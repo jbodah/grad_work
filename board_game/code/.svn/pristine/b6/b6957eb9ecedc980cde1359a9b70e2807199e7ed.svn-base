@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>WSClientArchitecture.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">arch</a> &gt; <span class="el_source">WSClientArchitecture.java</span></div><h1>WSClientArchitecture.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package arch;</span>
+
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JPanel;
+
+import ks.client.controllers.ClientControllerChain;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.client.lobby.ConnectFrame;
+import ks.client.processor.ClientProcessor;
+
+import wordstealclient.controllers.ChatControllerChainLink;
+import wordstealclient.controllers.GameControllerChainLink;
+import wordstealclient.controllers.RoomControllerChainLink;
+import wordstealclient.controllers.TailControllerChainLink;
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Room;
+import wordstealclient.interfaces.IGameProvider;
+import wordstealclient.util.XMLSchema;
+import wordstealclient.boundaries.TableManagerGUI;
+import wordstealclient.boundaries.UserManagerGUI;
+
+/**
+ * This is a sample class that shows how to configure the client to function.
+ * Copy (and rename) this into your appropriate location and then you can 
+ * begin the process of building up your own server implementation.
+ * &lt;p&gt;
+ * Note that you will have to provide your response to requests to close the 
+ * window. Here it just exits but that may not be what you want.
+ * 
+ * @author George Heineman, jbodah, cbelhumeur
+ */
+<span class="nc" id="L36">public class WSClientArchitecture {</span>
+	
+	/** Entity created for client. */
+	static ConnectFrame cf;
+	static ILobby lobby;
+	static IGameProvider provider;
+	
+	/**
+	 * Launch client app.
+	 * 
+	 * @param args
+	 * @throws Exception 
+	 */
+	public static void main(String[] args) throws Exception {
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">		if( !XMLSchema.foundValid() )</span>
+<span class="nc" id="L51">			return ;</span>
+				
+<span class="fc" id="L53">		setupConnectFrame(initLobby());</span>
+<span class="fc" id="L54">		setupControllerChain();</span>
+		
+<span class="fc" id="L56">		Room.getInstance() ;</span>
+		
+		// running...
+<span class="fc" id="L59">	}</span>
+	
+	/**
+	 * initialization callback. Client-side groups can pass in 
+	 * an object that provides this interface into the ConnectFrame
+	 * constructor and it will be called at the proper time.
+	 */
+	private static ILobbyInitialize initLobby() {
+<span class="fc" id="L67">		JPanel tempUserManagerGUI 	= UserManagerGUI.create(null);</span>
+<span class="fc" id="L68">		JPanel tempTableManagerGUI 	= TableManagerGUI.create(Room.getInstance().getTables());</span>
+
+<span class="fc" id="L70">		MyLobbyInitialization init = new MyLobbyInitialization(tempTableManagerGUI, tempUserManagerGUI);</span>
+<span class="fc" id="L71">		lobby = init.getLobby();</span>
+<span class="fc" id="L72">		provider = (IGameProvider)init;</span>
+<span class="fc" id="L73">		return (ILobbyInitialize)init;</span>
+	}
+
+	public static ILobby getLobby()
+	{
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		if (lobby == null) {</span>
+<span class="fc" id="L79">			ILobbyInitialize init = initLobby();</span>
+<span class="fc" id="L80">			lobby = ((MyLobbyInitialization)init).getLobby();</span>
+		}
+<span class="fc" id="L82">		return lobby;</span>
+	}
+	
+	public static IGameProvider getGameProvider()
+	{
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">		if (provider == null) {</span>
+<span class="nc" id="L88">			ILobbyInitialize init = initLobby();</span>
+<span class="nc" id="L89">			provider = (IGameProvider)init;</span>
+		}
+<span class="fc" id="L91">		return provider;</span>
+	}
+	
+	/**
+	 * Return the player that is currently logged in
+	 * @return
+	 * @author jbodah
+	 */
+	public static Player getThisPlayer() {
+<span class="fc bfc" id="L100" title="All 2 branches covered.">		if( getLobby() != null )</span>
+<span class="fc" id="L101">			return Room.getInstance().getPlayer(Integer.valueOf(getLobby().getContext().getUser()));</span>
+<span class="fc" id="L102">		return null ;</span>
+	}
+	
+	/**
+	 * all action on this (default) local host. Should there be a need
+	 * to connect to a different host computer, then you would need 
+	 * to pass in command-line argument values from 'args' into the 
+	 * constructor of UserContext so the client knows to which server
+	 * to connect.
+	 * @param init
+	 */
+	private static void setupConnectFrame(ILobbyInitialize init) {
+<span class="fc" id="L114">		cf = new ConnectFrame(init);</span>
+<span class="fc" id="L115">		cf.addWindowListener(new WindowAdapter() {</span>
+
+			// Override the closing method to exit from the VM.
+			// we need no check because this is before user 
+			// has actually connected.
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+<span class="nc" id="L122">				System.exit(0);			</span>
+<span class="nc" id="L123">			}</span>
+
+		});
+<span class="fc" id="L126">		cf.setVisible(true);</span>
+<span class="fc" id="L127">	}</span>
+
+	/**
+	 * here is where you can augment the chain of client-side controllers
+	 * Public for testing
+	 * @author jbodah
+	 */
+	public static void setupControllerChain() {
+<span class="fc" id="L135">		ClientControllerChain head = ClientProcessor.head();</span>
+<span class="fc" id="L136">		head.append(new ChatControllerChainLink());</span>
+<span class="fc" id="L137">		head.append(new RoomControllerChainLink());</span>
+<span class="fc" id="L138">		head.append(new GameControllerChainLink());</span>
+<span class="fc" id="L139">		head.append(new TailControllerChainLink());</span>
+<span class="fc" id="L140">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

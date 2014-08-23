@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>StartRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.uncorrelated_requests</a> &gt; <span class="el_source">StartRequestController.java</span></div><h1>StartRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.uncorrelated_requests;
+
+import arch.WSClientArchitecture;
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+
+/**
+ * Request: start&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: ??&lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * 	{@literal &lt;!-- Start table. --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;start table=&quot;100&quot;/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @author jbodah
+ */
+public class StartRequestController {
+	ILobby lobby ;
+	
+<span class="nc" id="L24">	public StartRequestController(ILobby lobby) {</span>
+<span class="nc" id="L25">		this.lobby = lobby;</span>
+<span class="nc" id="L26">	}</span>
+	
+	/**
+	 * Create and send request
+	 * @author jbodah
+	 */
+	public void process() {
+<span class="nc" id="L33">		Message m = new Message(Message.construct (writeXMLForRequest()));</span>
+<span class="nc" id="L34">		lobby.getContext().getClient().sendToServer(m);</span>
+<span class="nc" id="L35">		System.out.println(&quot;StartRequestController.process(): Request sent&quot;);</span>
+<span class="nc" id="L36">	}</span>
+	
+	private String writeXMLForRequest() {
+<span class="nc" id="L39">		String s = Message.requestHeader() + &quot;&lt;start table='&quot; + WSClientArchitecture.getThisPlayer().getTableID() + &quot;'/&gt;&lt;/request&gt;&quot; ;</span>
+<span class="nc" id="L40">		return s;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

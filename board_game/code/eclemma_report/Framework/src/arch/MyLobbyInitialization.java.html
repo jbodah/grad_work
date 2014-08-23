@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MyLobbyInitialization.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">arch</a> &gt; <span class="el_source">MyLobbyInitialization.java</span></div><h1>MyLobbyInitialization.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package arch;</span>
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+
+import ks.client.game.GameManager;
+import ks.client.interfaces.IGameInterface;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.client.lobby.LobbyFrame;
+
+/**
+ * My sample shows how to integrate the client code with the GameManager I am
+ * providing.
+ * 
+ * Note: Don't edit this class here. Rather copy this sample code into your
+ * own project and (1) rename it; and (2) modify as you need
+ * 
+ * @author George Heineman
+ */
+public class MyLobbyInitialization implements ILobbyInitialize, IGameInterface {
+	
+	/** Panels. */
+	JPanel tmgui;
+	JPanel umgui;
+	
+	/** Enclosing lobby. */
+	ILobby lobby;
+	
+<span class="nc" id="L37">	public MyLobbyInitialization (JPanel tm, JPanel um) {</span>
+<span class="nc" id="L38">		this.tmgui = tm;</span>
+<span class="nc" id="L39">		this.umgui = um;</span>
+<span class="nc" id="L40">	}</span>
+	
+	@Override
+	public void initializeLobby(final LobbyFrame frame) {
+		// remember this lobby for later use
+<span class="nc" id="L45">		this.lobby = frame;</span>
+		
+		// install the two manager GUIs and callback
+<span class="nc" id="L48">		frame.setUserManagerGUI(umgui);</span>
+<span class="nc" id="L49">		frame.setTableManagerGUI(tmgui);</span>
+<span class="nc" id="L50">		frame.setLobbyInitialization(this);</span>
+		
+		// callback object will likely need to know about things.
+<span class="nc" id="L53">		frame.getContext();</span>
+		
+		// grab the menu bar and make an update 
+<span class="nc" id="L56">		JMenuBar menu = frame.getJMenuBar();</span>
+<span class="nc" id="L57">		JMenu help = new JMenu(&quot;Debug&quot;);</span>
+<span class="nc" id="L58">		JMenuItem game = new JMenuItem(&quot;sample solitaireGameWindow...&quot;);</span>
+<span class="nc" id="L59">		game.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L63">				GameManager gm = GameManager.instance();</span>
+<span class="nc" id="L64">				Properties options = new Properties();</span>
+				// default ones from message
+<span class="nc" id="L66">				options.setProperty(&quot;seed&quot;, &quot;1234&quot;);</span>
+<span class="nc" id="L67">				options.setProperty(&quot;game&quot;, &quot;heineman.Idiot&quot;);</span>
+				//options.setProperty(&quot;game&quot;, &quot;heineman.Klondike&quot;);
+				
+				// game specific ones for solitaire variations.
+<span class="nc" id="L71">				Properties gameOptions = new Properties();</span>
+<span class="nc" id="L72">				gameOptions.setProperty(&quot;time&quot;, &quot;20&quot;);</span>
+<span class="nc" id="L73">				gameOptions.setProperty(&quot;undo&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L74">				gameOptions.setProperty(&quot;newHand&quot;, &quot;true&quot;);</span>
+				
+				// player ids and real names (example where one has no real name)
+<span class="nc" id="L77">				Properties players = new Properties();</span>
+<span class="nc" id="L78">				players.setProperty(&quot;982&quot;, &quot;George Heineman&quot;);</span>
+				//players.setProperty(&quot;1124&quot;, &quot;Paul Simon&quot;);
+				//players.setProperty(&quot;135&quot;, &quot;&quot;);
+				
+				// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L83">				ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L84">				order.add(&quot;982&quot;);</span>
+				//order.add(&quot;1124&quot;);
+				//order.add(&quot;135&quot;);
+				
+				// request creation of game window. Will start automatically.
+<span class="nc" id="L89">				gm.createGameWindow(13, &quot;982&quot;, options, gameOptions, order, players, MyLobbyInitialization.this);</span>
+<span class="nc" id="L90">			}</span>
+			
+		});
+<span class="nc" id="L93">		help.add(game);</span>
+		
+		// now wordsteal
+<span class="nc" id="L96">		JMenuItem ws = new JMenuItem(&quot;sample wordSteal...&quot;);</span>
+<span class="nc" id="L97">		ws.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L101">				GameManager gm = GameManager.instance();</span>
+<span class="nc" id="L102">				Properties options = new Properties();</span>
+				// default ones from message
+<span class="nc" id="L104">				options.setProperty(&quot;seed&quot;, &quot;1234&quot;);</span>
+<span class="nc" id="L105">				options.setProperty(&quot;game&quot;, &quot;wordsteal.Wordsteal&quot;);</span>
+			
+				// game specific ones for wordsteal variations. note
+				// that the pointsToWin of 4 means any word played of
+				// four or more letters will win the game.
+<span class="nc" id="L110">				Properties gameOptions = new Properties();</span>
+<span class="nc" id="L111">				gameOptions.setProperty(&quot;noS&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L112">				gameOptions.setProperty(&quot;pink&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L113">				gameOptions.setProperty(&quot;turnTime&quot;, &quot;10&quot;);</span>
+<span class="nc" id="L114">				gameOptions.setProperty(&quot;pointsToWin&quot;, &quot;4&quot;);</span>
+				
+				// player ids and real names (example where one has no real name)
+<span class="nc" id="L117">				Properties players = new Properties();</span>
+<span class="nc" id="L118">				players.setProperty(&quot;982&quot;, &quot;George Heineman&quot;);</span>
+				//players.setProperty(&quot;1124&quot;, &quot;Paul Simon&quot;);
+				//players.setProperty(&quot;135&quot;, &quot;&quot;);
+				
+				// note that for the purpose of this demonstration, I am assuming
+				// that I am the moderator. This need not be the case. Indeed, 
+				// getting this bit of logic right will be a partnership between
+				// myself and all other groups.
+				
+				// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L128">				ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L129">				order.add(&quot;982&quot;);</span>
+				//order.add(&quot;1124&quot;);
+				//order.add(&quot;135&quot;);
+				
+				// request creation of game window. Will start in locked mode.
+<span class="nc" id="L134">				gm.createGameWindow(13, &quot;982&quot;, options, gameOptions, order, players, MyLobbyInitialization.this);</span>
+				
+				// go ahead and activate this person's turn (presumably as moderator).
+<span class="nc" id="L137">				gm.activateTurn(&quot;982&quot;);</span>
+<span class="nc" id="L138">			}</span>
+		});
+<span class="nc" id="L140">		help.add(ws);</span>
+		
+		// now sudoku
+<span class="nc" id="L143">		ws = new JMenuItem(&quot;sample sudoku...&quot;);</span>
+<span class="nc" id="L144">		ws.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L148">				GameManager gm = GameManager.instance();</span>
+<span class="nc" id="L149">				Properties options = new Properties();</span>
+				// default ones from message
+<span class="nc" id="L151">				options.setProperty(&quot;seed&quot;, &quot;1234&quot;);</span>
+<span class="nc" id="L152">				options.setProperty(&quot;game&quot;, &quot;sudoku.Sudoku&quot;);</span>
+			
+				// game specific ones for sudoku variations. note
+				// that the pointsToWin of 4 means any word played of
+				// four or more letters will win the game.
+<span class="nc" id="L157">				Properties gameOptions = new Properties();</span>
+<span class="nc" id="L158">				gameOptions.setProperty(&quot;difficulty&quot;, &quot;2&quot;);</span>
+				
+				// player ids and real names (example where one has no real name)
+<span class="nc" id="L161">				Properties players = new Properties();</span>
+<span class="nc" id="L162">				players.setProperty(&quot;982&quot;, &quot;George Heineman&quot;);</span>
+				//players.setProperty(&quot;1124&quot;, &quot;Paul Simon&quot;);
+				//players.setProperty(&quot;135&quot;, &quot;&quot;);
+				
+				// note that for the purpose of this demonstration, I am assuming
+				// that I am the moderator. This need not be the case. Indeed, 
+				// getting this bit of logic right will be a partnership between
+				// myself and all other groups.
+				
+				// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L172">				ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L173">				order.add(&quot;982&quot;);</span>
+				//order.add(&quot;1124&quot;);
+				//order.add(&quot;135&quot;);
+				
+				// request creation of game window. Will start in locked mode.
+<span class="nc" id="L178">				gm.createGameWindow(13, &quot;982&quot;, options, gameOptions, order, players, MyLobbyInitialization.this);</span>
+				
+<span class="nc" id="L180">			}</span>
+		});
+<span class="nc" id="L182">		help.add(ws);</span>
+		
+		
+<span class="nc" id="L185">		JMenuItem cons = new JMenuItem(&quot;Show consolidated controller...&quot;);</span>
+<span class="nc" id="L186">		cons.addActionListener(new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L190">				new ConsolidatedClientProfileController(lobby).process();</span>
+<span class="nc" id="L191">			}</span>
+			
+		});
+<span class="nc" id="L194">		help.add(cons);</span>
+		
+		
+<span class="nc" id="L197">		menu.add(help);</span>
+<span class="nc" id="L198">	}</span>
+
+	@Override
+	public void sendTableChat(int tableID, String text) {
+<span class="nc" id="L202">		System.err.println(&quot;Table Chat request:&quot; + text);	</span>
+<span class="nc" id="L203">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="nc" id="L204">	}</span>
+
+	@Override
+	public void update(int tableID, int score, String game, boolean complete) {
+<span class="nc" id="L208">		System.err.println(&quot;Update request:&quot; + score + &quot;, complete=&quot; + complete);</span>
+<span class="nc" id="L209">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="nc" id="L210">	}</span>
+
+	@Override
+	public void leaveGame(int tableID) {
+<span class="nc" id="L214">		System.err.println(&quot;Player leaves table &quot; + tableID);</span>
+<span class="nc" id="L215">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="nc" id="L216">	}</span>
+
+	@Override
+	public void turn(int tableID, Properties scores, String move, boolean complete) {
+<span class="nc" id="L220">		System.err.println(&quot;Player makes move, complete=&quot; + complete);</span>
+<span class="nc" id="L221">		System.err.println(&quot;Move:&quot; + move);</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">		for (Object p : scores.keySet()) {</span>
+<span class="nc" id="L223">			String value = scores.getProperty((String)p);</span>
+<span class="nc" id="L224">			System.err.println(&quot;player &quot; + p + &quot;, score=&quot; + value);</span>
+		}
+<span class="nc" id="L226">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="nc" id="L227">	}</span>
+
+	@Override
+	public void skip(int tableNumber) {
+<span class="nc" id="L231">		System.err.println(&quot;Player has skipped on table &quot; + tableNumber);</span>
+<span class="nc" id="L232">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="nc" id="L233">	}</span>
+
+	@Override
+	public void connected(boolean status) {
+<span class="nc bnc" id="L237" title="All 2 branches missed.">		if (!status) {</span>
+<span class="nc" id="L238">			lobby.append(&quot;Server connection lost&quot;);</span>
+		} else {
+<span class="nc" id="L240">			lobby.append(&quot;My Initializer welcomes you&quot;);</span>
+		}
+		
+<span class="nc" id="L243">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

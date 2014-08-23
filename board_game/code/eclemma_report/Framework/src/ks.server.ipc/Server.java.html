@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Server.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.server.ipc</a> &gt; <span class="el_source">Server.java</span></div><h1>Server.java</h1><pre class="source lang-java linenums">package ks.server.ipc;
+
+
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.framework.interfaces.IAuthorization;
+import ks.framework.interfaces.ICommunicator;
+import ks.framework.interfaces.IServerConnection;
+import ks.server.processor.ServerProcessor;
+
+/**
+ * Server processes requests received from client.
+ */
+public class Server implements IServerConnection, IAuthorization {
+
+	/** Server Version. */
+	public static final String version = &quot;2.2&quot;;
+
+	/** Server Version Date. */
+	public static final String versionDate = &quot;2011-Feb-07-23-08-11&quot;;
+
+	/** Listener for client requests. */
+<span class="nc" id="L23">	Listener listener = null;</span>
+
+	/** Authentication. */
+	IAuthorization auth;
+
+	/** Communicator for responses to the client(s). */
+<span class="nc" id="L29">	Communicator com = null;</span>
+
+	/** Default port to be listened for. */
+	public static final int defaultPort = 7878;
+
+	/** Port to listen for. */
+	int port;
+
+	/** 
+	 * Construct a server with no authentication.
+	 */
+	public Server () {
+<span class="nc" id="L41">		this(null, defaultPort);</span>
+<span class="nc" id="L42">	}</span>
+
+	/** 
+	 * Construct a server with given entity to manage authorization requests.
+	 *  
+	 * @param auth   Authentication agent to use (or null if none).
+	 */
+	public Server (IAuthorization auth) {
+<span class="nc" id="L50">		this(auth, defaultPort);</span>
+<span class="nc" id="L51">	}</span>
+
+	/** 
+	 * Construct a server with authorization manager and different port.
+	 * &lt;p&gt;
+	 * @param auth   Authentication agent to use (or null if none).
+	 * @param port   Port on which server will be listening for connections.
+	 */
+<span class="nc" id="L59">	public Server(IAuthorization auth, int port) { </span>
+<span class="nc" id="L60">		this.auth = auth;</span>
+<span class="nc" id="L61">		this.port = port;</span>
+<span class="nc" id="L62">	}</span>
+
+	/** 
+	 * Construct a server with no authentication on given port.
+	 */
+	public Server(int port) {
+<span class="nc" id="L68">		this(null, port);</span>
+<span class="nc" id="L69">	}</span>
+
+	/**
+	 * Activate server. Prevent multiple access here
+	 */
+	public synchronized boolean activate() {
+
+<span class="nc" id="L76">		listener = new Listener(this, port);</span>
+<span class="nc" id="L77">		boolean response = listener.start();</span>
+
+<span class="nc" id="L79">		com = new Communicator();</span>
+<span class="nc" id="L80">		return response;</span>
+	}
+
+
+	/**
+	 * Close listener.
+	 */
+	public void deactivate() {
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		if (listener != null) {</span>
+<span class="nc" id="L89">			System.err.println (&quot;Shutting down server.&quot;);</span>
+<span class="nc" id="L90">			listener.killServer();</span>
+<span class="nc" id="L91">			listener = null;</span>
+<span class="nc" id="L92">			com = null;</span>
+		}
+<span class="nc" id="L94">	}</span>
+
+	/**
+	 * Receive message from client and hand off to our controller.
+	 * &lt;p&gt;
+	 * Make sure Message can't be spoofed since we set the incoming originator
+	 * here.
+	 * 
+	 * @param who       user making the request
+	 * @param incoming  message coming from client
+	 */
+	public void process(String who, Message incoming) {
+<span class="nc" id="L106">		incoming.setOriginator(who);</span>
+
+		// pass off to processor
+<span class="nc" id="L109">		new ServerProcessor(com).process(incoming);</span>
+<span class="nc" id="L110">	}</span>
+
+
+	/**
+	 * Determine whether user can self-register according to the declared 
+	 * authorization entity. 
+	 * 
+	 * Should no authorization entity exist, then return a randomly
+	 * generated id and hope for the best...
+	 *  
+	 * @param pwd 	the new player's hashed password
+	 * @return 		the new player's id
+	 */
+	public String selfRegister(String pwd) {
+<span class="nc bnc" id="L124" title="All 2 branches missed.">		if (auth == null ) { </span>
+<span class="nc" id="L125">			int id = (int)(Math.random()*10000000);</span>
+<span class="nc" id="L126">			return &quot;&quot; + id; </span>
+		}
+
+<span class="nc" id="L129">		return auth.selfRegister(pwd);</span>
+	}
+
+	/**
+	 * Determine whether user is authorized, according to the declared
+	 * authorization entity.
+	 * &lt;p&gt;
+	 * If there is no authenticating agent, then returns true always
+	 * 
+	 * @param user   user to be authorized
+	 * @param pass   associated pass pharse with user
+	 * @return
+	 */
+	public boolean authorize(String user, String pass) throws Exception {
+<span class="nc bnc" id="L143" title="All 2 branches missed.">		if (auth == null) {</span>
+<span class="nc" id="L144">			return true;</span>
+		}
+
+<span class="nc" id="L147">		return auth.authorize(user, pass);</span>
+	}
+
+	@Override
+	public void login(Communicator com, Message m) {
+<span class="nc bnc" id="L152" title="All 2 branches missed.">		if (auth != null) { </span>
+<span class="nc" id="L153">			auth.login(com, m); </span>
+		}
+<span class="nc" id="L155">	}</span>
+
+	@Override
+	public void logout(Communicator com, Message m) {
+<span class="nc bnc" id="L159" title="All 2 branches missed.">		if (auth != null) { </span>
+<span class="nc" id="L160">			auth.logout(com, m); </span>
+		}
+<span class="nc" id="L162">	}</span>
+
+	@Override
+	public boolean connectUser(String userName, ICommunicator agent) {
+<span class="nc" id="L166">		return com.connectUser(userName, agent);</span>
+	}
+
+	@Override
+	public boolean disconnectUser(String userName) {
+<span class="nc" id="L171">		return com.disconnectUser(userName);</span>
+	}
+
+	/** Enable externals to access communicator to talk to client. */
+	public Communicator getCommunicator() {
+<span class="nc" id="L176">		return com;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

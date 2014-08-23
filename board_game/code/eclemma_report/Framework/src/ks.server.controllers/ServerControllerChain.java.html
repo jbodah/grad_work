@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServerControllerChain.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.server.controllers</a> &gt; <span class="el_source">ServerControllerChain.java</span></div><h1>ServerControllerChain.java</h1><pre class="source lang-java linenums">package ks.server.controllers;
+
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.server.interfaces.IProcessServerMessage;
+
+/**
+ * Generic ControllerChain registered with server-side processor.
+ * 
+ * This class enables us to design a &quot;Chain of Responsibilities&quot; where 
+ * extensibility is gained by appending additional agents to a list.
+ * The processor locates the first controller in the chain that handles
+ * the given message.
+ * 
+ * @author George Heineman
+ */
+public class ServerControllerChain implements IProcessServerMessage {
+
+	/** The next agent in the chain. */
+	protected ServerControllerChain next;
+	
+	/** 
+	 * The terminal agent in the chain is constructed using this constructor.
+	 */
+<span class="nc" id="L25">	public ServerControllerChain () {</span>
+		
+<span class="nc" id="L27">	}</span>
+
+	/** 
+	 * Helper function for constructing chain by appending given agent as the next
+	 * one to execute.
+	 * 
+	 * @param next   Next agent to manage controllers.
+	 */
+	public ServerControllerChain (ServerControllerChain next) {
+<span class="nc" id="L36">		this();</span>
+<span class="nc" id="L37">		append(next);</span>
+<span class="nc" id="L38">	}</span>
+	
+	/**
+	 * Add agent to be the last one in the controller chain.
+	 * 
+	 * @param agent
+	 */
+	public void append (ServerControllerChain agent) {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">		if (next == null) {</span>
+<span class="nc" id="L47">			next = agent;</span>
+<span class="nc" id="L48">			return;</span>
+		} 
+		
+		// append to next.
+<span class="nc" id="L52">		next.append(agent);</span>
+<span class="nc" id="L53">	}</span>
+	
+	/**
+	 * Appeal to the next agent in the chain to process given message.
+	 * 
+	 * If there is no such agent then false is returned, otherwise that 
+	 * agent is directed to process the message
+	 * 
+	 * @param com  {@link Communicator} from which message came
+	 * @param m    {@link Message} object to be processed.
+	 * @return &lt;code&gt;true&lt;/code&gt; if someone took ownership of the message otherwise &lt;code&gt;false&lt;/code&gt;
+	 * 
+	 */
+	protected boolean next(Communicator com, Message m) {
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		if (next == null) {</span>
+<span class="nc" id="L68">			return false;</span>
+		}
+		
+<span class="nc" id="L71">		return next.process(com, m);</span>
+	} 
+	
+	/**
+	 * An agent in the chain processes the message if it can, but if not
+	 * then the next agent in the chain has its turn.
+	 * 
+	 * Entities that extend this class should override this method appropriately.
+	 */
+	@Override
+	public boolean process(Communicator com, Message m) {
+<span class="nc" id="L82">		return next(com, m);</span>
+	} 
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

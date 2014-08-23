@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ConsolidatedClientProfileController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">arch</a> &gt; <span class="el_source">ConsolidatedClientProfileController.java</span></div><h1>ConsolidatedClientProfileController.java</h1><pre class="source lang-java linenums">package arch;
+
+import java.util.UUID;
+
+import org.w3c.dom.Document;
+
+import ks.client.interfaces.IController;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.IProcessClientMessage;
+import ks.framework.common.Message;
+
+/**
+ * SAMPLE INFORMATION TO SHOW HOW TO GET THINGS STARTED. THIS IS NOT REAL!
+ * 
+ * take getProfile request and produce playerResponse 
+ *
+ */
+public class ConsolidatedClientProfileController implements IProcessClientMessage, IController {
+
+	/** Lobby over which controller is active. */
+	ILobby lobby;
+	
+<span class="fc" id="L23">	public ConsolidatedClientProfileController (ILobby lobby) {</span>
+<span class="fc" id="L24">		this.lobby = lobby;</span>
+<span class="fc" id="L25">	}</span>
+	
+	/** GUi-based event handler to respond to the selection of the menu item. */
+	public void process() { 
+		// make a getProfile request
+<span class="fc" id="L30">		String id = UUID.randomUUID().toString();</span>
+<span class="fc" id="L31">		String s = new String (&quot;&lt;request version='1.0' id='&quot; + id + &quot;'&gt;\n&quot; +</span>
+<span class="fc" id="L32">				&quot;&lt;getProfile player='1213'/&gt;\n&quot; + </span>
+<span class="fc" id="L33">				&quot;&lt;/request&gt;&quot;);</span>
+		
+<span class="fc" id="L35">		Document d = Message.construct (s);</span>
+<span class="fc" id="L36">		Message m = new Message(d);</span>
+<span class="fc" id="L37">		lobby.getContext().getClient().sendToServer(lobby, m, this);</span>
+<span class="fc" id="L38">	}</span>
+
+
+	// process correlated response (to given request) when received from server
+	@Override
+	public void process(ILobby lobby, Message request, Message response) {
+<span class="fc" id="L44">		System.out.println(&quot;Received &quot; + response + &quot; in response to &quot; + request);</span>
+<span class="fc" id="L45">	}</span>
+
+	
+	// process independent response received from server
+	@Override
+	public boolean process(ILobby lobby, Message m) {
+<span class="fc" id="L51">		System.out.println(&quot;Received &quot; + m);</span>
+<span class="fc" id="L52">		return true;</span>
+	}
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

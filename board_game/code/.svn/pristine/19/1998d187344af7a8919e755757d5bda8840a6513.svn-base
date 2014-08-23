@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CommonMoveController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game.wordsteal</a> &gt; <span class="el_source">CommonMoveController.java</span></div><h1>CommonMoveController.java</h1><pre class="source lang-java linenums">package ks.client.game.wordsteal;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+
+import ks.client.interfaces.IGameInterface;
+
+import wordsteal.entities.Cell;
+import wordsteal.entities.CellColor;
+import wordsteal.entities.GameState;
+import wordsteal.entities.Player;
+import wordsteal.entities.Tile;
+import wordsteal.interfaces.IWordstealApp;
+import wordsteal.util.BoardLocation;
+
+/**
+ * Shared logic stored here between two controllers.
+ * &lt;p&gt;
+ * First controller, {@link MakeTurnController} is responsible for
+ * playing a turn as received from another client. The other one,
+ * {@link SubmitWordController} is responsible for playing current
+ * player's turn. Both share a lot of code, which is stored here.
+ * 
+ * @author George Heineman
+ */
+public class CommonMoveController {
+	
+	/** Controller has handle to MainFrame */
+	IWordstealApp mf;
+
+	/** Hold callback. */
+	IGameInterface callback;
+	
+	/** Common constructor. */
+<span class="nc" id="L36">	protected CommonMoveController(IWordstealApp mainFrame) {</span>
+<span class="nc" id="L37">		this.mf = mainFrame;</span>
+<span class="nc" id="L38">	}</span>
+
+
+	/**
+	 * finishSubmitWord is called once all validation is completed, it updates the boundaries and entities
+	 * accordingly based on the tiles the player has placed on the board
+	 * @param words Words formed by the player
+	 * @param wordCells Cells containing words
+	 * @param playedTileCells Cells with tiles played this turn
+	 * 
+	 * @return true if game is complete, false otherwise.
+	 */
+	protected boolean finishSubmitWord(String playerId, ArrayList&lt;String&gt; words, ArrayList&lt;ArrayList&lt;Cell&gt;&gt; wordCells, Hashtable&lt;BoardLocation, Cell&gt; playedTileCells) {
+		// Find player from the table
+<span class="nc" id="L52">		Player currentPlayer = this.mf.getGame().findPlayer(playerId);</span>
+		
+		// Add new words to that players word list
+<span class="nc" id="L55">		currentPlayer.getWords().addAll(words);</span>
+		
+		// Update tile owners, current player points, and bonus points
+<span class="nc" id="L58">		updateOwnerPoints(wordCells, currentPlayer);</span>
+		
+		// No longer first turn of the game
+<span class="nc" id="L61">		this.mf.getGame().setFirstTurn(false);	</span>
+
+		// Check if a Pink square was used
+<span class="nc bnc" id="L64" title="All 2 branches missed.">		if (isTilesOnColorCell(playedTileCells, CellColor.Pink)) {</span>
+
+<span class="nc" id="L66">			currentPlayer.modifyPoints(currentPlayer.getBonusPoints());</span>
+<span class="nc" id="L67">			this.mf.getGame().getBoard().clearBoard();</span>
+			
+<span class="nc bnc" id="L69" title="All 2 branches missed.">			for ( int i = 0; i &lt; this.mf.getGame().getPlayers().size(); i++ ) {</span>
+<span class="nc" id="L70">				this.mf.getGame().getPlayers().get(i).clearBonusPoints();</span>
+			}
+			
+<span class="nc" id="L73">			this.mf.getGame().setFirstTurn(true);</span>
+		}
+		
+		// Clear consecutive skips
+<span class="nc" id="L77">		this.mf.getGame().setConsecSkips(0);</span>
+		
+		// Check if player has won the game, if they have won the game, show the winning frame
+<span class="nc" id="L80">		boolean complete = true;</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if (currentPlayer.getPoints() &gt;= this.mf.getGame().getPointsToWin()) {</span>
+			
+			// Update the GUI with the new information
+<span class="nc" id="L84">			this.mf.updateGUI();</span>
+			
+			// Update game state
+<span class="nc" id="L87">			GameState gs = new GameState(this.mf.getGame(), &quot;Success&quot;, 0, words);</span>
+<span class="nc" id="L88">			this.mf.getGame().getGameLog().pushGameState(gs);</span>
+
+		} else {
+			// Update game state
+<span class="nc" id="L92">			GameState gs = new GameState(this.mf.getGame(), &quot;Success&quot;, 0, words);</span>
+<span class="nc" id="L93">			this.mf.getGame().getGameLog().pushGameState(gs);</span>
+			
+<span class="nc" id="L95">			this.mf.setStatus(&quot;Success!&quot;);</span>
+<span class="nc" id="L96">			this.mf.updateGUI();</span>
+<span class="nc" id="L97">			complete = false;</span>
+		}
+		
+		// in both cases we want to LOCK the gui because we are now
+		// distributing clients and our turn is now over.
+<span class="nc" id="L102">		this.mf.lockUI(true);</span>
+<span class="nc" id="L103">		return complete;</span>
+	}	
+	
+	
+	/**
+	 * isTilesOnColorCell verifies that a tile has been placed on a cell with a given color
+	 * @param placedTileCells A hashtable of board locations mapped to cells with tiles played this turn
+	 * @param color Color to be checked for
+	 * @return Whether the word is on the color cell
+	 */
+	boolean isTilesOnColorCell(Hashtable&lt;BoardLocation, Cell&gt; placedTileCells, CellColor color) {
+<span class="nc" id="L114">	    Iterator&lt;BoardLocation&gt; itr = placedTileCells.keySet().iterator();	    </span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">	    while (itr.hasNext()) {</span>
+<span class="nc" id="L116">	    	BoardLocation bl = itr.next();</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">	    	if (placedTileCells.get(bl).color == color){</span>
+<span class="nc" id="L118">	    		return true; // No error</span>
+	    	}
+	    }
+	    
+<span class="nc" id="L122">		return false;</span>
+	}
+	
+	/**
+	 * updateOwnerPoints takes all of the cells involved with the new words on the board and assigns the current
+	 * player as the owner of the tiles in the cells, it adds points to the current player and subtracts points
+	 * from other players if necessary, it also updates player bonus points
+	 * @param wordCells Cells containing the tiles that form the words
+	 * @param currentPlayerIndex Index of the current player
+	 */
+	void updateOwnerPoints(ArrayList&lt;ArrayList&lt;Cell&gt;&gt; wordCells, Player currentPlayer) {		
+		
+<span class="nc" id="L134">		Iterator&lt;ArrayList&lt;Cell&gt;&gt; wordItr = wordCells.iterator();</span>
+		
+<span class="nc bnc" id="L136" title="All 2 branches missed.">		while(wordItr.hasNext()) {</span>
+			
+<span class="nc" id="L138">			Iterator&lt;Cell&gt; cellItr = wordItr.next().iterator();</span>
+			
+<span class="nc bnc" id="L140" title="All 2 branches missed.">			while(cellItr.hasNext()) {</span>
+				
+<span class="nc" id="L142">				Cell cell = cellItr.next();</span>
+<span class="nc" id="L143">				Tile tile = cell.getTile();</span>
+<span class="nc" id="L144">				Player owner = tile.getOwner();</span>
+				
+<span class="nc bnc" id="L146" title="All 2 branches missed.">				if(owner == null) {</span>
+					
+<span class="nc" id="L148">					tile.setOwner(currentPlayer);</span>
+<span class="nc" id="L149">					currentPlayer.modifyPoints(1);</span>
+					
+<span class="nc bnc" id="L151" title="All 2 branches missed.">					if(cell.color == CellColor.Orange) {</span>
+						
+<span class="nc" id="L153">						currentPlayer.addBonusPoints(1);</span>
+					}
+					
+<span class="nc bnc" id="L156" title="All 2 branches missed.">				} else if(owner != currentPlayer) {</span>
+					
+<span class="nc" id="L158">					tile.setOwner(currentPlayer);</span>
+<span class="nc" id="L159">					currentPlayer.modifyPoints(1);</span>
+<span class="nc" id="L160">					owner.modifyPoints(-1);</span>
+					
+<span class="nc bnc" id="L162" title="All 2 branches missed.">					if(cell.color == CellColor.Orange) {</span>
+						
+<span class="nc" id="L164">						currentPlayer.addBonusPoints(1);</span>
+<span class="nc" id="L165">						owner.addBonusPoints(-1);</span>
+					}
+				}
+			}
+		}
+<span class="nc" id="L170">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.entities</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package wordstealclient.entities;
+
+public class Player {
+
+	protected int 		login ;
+	protected String 	alias ;
+	protected int 		wordstealRating ;
+	protected int 		wordstealWins ;
+	protected int 		wordstealLosses ;
+	protected int 		solitaireRating ;
+	protected int 		solitaireWins ;
+	protected int 		solitaireLosses ;
+	protected int 		sudokuRating ;
+	protected int 		sudokuWins ;
+	protected int 		sudokuLosses ;
+	protected int		tableID ;
+	
+	/**
+	 *  Constructor
+	 *	@author jbodah
+	 */
+<span class="fc" id="L22">	public Player() {</span>
+<span class="fc" id="L23">		this.login = 0 ;</span>
+<span class="fc" id="L24">		this.alias = new String() ;</span>
+<span class="fc" id="L25">		this.tableID = 0 ;</span>
+<span class="fc" id="L26">		this.wordstealRating = 0 ;</span>
+<span class="fc" id="L27">		this.wordstealWins = 0 ;</span>
+<span class="fc" id="L28">		this.wordstealLosses = 0 ;</span>
+<span class="fc" id="L29">		this.solitaireRating = 0 ;</span>
+<span class="fc" id="L30">		this.solitaireWins = 0 ;</span>
+<span class="fc" id="L31">		this.solitaireLosses = 0 ;</span>
+<span class="fc" id="L32">		this.sudokuRating = 0 ;</span>
+<span class="fc" id="L33">		this.sudokuWins = 0 ;</span>
+<span class="fc" id="L34">		this.sudokuLosses = 0 ;</span>
+<span class="fc" id="L35">	}</span>
+	
+<span class="fc" id="L37">	public Player(int login) {</span>
+<span class="fc" id="L38">		this.login = login ;</span>
+<span class="fc" id="L39">		this.alias = new String() ;</span>
+<span class="fc" id="L40">		this.tableID = 0 ;</span>
+<span class="fc" id="L41">		this.wordstealRating = 0 ;</span>
+<span class="fc" id="L42">		this.wordstealWins = 0 ;</span>
+<span class="fc" id="L43">		this.wordstealLosses = 0 ;</span>
+<span class="fc" id="L44">		this.solitaireRating = 0 ;</span>
+<span class="fc" id="L45">		this.solitaireWins = 0 ;</span>
+<span class="fc" id="L46">		this.solitaireLosses = 0 ;</span>
+<span class="fc" id="L47">		this.sudokuRating = 0 ;</span>
+<span class="fc" id="L48">		this.sudokuWins = 0 ;</span>
+<span class="fc" id="L49">		this.sudokuLosses = 0 ;</span>
+<span class="fc" id="L50">	}</span>
+	
+<span class="fc" id="L52">	public Player(int login, String alias, int rating, int wins, int losses)</span>
+	{
+<span class="fc" id="L54">		this.login = login ;</span>
+<span class="fc" id="L55">		this.alias = alias ;</span>
+<span class="fc" id="L56">		this.wordstealRating = rating ;</span>
+<span class="fc" id="L57">		this.wordstealWins = wins ;</span>
+<span class="fc" id="L58">		this.wordstealLosses = losses ;</span>
+<span class="fc" id="L59">	}</span>
+	
+<span class="fc" id="L61">	public Player(int login, String alias,</span>
+				  int woRating, int woWins, int woLosses,
+				  int soRating, int soWins, int soLosses,
+				  int suRating, int suWins, int suLosses) {
+<span class="fc" id="L65">		this.login = login ;</span>
+<span class="fc" id="L66">		this.alias = alias ;</span>
+<span class="fc" id="L67">		this.wordstealRating = woRating ;</span>
+<span class="fc" id="L68">		this.wordstealWins = woWins ;</span>
+<span class="fc" id="L69">		this.wordstealLosses = woLosses ;</span>
+<span class="fc" id="L70">		this.solitaireRating = soRating ;</span>
+<span class="fc" id="L71">		this.solitaireWins = soWins ;</span>
+<span class="fc" id="L72">		this.solitaireLosses = soLosses ;</span>
+<span class="fc" id="L73">		this.sudokuRating = suRating ;</span>
+<span class="fc" id="L74">		this.sudokuWins = suWins ;</span>
+<span class="fc" id="L75">		this.sudokuLosses = suLosses ;</span>
+<span class="fc" id="L76">	}</span>
+	
+	/**************************************** BEG GETTERS/SETTERS ****************************************/
+	
+	public int getLogin() {
+<span class="fc" id="L81">		return login;</span>
+	}
+
+	public void setLogin(int login) {
+<span class="fc" id="L85">		this.login = login;</span>
+<span class="fc" id="L86">	}</span>
+
+	public String getAlias() {
+<span class="fc bfc" id="L89" title="All 2 branches covered.">		if( alias.equals( &quot;&quot; ) )</span>
+<span class="fc" id="L90">			return &quot;User &quot; + getLogin() ;</span>
+<span class="fc" id="L91">		return alias;</span>
+	}
+
+	public void setAlias(String alias) {
+<span class="fc" id="L95">		this.alias = alias;</span>
+<span class="fc" id="L96">	}</span>
+
+	public int getWordstealRating() {
+<span class="fc" id="L99">		return wordstealRating;</span>
+	}
+
+	public void setWordstealRating(int wordstealRating) {
+<span class="fc" id="L103">		this.wordstealRating = wordstealRating;</span>
+<span class="fc" id="L104">	}</span>
+
+	public int getWordstealWins() {
+<span class="fc" id="L107">		return wordstealWins;</span>
+	}
+
+	public void setWordstealWins(int wordstealWins) {
+<span class="fc" id="L111">		this.wordstealWins = wordstealWins;</span>
+<span class="fc" id="L112">	}</span>
+
+	public int getWordstealLosses() {
+<span class="fc" id="L115">		return wordstealLosses;</span>
+	}
+
+	public void setWordstealLosses(int wordstealLosses) {
+<span class="fc" id="L119">		this.wordstealLosses = wordstealLosses;</span>
+<span class="fc" id="L120">	}</span>
+
+	public int getSolitaireRating() {
+<span class="fc" id="L123">		return solitaireRating;</span>
+	}
+
+	public void setSolitaireRating(int solitaireRating) {
+<span class="fc" id="L127">		this.solitaireRating = solitaireRating;</span>
+<span class="fc" id="L128">	}</span>
+
+	public int getSolitaireWins() {
+<span class="fc" id="L131">		return solitaireWins;</span>
+	}
+
+	public void setSolitaireWins(int solitaireWins) {
+<span class="fc" id="L135">		this.solitaireWins = solitaireWins;</span>
+<span class="fc" id="L136">	}</span>
+
+	public int getSolitaireLosses() {
+<span class="fc" id="L139">		return solitaireLosses;</span>
+	}
+
+	public void setSolitaireLosses(int solitaireLosses) {
+<span class="fc" id="L143">		this.solitaireLosses = solitaireLosses;</span>
+<span class="fc" id="L144">	}</span>
+
+	public int getSudokuRating() {
+<span class="fc" id="L147">		return sudokuRating;</span>
+	}
+
+	public void setSudokuRating(int sudokuRating) {
+<span class="fc" id="L151">		this.sudokuRating = sudokuRating;</span>
+<span class="fc" id="L152">	}</span>
+
+	public int getSudokuWins() {
+<span class="fc" id="L155">		return sudokuWins;</span>
+	}
+
+	public void setSudokuWins(int sudokuWins) {
+<span class="fc" id="L159">		this.sudokuWins = sudokuWins;</span>
+<span class="fc" id="L160">	}</span>
+
+	public int getSudokuLosses() {
+<span class="fc" id="L163">		return sudokuLosses;</span>
+	}
+
+	public void setSudokuLosses(int sudokuLosses) {
+<span class="fc" id="L167">		this.sudokuLosses = sudokuLosses;</span>
+<span class="fc" id="L168">	}</span>
+
+	/**
+	 * tableID = 0 =&gt; not at a table
+	 * @param table_id
+	 */
+	public void setTableID( int table_id ) {
+<span class="fc" id="L175">		tableID = table_id ;</span>
+<span class="fc" id="L176">	}</span>
+	
+	/**
+	 * tableID = 0 =&gt; not at a table
+	 * @return
+	 */
+	public int getTableID() {
+<span class="fc" id="L183">		return tableID ;</span>
+	}
+	
+	/**************************************** END GETTERS/SETTERS ****************************************/
+	
+	// TODO: Probably want these in a helper, jbodah 4/10
+	public String[] getSplitPlayerInfo()
+	{
+<span class="fc" id="L191">		return new String[]{getAlias(), Integer.toString(getWordstealRating()), </span>
+<span class="fc" id="L192">				Integer.toString(getWordstealWins()), Integer.toString(getWordstealLosses())};</span>
+	}
+	
+	public String getPlayerInfo()
+	{
+<span class="fc" id="L197">		return new String(getAlias() + &quot; - &quot; + Integer.toString(getWordstealRating()) + &quot; (&quot; +</span>
+<span class="fc" id="L198">				Integer.toString(getWordstealWins()) + &quot;/&quot; + Integer.toString(getWordstealLosses()) + &quot;)&quot;);</span>
+	}	
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

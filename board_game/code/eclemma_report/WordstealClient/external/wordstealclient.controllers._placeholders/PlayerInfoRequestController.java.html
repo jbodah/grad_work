@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PlayerInfoRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">external</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers._placeholders</a> &gt; <span class="el_source">PlayerInfoRequestController.java</span></div><h1>PlayerInfoRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers._placeholders;
+
+import java.util.UUID;
+
+import org.w3c.dom.Document;
+
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+import ks.client.interfaces.IController;
+
+/**
+ * Request: playerInfo&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: ??&lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * 	{@literal &lt;!-- Request to change player password. --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;playerInfo password=&quot;2g3jg3hjg&quot; new-password=&quot;somePassword&quot;/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @example2
+ * 	{@literal &lt;!-- Request to change player information. --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;playerInfo password=&quot;89uoj93fuf&quot; new-realName=&quot;George Heineman&quot;/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @author jbodah
+ */
+public class PlayerInfoRequestController implements IController {
+	ILobby lobby ;
+	
+<span class="nc" id="L34">	public PlayerInfoRequestController(ILobby lobby) {</span>
+<span class="nc" id="L35">		this.lobby = lobby;</span>
+<span class="nc" id="L36">	}</span>
+	
+	/**
+	 * Create and send a playerRequest
+	 * @author jbodah
+	 */
+	public void process() {
+<span class="nc" id="L43">		String id = UUID.randomUUID().toString();</span>
+<span class="nc" id="L44">		String s = new String (&quot;&lt;request version='1.0' id='&quot; + id + &quot;'&gt;&quot; +</span>
+<span class="nc" id="L45">				&quot;&lt;playerInfo password=&quot; + </span>
+<span class="nc" id="L46">				&quot;&lt;/request&gt;&quot;);</span>
+<span class="nc" id="L47">		Document d = Message.construct (s);</span>
+<span class="nc" id="L48">		Message m = new Message(d);</span>
+<span class="nc" id="L49">		lobby.getContext().getClient().sendToServer(lobby, m, this);</span>
+<span class="nc" id="L50">		System.out.println(&quot;PlayerInfoRequestController.process(): Request sent&quot;);</span>
+<span class="nc" id="L51">	}</span>
+	
+	/**
+	 *  process correlated response (to given request) when received from server
+	 *	@author jbodah
+	 */
+	@Override
+	public void process(ILobby lobby, Message request, Message response) {
+<span class="nc" id="L59">		System.out.println(&quot;PlayerInfoRequestController.process(ILobby, Message, Message): Received &quot; + response + &quot; in response to &quot; + request);</span>
+<span class="nc" id="L60">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

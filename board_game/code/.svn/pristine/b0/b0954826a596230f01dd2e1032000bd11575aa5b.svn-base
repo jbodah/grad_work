@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SimpleClientConnection.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.framework.common.network</a> &gt; <span class="el_source">SimpleClientConnection.java</span></div><h1>SimpleClientConnection.java</h1><pre class="source lang-java linenums">package ks.framework.common.network;
+
+import java.net.*;
+import java.io.*;
+
+/**
+ * Base class to manage the client-side of a Socket connection.
+ * &lt;p&gt;
+ * @author George Heineman (heineman@cs.wpi.edu)
+ */
+public class SimpleClientConnection {
+	/** Socket once connection has been made. */
+	private Socket socket;
+
+	/** host to which connection is to be made. */
+	private String host;
+
+	/** Port on which to connect. */
+	private int port;
+
+	/** How to read from server. */
+<span class="nc" id="L22">	private CommunicationAgent agent = null;</span>
+
+	/** Status of connection. */
+<span class="nc" id="L25">	private boolean connectState = false;</span>
+
+	/** Protect default construction to subclasses only. */
+<span class="nc" id="L28">	protected SimpleClientConnection() {</span>
+<span class="nc" id="L29">	}</span>
+
+	/**
+	 * Prepare connection on given host and port.
+	 * 
+	 * @param theHost       host to which connection is requested.
+	 * @param thePort       Socket port number to which to connect.
+	 * @throws IOException  Any failure is reported as an exception.
+	 */
+<span class="nc" id="L38">	public SimpleClientConnection(String theHost, int thePort) throws IOException {</span>
+<span class="nc" id="L39">		connect(theHost, thePort);</span>
+<span class="nc" id="L40">	}</span>
+
+	/**
+	 * Connect to given host at specified port.
+	 * 
+	 * @param theHost       host to which connection is requested.
+	 * @param thePort       Socket port number to which to connect.
+	 * @throws IOException  Any failure is reported as an exception.
+	 */
+	void connect(String theHost, int thePort) throws IOException {
+<span class="nc" id="L50">		host = theHost;</span>
+<span class="nc" id="L51">		port = thePort;</span>
+
+<span class="nc" id="L53">		socket = new Socket(host, port);</span>
+
+<span class="nc" id="L55">		agent = new CommunicationAgent (socket.getInputStream(), socket.getOutputStream());</span>
+<span class="nc" id="L56">		connectState = true;</span>
+<span class="nc" id="L57">	}</span>
+
+	/**
+	 * Terminate the connection to the server.
+	 */
+	public void disconnect() {
+<span class="nc bnc" id="L63" title="All 2 branches missed.">		if (isConnected()) {</span>
+<span class="nc" id="L64">			agent.close();</span>
+
+<span class="nc" id="L66">			connectState = false;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">			if (socket != null) {</span>
+				try {
+<span class="nc" id="L69">					socket.close();</span>
+<span class="nc" id="L70">				} catch (Exception e) {</span>
+<span class="nc" id="L71">					System.err.println(&quot;SimpleClientConnection: Error in disconnect(), &quot; + e.toString());</span>
+				}
+			}
+		}
+<span class="nc" id="L75">		agent = null;</span>
+<span class="nc" id="L76">		socket = null;</span>
+<span class="nc" id="L77">	}</span>
+	/**
+	 * Determines if server is open for communication?
+	 *
+	 * @return  true if server is available for communication; false otherwise.
+	 */
+	public boolean isConnected() {
+<span class="nc" id="L84">		return connectState;</span>
+	}
+
+	/**
+	 * Return agent responsible for communication to server.
+	 * 
+	 * @return agent responsible for communication.
+	 */
+	public CommunicationAgent getAgent() {
+<span class="nc" id="L93">		return agent;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

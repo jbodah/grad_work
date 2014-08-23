@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Communicator.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.framework.communicator</a> &gt; <span class="el_source">Communicator.java</span></div><h1>Communicator.java</h1><pre class="source lang-java linenums">package ks.framework.communicator;
+
+import java.util.*;
+
+import ks.framework.common.Message;
+import ks.framework.interfaces.ICommunicator;
+import ks.framework.interfaces.IServerConnection;
+
+/**
+ * Responsible for all communication from the server to its clients.
+ * &lt;p&gt;
+ * Communicator will need access to an IUserManager object to be able to
+ * identify the set of active uers during a broadcast.
+ * 
+ * Note that we read Commands from the client and write Messages
+ * to the client.
+ * 
+ * @author George T. Heineman (heineman@cs.wpi.edu)
+ */
+<span class="nc" id="L20">public class Communicator implements IServerConnection {</span>
+
+	/** Record ICommunicator entities on behalf of the server with regard to a client. */
+<span class="nc" id="L23">	private Hashtable&lt;String,ICommunicator&gt; communicationHash = new Hashtable&lt;String,ICommunicator&gt;();</span>
+
+	/**
+	 * Distribute message based upon its status.
+	 * &lt;p&gt;
+	 * If the message is not a broadcast message, it is only sent to the
+	 * designated recipient of the message.
+	 * &lt;p&gt;
+	 * If the message is a broadcast message and the designated recipient of
+	 * the message is different from the originator, then the message is broadcast
+	 * to all connected users EXCEPT the originator.
+	 * &lt;p&gt;
+	 * To produce a message to be broadcast to all connected users INCLUDING
+	 * the originator of the message, just make sure that the recipient is
+	 * equal to the originator. 
+	 * &lt;p&gt;
+	 * Please recognize this sequence of logic as a glorified hack.
+	 * 
+	 * @param m     Message to be delivered based upon its recipient status.
+	 * @return      true if at least one message was sent; otherwise false
+	 */
+	public boolean distribute(Message m) {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		if (m.isBroadcast()) {</span>
+			// send to originator ONLY IF recipient is also set to the originator,
+<span class="nc" id="L47">			String originator = m.getOriginator();</span>
+<span class="nc" id="L48">			String recipient = m.getRecipient();</span>
+			
+<span class="nc" id="L50">			boolean atLeastOneSent = false;</span>
+<span class="nc bnc" id="L51" title="All 4 branches missed.">			if (originator != null &amp;&amp; recipient != null &amp;&amp; </span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">				originator.equals(recipient)) {</span>
+<span class="nc" id="L53">				atLeastOneSent |= output(originator, m);</span>
+			}
+			
+			// and now distribute to everyone else.
+<span class="nc" id="L57">			atLeastOneSent |= distribute(communicationHash.keySet().iterator(), m, true);</span>
+<span class="nc" id="L58">			return atLeastOneSent;</span>
+		}
+		
+<span class="nc" id="L61">		String recipient = m.getRecipient();</span>
+<span class="nc" id="L62">		return output(recipient, m);</span>
+	}
+
+	/**
+	 * Distribute message to given user list.
+	 * &lt;p&gt;
+	 * Regardless of whether the given message is a broadcast, it is delivered
+	 * to all active users in the given iterator (which may include the originator
+	 * of the message).
+	 * 
+	 * @param users     Iterator (of String) of users. 
+	 * @param m         Message to be delivered to all active users
+	 * @return          true if at least one message was sent; otherwise false
+	 */
+	public boolean distribute(Iterator&lt;String&gt; users, Message m) {
+<span class="nc" id="L77">		return distribute(users, m, false);</span>
+	}
+
+	// helper method.
+	private boolean distribute(Iterator&lt;String&gt; users, Message m, boolean skipSelf) {
+		
+		// for each user, send message
+<span class="nc" id="L84">		String from = m.getOriginator();</span>
+<span class="nc" id="L85">		boolean atLeastOneSent = false;</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		while (users.hasNext()) {</span>
+<span class="nc" id="L87">			String toUser = users.next();</span>
+
+			// Skip SELF
+<span class="nc bnc" id="L90" title="All 4 branches missed.">			if (skipSelf &amp;&amp; toUser.equals(from)) {</span>
+<span class="nc" id="L91">				continue;</span>
+			}
+			
+<span class="nc" id="L94">			atLeastOneSent |= output(toUser, m);</span>
+		}
+		
+<span class="nc" id="L97">		return atLeastOneSent;</span>
+	}
+	
+	/**
+	 * Register with the communicator the means to interact with given userName.
+	 * &lt;p&gt;
+	 * Cannot connect the same user twice.
+	 * 
+	 * @param userName    String representing user connecting to server
+	 * @param agent       ICommunicator object managing our communication.
+	 * @exception         agent is already associated with an existing user.
+	 */
+	public boolean connectUser(String userName, ICommunicator agent) throws IllegalArgumentException {
+<span class="nc" id="L110">		ICommunicator ic = communicationHash.get(userName);</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		if (ic != null) { return false; }</span>
+		
+		// make sure agent isn't already in the hash table
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		for (String exist : communicationHash.keySet()) {</span>
+<span class="nc" id="L115">			ICommunicator existAgent = communicationHash.get(exist);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">			if (existAgent == agent) {</span>
+<span class="nc" id="L117">				throw new IllegalArgumentException(&quot;That agent is already associated with &quot; + exist);</span>
+			}
+		}
+		
+<span class="nc" id="L121">		communicationHash.put (userName, agent);</span>
+<span class="nc" id="L122">		return true;</span>
+	}
+	
+	/**
+	 * Remove user from communication set.
+	 * 
+	 * @param userName    String representing user connecting to server
+	 */
+	public boolean disconnectUser(String userName) {
+<span class="nc" id="L131">		ICommunicator ic = communicationHash.get(userName);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">		if (ic == null) { return false; }</span>
+		
+<span class="nc" id="L134">		ic.close();</span>
+<span class="nc" id="L135">		communicationHash.remove (userName);</span>
+<span class="nc" id="L136">		return true;</span>
+	}
+
+	/**
+	 * Helper method to ensure delivery of message to agent for given player.
+	 * 
+	 * @param player      designated recipient
+	 * @param m           message for delivery
+	 */
+	private boolean output(String player, Message m) {
+<span class="nc" id="L146">		ICommunicator agent = (ICommunicator) communicationHash.get (player);</span>
+<span class="nc bnc" id="L147" title="All 2 branches missed.">		if (agent == null) {</span>
+<span class="nc" id="L148">			return false;  // not much to do!</span>
+		}
+
+		// consider it delivered.
+<span class="nc" id="L152">		return agent.writeObject (m);</span>
+	}
+	
+	/** 
+	 * Determine if given user is online.
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public boolean isOnline(String user) {
+<span class="nc" id="L162">		return communicationHash.containsKey(user);</span>
+	}
+ 
+	/** 
+	 * Disconnect should user be logged in.
+	 * 
+	 * @param username
+	 * @return
+	 */
+//	public boolean disconnect(String username) {
+//		ICommunicator ic = communicationHash.get(username);
+//		if (ic == null) { return false; }
+//		
+//		ic.close();
+//		return true;
+//	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

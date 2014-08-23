@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestProcessLobbyInputController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.controllers</a> &gt; <span class="el_source">TestProcessLobbyInputController.java</span></div><h1>TestProcessLobbyInputController.java</h1><pre class="source lang-java linenums">package ks.client.controllers;
+
+import org.w3c.dom.Document;
+
+import arch.ServerExtension;
+
+
+import junit.framework.TestCase;
+import ks.LocalClientProcessor;
+import ks.client.UserContext;
+import ks.client.controllers.ConnectController;
+import ks.client.controllers.DisconnectController;
+import ks.client.lobby.LobbyFrame;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+import ks.framework.communicator.SampleOutput;
+import ks.server.controllers.ServerControllerChain;
+import ks.server.ipc.Server;
+import ks.server.processor.ServerProcessor;
+
+/**
+ * 
+ */
+<span class="nc" id="L24">public class TestProcessLobbyInputController extends TestCase {</span>
+
+	// host
+	public static final String localhost = &quot;localhost&quot;;
+	
+	// sample credentials
+	public static final String user = &quot;11324&quot;;
+	public static final String password = &quot;password&quot;;
+	
+	/** Constructed objects for this test case. */
+	Server server;
+	UserContext context;
+	LobbyFrame lobby;
+	LocalClientProcessor lcp;
+	
+	// random port 8000-10000 to avoid arbitrary conflicts
+	int port;
+	
+	protected void setUp() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L45">			assertTrue (Configure.configure());</span>
+			
+			// validate a simple tables
+<span class="nc" id="L48">			String s = Message.requestHeader() + &quot;&lt;tables/&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L49">			Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">			assertTrue (d != null);</span>
+			
+<span class="nc" id="L52">		} catch (Exception e) {</span>
+<span class="nc" id="L53">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+		
+<span class="nc" id="L56">		port = (int) (8000 + Math.random()*2000);</span>
+<span class="nc" id="L57">		server = new Server(port);</span>
+		
+		// Now that CHAT is not standard, we have to add in its controller
+		// for processing.
+<span class="nc" id="L61">		ServerControllerChain head = ServerProcessor.head();</span>
+<span class="nc" id="L62">		head.append(new ServerExtension());</span>
+		
+<span class="nc" id="L64">		assertTrue (server.activate());</span>
+		
+<span class="nc" id="L66">		waitASecond();</span>
+		
+		// create client to connect
+<span class="nc" id="L69">		context = new UserContext();  // by default, localhost</span>
+<span class="nc" id="L70">		lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L71">		lobby.setVisible(true);</span>
+		
+<span class="nc" id="L73">		context.setPort(port);</span>
+<span class="nc" id="L74">		context.setUser(user);</span>
+<span class="nc" id="L75">		context.setPassword(password);</span>
+<span class="nc" id="L76">		context.setSelfRegister(false);</span>
+		
+<span class="nc" id="L78">		assertTrue (new ConnectController(lobby).process(context));</span>
+		
+<span class="nc" id="L80">		waitASecond();</span>
+		
+		// now 'hook' in a new processor to validate messages are being
+		// properly received here.
+<span class="nc" id="L84">		lcp = new LocalClientProcessor(lobby);</span>
+<span class="nc" id="L85">		context.getClient().setProcessor(lcp);</span>
+<span class="nc" id="L86">	}</span>
+
+	@Override
+	protected void tearDown() {
+		// the other way to leave is to manually invoke controller.
+<span class="nc" id="L91">		assertTrue (new DisconnectController (lobby).process(context));</span>
+		
+<span class="nc" id="L93">		waitASecond();</span>
+<span class="nc" id="L94">		server.deactivate();</span>
+		
+<span class="nc" id="L96">		lobby.setVisible(false);</span>
+<span class="nc" id="L97">		lobby.dispose();</span>
+<span class="nc" id="L98">	}</span>
+	
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="nc" id="L103">			Thread.sleep(1000);</span>
+<span class="nc" id="L104">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="nc" id="L107">	}</span>
+	
+	// Note that all test cases now can focus on the sending of a message
+	// and the proper receipt of actual request(s) from the server. 
+	// Still doesn't handle broadcast well, however.
+	public void testClient() {
+
+		// another &quot;client&quot; connected to the same server
+<span class="nc" id="L115">		SampleOutput sample = new SampleOutput();</span>
+<span class="nc" id="L116">		server.connectUser(&quot;1133&quot;, sample);</span>
+		
+		// validate that lobby input is working as expected
+<span class="nc" id="L119">		ProcessLobbyInputController plic = new ProcessLobbyInputController(lobby);</span>
+		
+		// try to send chat message.
+<span class="nc" id="L122">		plic.process(&quot;Hey there&quot;);</span>
+		
+<span class="nc" id="L124">		waitASecond();</span>
+		
+		// WE should have no message because chat doesn't come back to owner
+<span class="nc" id="L127">		assertFalse (lcp.hasMessage());</span>
+		
+		// however user 1133 should have seen it
+<span class="nc" id="L130">		boolean hasObj = sample.hasObject();</span>
+<span class="nc" id="L131">		assertTrue (hasObj);</span>
+<span class="nc" id="L132">		Message m = (Message) sample.readObject();</span>
+<span class="nc" id="L133">		assertEquals (&quot;output&quot;, m.getName());</span>
+<span class="nc" id="L134">	}	</span>
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

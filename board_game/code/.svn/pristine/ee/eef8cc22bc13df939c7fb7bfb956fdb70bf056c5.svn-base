@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ConnectController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.controllers</a> &gt; <span class="el_source">ConnectController.java</span></div><h1>ConnectController.java</h1><pre class="source lang-java linenums">package ks.client.controllers;
+
+import ks.client.UserContext;
+import ks.client.interfaces.ILobby;
+import ks.client.ipc.Client;
+import ks.client.processor.ClientProcessor;
+
+/**
+ * On client-side, manage the request to initiate a connection to a remote 
+ * server host.
+ * &lt;p&gt;
+ * This is an internal controller used by the KS framework code and that is why
+ * it doesn't implement {@link IProcessClientMessage}. You will not need to
+ * modify this class.
+ * 
+ * @author George Heineman
+ */
+public class ConnectController {
+
+	/** Manages top-level communication via lobby root object. */
+	ILobby lobby;
+	
+	/** 
+	 * Connection controller needs to know the RoomGUI to manage its functionality.
+	 * 
+	 * @param room
+	 */
+<span class="fc" id="L28">	public ConnectController (ILobby lobby) {</span>
+<span class="fc" id="L29">		this.lobby = lobby;</span>
+<span class="fc" id="L30">	}</span>
+
+	/**
+	 * Attempt to connect to the remote host as specified by this context
+	 * object.
+	 * &lt;p&gt;
+	 * A successful completion of this method results in a properly configured
+	 * Client object associated with this context that can be used for all
+	 * future communication with the remote server.
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public boolean process(UserContext context) {
+		
+		// create client and ensure that a processor is constructed to be 
+		// able to manage requests for the lobby
+<span class="fc" id="L47">		Client client = new Client();</span>
+<span class="fc" id="L48">		client.setProcessor(new ClientProcessor(lobby));</span>
+		
+		// this will initiate a request to start speaking in its own thread
+		// We have to wait until later to determine whether that communication
+		// had succeeded.
+<span class="fc" id="L53">		client.connect(context.getHost(), context.getPort(), context.getUser(), context.getPassword(), context.getSelfRegister());</span>
+		
+		// if we get here, we believe we have the right context
+<span class="fc" id="L56">		context.setClient(client);</span>
+		
+		// we can only say we are &quot;attempting to connect&quot; because we now must
+		// wait for confirmation from the server that we have appropriate credentials
+<span class="fc" id="L60">		lobby.append(&quot;Connecting to: &quot; + context.getHost() + &quot;@&quot; + context.getPort());</span>
+		
+		// we can't know success of this method as of yet, until the thread 
+		// communicating to the server returns.
+<span class="fc" id="L64">		return true;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

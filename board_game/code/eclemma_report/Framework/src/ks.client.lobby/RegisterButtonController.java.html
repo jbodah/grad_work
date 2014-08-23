@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>RegisterButtonController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.lobby</a> &gt; <span class="el_source">RegisterButtonController.java</span></div><h1>RegisterButtonController.java</h1><pre class="source lang-java linenums">package ks.client.lobby;
+
+import ks.client.UserContext;
+import ks.client.controllers.ConnectController;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.client.ipc.Client;
+
+/**
+ * GUI-based controller reacting to the user request to register a new account.
+ * 
+ * @author George Heineman
+ */
+public class RegisterButtonController {
+
+	/** Frame being managed. */
+	ConnectFrame frame;
+	
+	/** When constructing controller, need frame. */
+<span class="nc" id="L20">	public RegisterButtonController (ConnectFrame frame) {</span>
+<span class="nc" id="L21">		this.frame = frame;</span>
+<span class="nc" id="L22">	}</span>
+	
+	/**
+	 * Process registration by validating that passwords match, and if they
+	 * do, by going ahead and registering with the KombatGames server.
+	 * @param lobbyInit 
+	 */
+	public ILobby process(ILobbyInitialize lobbyInit) {
+<span class="nc" id="L30">		String password = matchingPasswords();</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">		if (password == null) {</span>
+<span class="nc" id="L32">			frame.setError(&quot;Passwords do not match!&quot;);</span>
+<span class="nc" id="L33">			return null;</span>
+		}
+		
+<span class="nc" id="L36">		frame.clearError();</span>
+		
+		// hash passwords.
+<span class="nc" id="L39">		password = Client.sha1(password);</span>
+		
+		// initiate a new context
+<span class="nc" id="L42">		UserContext context = new UserContext();</span>
+<span class="nc" id="L43">		context.setPassword(password);</span>
+<span class="nc" id="L44">		context.setSelfRegister(true);</span>
+		
+		// Create LobbyGUI presuming successful connection
+		// for now it is visible (debugging purposes) but it
+		// will become visible once secure connection has been
+		// established.
+<span class="nc" id="L50">		LobbyFrame lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L51">		lobbyInit.initializeLobby(lobby);</span>
+<span class="nc" id="L52">		lobby.setVisible(true);</span>
+					
+		// just when I said it was uncommon for controllers to invoke other
+		// controllers, look what comes up naturally...
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		if (new ConnectController(lobby).process(context)) {</span>
+			// success
+		
+			// within this anonymous class we can access
+			// our outer class with this little bit of syntax. Make
+			// sure to dispose for thread.
+<span class="nc" id="L62">			frame.setVisible(false);</span>
+<span class="nc" id="L63">			frame.dispose();</span>
+		}			
+		
+<span class="nc" id="L66">		return lobby;</span>
+	}
+	
+	/**
+	 * Determine if passwords in registration area match. If they do,
+	 * return the valid password. If no match, return null. 
+	 * 
+	 * In both cases, both fields are wiped.
+	 * 
+	 * @return string if matching otherwise &lt;code&gt;null&lt;/code&gt;
+	 */
+	String matchingPasswords() {
+<span class="nc" id="L78">		String p1 = frame.extractPassword(frame.registerPassText);</span>
+<span class="nc" id="L79">		String p2 = frame.extractPassword(frame.registerConfirmPassText);</span>
+		
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if (p1.equals(p2)) { return p1; }</span>
+
+		// no match.
+<span class="nc" id="L84">		return null;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

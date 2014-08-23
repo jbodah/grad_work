@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TableResponseHandlerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.xml_handlers</a> &gt; <span class="el_source">TableResponseHandlerTest.java</span></div><h1>TableResponseHandlerTest.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.xml_handlers;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import ks.client.UserContext;
+import ks.client.controllers.ConnectController;
+import ks.client.controllers.DisconnectController;
+import ks.client.lobby.LobbyFrame;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import arch.WSClientArchitecture;
+
+import test.TestData;
+import test.Utilities;
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Room;
+import wordstealclient.entities.Table;
+import wordstealclient.entities.Table.TABLE_STATE;
+
+<span class="fc" id="L26">public class TableResponseHandlerTest {</span>
+	Message mOne ;
+	Message mTwo ;
+	
+	@Before
+	public void setUp() {
+		// Create a message to test parsing
+		// 1192 is just a random id number		
+<span class="fc" id="L34">		mOne = Utilities.makeTestMessage(TestData.samplePlayerResponse(&quot;1192&quot;));</span>
+<span class="fc" id="L35">		mTwo = Utilities.makeTestMessage(TestData.sampleTableResponse(&quot;2000&quot;));</span>
+<span class="fc" id="L36">	}</span>
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L40">		mOne = null ;</span>
+<span class="fc" id="L41">		mTwo = null ;</span>
+<span class="fc" id="L42">	}</span>
+	
+	@Test
+	public void test() {
+<span class="fc" id="L46">		context.getClient().process(mOne);</span>
+		
+<span class="fc" id="L48">		Player bob 		= Room.getInstance().getPlayer(1456) ;</span>
+<span class="fc" id="L49">		Player george 	= Room.getInstance().getPlayer(1213) ;</span>
+		
+<span class="pc bpc" id="L51" title="1 of 2 branches missed.">		assertTrue( bob != null ) ;</span>
+<span class="fc" id="L52">		assertEquals( bob.getAlias(), &quot;Bob Smith&quot; ) ;</span>
+<span class="fc" id="L53">		assertEquals( bob.getSudokuRating(), 9000 ) ;</span>
+<span class="fc" id="L54">		assertEquals( bob.getWordstealRating(), 1231 ) ;</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">		assertTrue( george != null ) ;</span>
+<span class="fc" id="L56">		assertEquals( george.getAlias(), &quot;George Heineman&quot; ) ;</span>
+<span class="fc" id="L57">		assertEquals( george.getSolitaireRating(), 229 ) ;</span>
+<span class="fc" id="L58">		assertEquals( george.getWordstealRating(), 1234 ) ;</span>
+		
+<span class="fc" id="L60">		context.getClient().process(mTwo);</span>
+		
+<span class="fc" id="L62">		Table tableOne = Room.getInstance().getTable(1) ;</span>
+		
+<span class="fc" id="L64">		assertEquals( tableOne.getPlayer(1456), bob );</span>
+<span class="fc" id="L65">		assertEquals( tableOne.getPlayer(1213), george );</span>
+<span class="fc" id="L66">		assertEquals( tableOne.getModerator(), george );</span>
+<span class="fc" id="L67">		assertEquals( tableOne.getGame(), &quot;wordsteal&quot; );</span>
+<span class="fc" id="L68">		assertEquals( tableOne.getSeed(), 12944 );</span>
+<span class="fc" id="L69">		assertEquals( tableOne.getOptions(), &quot;turnTime=30,noS=true,maxScore=50&quot; );</span>
+<span class="fc" id="L70">		assertEquals( tableOne.getNumberOfPlayers(), 2 );</span>
+<span class="fc" id="L71">		assertEquals( tableOne.getTableState(), TABLE_STATE.PUBLIC );</span>
+		
+<span class="fc" id="L73">		Table tableTwo = Room.getInstance().getTable(2);</span>
+		
+<span class="fc" id="L75">		assertEquals( tableTwo.getTableState(), TABLE_STATE.PRIVATE ) ;</span>
+
+<span class="fc" id="L77">		Table tableThree = Room.getInstance().getTable(3) ;</span>
+		
+<span class="fc" id="L79">		assertEquals( tableThree.getTableState(), TABLE_STATE.INGAME ) ;</span>
+		
+<span class="fc" id="L81">		Table tableFour = Room.getInstance().getTable(4) ;</span>
+		
+<span class="fc" id="L83">		assertEquals( tableFour.getTableState(), TABLE_STATE.BYINVITATION ) ;</span>
+		
+<span class="fc" id="L85">		Table tableFive = Room.getInstance().getTable(5) ;</span>
+		
+<span class="fc" id="L87">		assertEquals( tableFive.getTableState(), TABLE_STATE.BYINVITATION ) ;</span>
+<span class="fc" id="L88">		assertEquals( tableFive.getNumberOfPlayers(), Table.MAX_PLAYERS );</span>
+<span class="fc" id="L89">	}</span>
+
+	
+	/********************* BOILERPLATE CODE *********************/
+	
+	// host
+	public static final String localhost = &quot;localhost&quot;;
+	
+	// sample credentials (really meaningless in the testing case)
+	public static final String user = &quot;11323&quot;;
+	public static final String password = &quot;password&quot;;
+	
+	/** Constructed objects for this test case. */
+	UserContext context;
+	LobbyFrame lobby;
+	
+	// random port 8000-10000 to avoid arbitrary conflicts
+	int port;
+	
+	/**
+	 * setUp() method is executed by the JUnit framework prior to each 
+	 * test case.
+	 */
+	@Before
+	public void setUpTwo() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="fc" id="L116">			Message.unconfigure();</span>
+<span class="fc" id="L117">			assertTrue (Configure.configure());</span>
+<span class="nc" id="L118">		} catch (Exception e) {</span>
+<span class="nc" id="L119">			fail (&quot;Unable to setup Message tests.&quot;); </span>
+		}
+		
+<span class="fc" id="L122">		WSClientArchitecture.setupControllerChain();</span>
+		
+		// create client to connect
+<span class="fc" id="L125">		context = new UserContext();  // by default, localhost</span>
+<span class="fc" id="L126">		lobby = new LobbyFrame (context);</span>
+<span class="fc" id="L127">		lobby.setVisible(true);</span>
+		
+<span class="fc" id="L129">		context.setPort(port);</span>
+<span class="fc" id="L130">		context.setUser(user);</span>
+<span class="fc" id="L131">		context.setPassword(password);</span>
+<span class="fc" id="L132">		context.setSelfRegister(false);</span>
+		
+		// connect client to server
+<span class="fc" id="L135">		assertTrue (new ConnectController(lobby).process(context));</span>
+		
+		// wait for things to settle down. As your test cases become more
+		// complex, we may find it necessary to include additional waiting 
+		// times.
+<span class="fc" id="L140">		waitASecond();</span>
+<span class="fc" id="L141">	}</span>
+
+	/**
+	 * tearDown() is executed by JUnit at the conclusion of each individual
+	 * test case.
+	 */
+	@After
+	public void tearDownTwo() {
+		// the other way to leave is to manually invoke controller.
+<span class="fc" id="L150">		assertTrue (new DisconnectController (lobby).process(context));</span>
+		
+<span class="fc" id="L152">		lobby.setVisible(false);</span>
+<span class="fc" id="L153">		lobby.dispose();</span>
+<span class="fc" id="L154">	}</span>
+	
+	// helper function to sleep for a second.
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="fc" id="L160">			Thread.sleep(1000);</span>
+<span class="nc" id="L161">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="fc" id="L164">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

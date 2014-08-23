@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Configure.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.framework.common</a> &gt; <span class="el_source">Configure.java</span></div><h1>Configure.java</h1><pre class="source lang-java linenums">package ks.framework.common;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.URLConnection;
+
+
+/**
+ * Helper class whose only purpose is to simplify the process of securing the appropriate
+ * ks.xsd file to use. If there is no Internet connection, then at least a local copy
+ * (which may be marginally out of date) is to be used. 
+ * 
+ * @author George Heineman 
+ */
+<span class="pc" id="L19">public class Configure {</span>
+	
+	/** Default file. */
+	public static final String DEFAULT_KS_XSD = &quot;ks.xsd&quot;;
+	
+	/** Default URL. */
+	public static final String DEFAULT_KS_URL = &quot;http://www.wpi.edu/~heineman/xml/ks.xsd&quot;;
+	
+	/** Default XSD Name. */
+	public static final String XSD_NAME = &quot;ks.xsd&quot;;
+	
+	/**
+	 * Properly configure the XML schema definition file we are to use.
+	 * 
+	 * @return  true if successful in either attempt to retrieve ks.xsd via the Internet
+	 * or using local copy
+	 */
+	public static boolean configure() {
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">		if (configureURL(DEFAULT_KS_URL)) {</span>
+<span class="fc" id="L38">			return true;</span>
+		}
+		
+<span class="nc" id="L41">		return configureLocal(DEFAULT_KS_XSD);</span>
+	}
+	
+	// record last known FAILURE and cache it to save headaches later during testing. HACK
+<span class="fc" id="L45">	static String lastFailedURL = &quot;&quot;;</span>
+	
+	/**
+	 * Helper function to load up schema definition file from given HTTP
+	 * Address.
+	 */
+	static boolean configureURL(String httpAddress) {
+		// Determine the XML schema we are going to use. First try to see if we
+		// have internet access to get most recent one. Otherwise, use our local
+		// copy and cross-fingers to hope it works.
+<span class="fc" id="L55">		URL url = null;</span>
+		try {
+<span class="fc" id="L57">			url = new URL(httpAddress);</span>
+<span class="nc" id="L58">		} catch (MalformedURLException e) {</span>
+			// ignore
+		}
+		
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">		if (url == null) { </span>
+<span class="nc" id="L63">			return false;</span>
+		}
+		
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">		if (lastFailedURL.equals(httpAddress)) {</span>
+<span class="nc" id="L67">			return configureLocal(DEFAULT_KS_XSD);</span>
+		}
+		
+		// Try to access the ks.xsd via the Internet. If it works, configure and 
+		// we are done.
+		try {
+<span class="fc" id="L73">			URLConnection con = url.openConnection();</span>
+<span class="fc" id="L74">			InputStream is = con.getInputStream();</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">			if (is != null) {</span>
+<span class="fc" id="L76">				Message.configure(XSD_NAME, url);</span>
+<span class="fc" id="L77">				return true;</span>
+			}
+<span class="nc" id="L79">		} catch (IllegalStateException e) {</span>
+<span class="nc" id="L80">			System.err.println(e.getMessage());</span>
+<span class="nc" id="L81">		} catch (IOException e) {</span>
+<span class="nc" id="L82">			System.err.println(e.getMessage());</span>
+		}
+		
+		// cache this value so we can avoid looking for it again.
+<span class="nc" id="L86">		lastFailedURL = httpAddress;</span>
+		
+<span class="nc" id="L88">		return configureLocal(DEFAULT_KS_XSD);</span>
+	}
+	
+	/**
+	 * Helper function to load up schema definition file locally
+	 * when internet connection is disabled.
+	 * 
+	 */
+	static boolean configureLocal(String file) {
+		// if we get here, try to access local copy
+<span class="nc" id="L98">		File f = new File (file);</span>
+<span class="nc" id="L99">		URI uri = f.toURI();</span>
+		URL url;
+		try {
+<span class="nc" id="L102">			url = uri.toURL();</span>
+			try {
+<span class="nc" id="L104">				URLConnection con = url.openConnection();</span>
+<span class="nc" id="L105">				InputStream is = con.getInputStream();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">				if (is != null) {</span>
+<span class="nc" id="L107">					System.err.println(&quot;Using local copy of &quot; + file + &quot;. May be out of date...&quot;);</span>
+<span class="nc" id="L108">					Message.configure(XSD_NAME, url);</span>
+<span class="nc" id="L109">					return true;</span>
+				}
+<span class="nc" id="L111">			} catch (IllegalStateException e) {</span>
+				// pass through
+<span class="nc" id="L113">			} catch (IOException e) {</span>
+				// pass through
+			}
+<span class="nc" id="L116">		} catch (MalformedURLException e) {</span>
+			// pass through
+		}
+		
+<span class="nc" id="L120">		System.err.println(&quot;Unable to access local ks.xsd file&quot;);</span>
+<span class="nc" id="L121">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

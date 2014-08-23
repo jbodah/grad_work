@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>OptionsRequestControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.requests</a> &gt; <span class="el_source">OptionsRequestControllerTest.java</span></div><h1>OptionsRequestControllerTest.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.requests;
+
+import ks.client.UserContext;
+import ks.client.interfaces.IController;
+import ks.client.ipc.MockServer;
+import ks.client.lobby.LobbyFrame;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+
+import org.junit.*;
+import org.w3c.dom.Document;
+
+import wordstealclient.controllers.uncorrelated_requests.OptionsRequestController;
+import wordstealclient.entities.Table.TABLE_STATE;
+import wordstealclient.util.XMLSchema;
+import static org.junit.Assert.*;
+
+<span class="fc" id="L18">public class OptionsRequestControllerTest {</span>
+	
+	public static final String localhost = &quot;localhost&quot;;
+	public static final String user = &quot;11323&quot;;
+	public static final String password = &quot;password&quot;;
+	public static final int tableID = 1;
+	public static final int seed = 50;
+	public static final String game = &quot;wordsteal.Wordsteal&quot;;
+<span class="fc" id="L26">	public static final TABLE_STATE state = TABLE_STATE.PUBLIC;</span>
+	UserContext context;
+	LobbyFrame lobby;
+	MockServer mockServer;
+	
+	@Before
+	public void setUp() {
+		
+		try {
+<span class="fc" id="L35">			Message.unconfigure();</span>
+<span class="fc" id="L36">			assertTrue (Configure.configure());</span>
+			
+			// create client to connect
+<span class="fc" id="L39">			context = new UserContext();  </span>
+<span class="fc" id="L40">			lobby = new LobbyFrame (context);</span>
+<span class="fc" id="L41">			lobby.setVisible(true);</span>
+			
+<span class="fc" id="L43">			context.setUser(user);</span>
+<span class="fc" id="L44">			context.setPassword(password);</span>
+<span class="fc" id="L45">			context.setSelfRegister(false);</span>
+			
+<span class="fc" id="L47">			mockServer = new MockServer(lobby);</span>
+<span class="fc" id="L48">			context.setClient(mockServer);</span>
+			
+			
+<span class="nc" id="L51">		} catch (Exception e) {</span>
+<span class="nc" id="L52">			fail (&quot;Unable to perform setup for OptionsRequestControllerTest&quot;);</span>
+		}
+<span class="fc" id="L54">	}</span>
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L58">		lobby.dispose();</span>
+<span class="fc" id="L59">	}</span>
+	
+	@Test
+	public void processOptionsRequest()
+	{
+		try {			
+<span class="fc" id="L65">			OptionsRequestController orc = new OptionsRequestController(lobby);</span>
+<span class="fc" id="L66">			orc.process(tableID, state, seed, game);</span>
+			
+<span class="fc" id="L68">			Message req = mockServer.firstRoundTripRequest();</span>
+<span class="fc" id="L69">			IController ic = mockServer.firstRoundTripController();</span>
+						
+<span class="fc" id="L71">			String s = &quot;&lt;table id=\&quot;&quot; + tableID + &quot;\&quot; seed=\&quot;&quot; + seed + &quot;\&quot; type=\&quot;&quot; + XMLSchema.convertTableState(state) + &quot;\&quot; full=\&quot;false\&quot; moderator=\&quot;1213\&quot; game=\&quot;&quot; + game + &quot;\&quot; options=\&quot;turnTime=30,noS=true,maxScore=50\&quot;&gt;&quot; + </span>
+<span class="fc" id="L72">			  &quot;&lt;player-id player=\&quot;11\&quot;/&gt;&quot; + </span>
+<span class="fc" id="L73">			  &quot;&lt;player-id player=\&quot;1213\&quot;/&gt;&quot; +</span>
+<span class="fc" id="L74">			  &quot;&lt;/table&gt;&quot;;</span>
+		
+<span class="fc" id="L76">			String xmlString = Message.responseHeader(true, req.id) + &quot;&lt;tableResponse&gt;&quot; + s + &quot;&lt;/tableResponse&gt;&lt;/response&gt;&quot;;</span>
+<span class="fc" id="L77">			Document d = Message.construct (xmlString);</span>
+<span class="fc" id="L78">			Message resp = new Message(d);</span>
+<span class="fc" id="L79">			mockServer.process(resp);</span>
+			
+<span class="fc" id="L81">			assertNotNull(resp);			</span>
+		}
+<span class="nc" id="L83">		catch (Exception e){</span>
+<span class="nc" id="L84">			fail(e.getMessage());</span>
+		}
+<span class="fc" id="L86">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

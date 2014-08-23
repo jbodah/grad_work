@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LeaveRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.uncorrelated_requests</a> &gt; <span class="el_source">LeaveRequestController.java</span></div><h1>LeaveRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.uncorrelated_requests;
+
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Room;
+import arch.WSClientArchitecture;
+import ks.client.interfaces.IController;
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+
+/**
+ * Request: leave&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: ??&lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * 	{@literal &lt;!-- Player (on own initiative) requests to leave given table --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;leave table=&quot;100&quot;/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @example2
+ * 	{@literal &lt;!-- Moderator forced player 'poorSoul' (11324) from table 100 --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;leave table=&quot;100&quot; player=&quot;11324&quot;/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;} 
+ * 
+ * @author jbodah
+ */
+public class LeaveRequestController implements IController {
+	ILobby lobby ;
+	
+<span class="fc" id="L33">	public LeaveRequestController(ILobby lobby) {</span>
+<span class="fc" id="L34">		this.lobby = lobby;</span>
+<span class="fc" id="L35">	}</span>
+	
+	/**
+	 * Create and send request
+	 * @author jbodah
+	 */
+	public void process() {
+<span class="fc" id="L42">		Message m = new Message(Message.construct (writeXMLForRequest()));</span>
+<span class="fc" id="L43">		lobby.getContext().getClient().sendToServer(m);</span>
+<span class="fc" id="L44">		System.out.println(&quot;LeaveRequestController.process(): Request sent&quot;);</span>
+<span class="fc" id="L45">		removePlayerFromTable();</span>
+<span class="fc" id="L46">	}</span>
+
+	/**
+	 * Removed current player from table (current player is the one logged in on this machine)
+	 * @author jbodah
+	 */
+	private void removePlayerFromTable() {
+<span class="fc" id="L53">		Player thisPlayer = WSClientArchitecture.getThisPlayer() ;</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">		if( thisPlayer != null )</span>
+<span class="fc" id="L55">			Room.getInstance().getTable(thisPlayer.getTableID()).removePlayer(thisPlayer.getLogin());</span>
+<span class="fc" id="L56">	}</span>
+	
+	/**
+	 *  process correlated response (to given request) when received from server
+	 *	@author jbodah
+	 */
+	@Override
+	public void process(ILobby lobby, Message request, Message response) {		
+<span class="fc" id="L64">		System.out.println(&quot;LeaveRequestController.process(ILobby, Message, Message): Received &quot; + response + &quot; in response to &quot; + request);</span>
+<span class="fc" id="L65">		parseXML( response ) ;</span>
+<span class="fc" id="L66">	}</span>
+	
+	private String writeXMLForRequest() {
+<span class="fc" id="L69">		String s = Message.requestHeader() +</span>
+<span class="fc" id="L70">				&quot;&lt;leave table='&quot; + WSClientArchitecture.getThisPlayer().getTableID() + &quot;'/&gt;&quot; +</span>
+<span class="fc" id="L71">				&quot;&lt;/request&gt;&quot;;</span>
+<span class="fc" id="L72">		return s;</span>
+	}
+	
+	/**
+	 * Parse XML response and extract the nodes we need
+	 * @author jbodah
+	 */
+	private void parseXML(Message response) {
+<span class="fc" id="L80">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

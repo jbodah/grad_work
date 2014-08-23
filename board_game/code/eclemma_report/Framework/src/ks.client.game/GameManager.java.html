@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GameManager.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">GameManager.java</span></div><h1>GameManager.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Properties;
+
+import ks.client.interfaces.IGameInterface;
+
+/**
+ * The Game Manager provides the core logic to host the actual games being
+ * considered by KombatGames, including Solitaire, WordSteal and possibly 
+ * Sudoku.
+ * &lt;p&gt;
+ * This is the interface that you will all have to code against.
+ * &lt;p&gt;
+ * This logic will increasingly become filled in as we progress over the
+ * next few weeks.
+ * 
+ * @author George Heineman
+ */
+public class GameManager {
+	
+	/** Singleton instance. */
+	static GameManager inst;
+	
+	/** Lock down the constructor. */
+<span class="fc" id="L28">	GameManager() {}</span>
+	
+	/** Callback interface to project code. */
+	IGameInterface callback;
+	
+	/** Active game window (if one exists). */
+<span class="fc" id="L34">	GameFrame frame = null;</span>
+	
+	/** Return (or create) the singleton instance. */
+	public static GameManager instance() {
+<span class="pc bpc" id="L38" title="1 of 2 branches missed.">		if (inst == null) {</span>
+<span class="fc" id="L39">			inst = new GameManager();</span>
+		}
+		
+<span class="fc" id="L42">		return inst;</span>
+	}
+	
+	/**
+	 * Expose the acceptable game types.
+	 * 
+	 * @return
+	 */
+	public static Iterator&lt;String&gt; validGameTypes() {
+<span class="nc" id="L51">		return Factory.validGameTypes();</span>
+	}
+	
+	/**
+	 * Return default pre-set options for the given game type.
+	 * &lt;p&gt;
+	 * Provides a useful starting point for the client.
+	 * 
+	 * @param gameType
+	 * @return a preconfigured {@link Properties} object containing suitable defaults. If gameType is invalid
+	 * then &lt;code&gt;null&lt;/code&gt; is returned.
+	 */
+	public static Properties defaultOptions(String gameType) {
+<span class="nc" id="L64">		Properties opts = new Properties();</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		if (Factory.isSolitaire(gameType)) {</span>
+<span class="nc" id="L66">			opts.setProperty(&quot;time&quot;, &quot;300&quot;);</span>
+<span class="nc" id="L67">			opts.setProperty(&quot;undo&quot;, Boolean.TRUE.toString());</span>
+<span class="nc" id="L68">			opts.setProperty(&quot;newHand&quot;, Boolean.TRUE.toString());</span>
+<span class="nc" id="L69">			return opts;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		} else if (Factory.isWordSteal(gameType)) {</span>
+<span class="nc" id="L71">			opts.setProperty(&quot;noS&quot;, Boolean.FALSE.toString());</span>
+<span class="nc" id="L72">			opts.setProperty(&quot;pink&quot;, Boolean.TRUE.toString());</span>
+<span class="nc" id="L73">			opts.setProperty(&quot;turnTime&quot;, &quot;45&quot;);</span>
+<span class="nc" id="L74">			opts.setProperty(&quot;pointsToWin&quot;, &quot;30&quot;);</span>
+<span class="nc" id="L75">			return opts;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		} else if (Factory.isSudoku(gameType)) {</span>
+<span class="nc" id="L77">			opts.setProperty(&quot;difficulty&quot;, &quot;1&quot;);</span>
+<span class="nc" id="L78">			return opts;</span>
+		}
+
+		// must have been invalid
+<span class="nc" id="L82">		return null;</span>
+	}
+	
+	/**
+	 * Expose the gameOptions associated with the given game type.
+	 * &lt;p&gt;
+	 * If an invalid gametype is passed in, then &lt;code&gt;null&lt;/code&gt; is passed back. 
+	 * 
+	 * @return Collection of string names representing options for that game type or &lt;code&gt;null&lt;/code&gt; if
+	 * game type is invalid.
+	 */
+	public static Collection&lt;String&gt; validOptions(String gameType) {
+<span class="nc" id="L94">		ArrayList&lt;String&gt; options = new ArrayList&lt;String&gt;();</span>
+		
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		if (Factory.isSolitaire(gameType)) {</span>
+<span class="nc" id="L97">			options.add(&quot;time&quot;);</span>
+<span class="nc" id="L98">			options.add(&quot;undo&quot;);</span>
+<span class="nc" id="L99">			options.add(&quot;newHand&quot;);</span>
+<span class="nc" id="L100">			return options;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		} else if (Factory.isWordSteal(gameType)) {</span>
+<span class="nc" id="L102">			options.add(&quot;noS&quot;);</span>
+<span class="nc" id="L103">			options.add(&quot;pink&quot;);</span>
+<span class="nc" id="L104">			options.add(&quot;turnTime&quot;);</span>
+<span class="nc" id="L105">			options.add(&quot;pointsToWin&quot;);</span>
+<span class="nc" id="L106">			return options;</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		} else if (Factory.isSudoku(gameType)) {</span>
+<span class="nc" id="L108">			options.add(&quot;difficulty&quot;);</span>
+<span class="nc" id="L109">			return options;</span>
+		}
+		
+		// invalid
+<span class="nc" id="L113">		return null;</span>
+	}
+	
+	/**
+	 * Create a game window for the game active on the given table, with the given
+	 * options and players.
+	 * &lt;p&gt;
+	 * A callback object is provided for outgoing calls by the GameManager.
+	 * 
+	 * @param tableID     table id on which game is to be played
+	 * @param me          user that is playing the game on this client 
+	 * @param options     Name/Value properties of the options
+	 * @param gameOptions Name/Value properties of the game-specific options
+	 * @param playerOrder ArrayList describing order of players on table (IDs in this array)
+	 * @param playerIDs   Properties where key=ID, name=Real Name
+	 * @param callback    call back object whenever we need to communicate back to client.
+	 * @return
+	 */
+	public boolean createGameWindow (int tableID, String me,
+			Properties options, Properties gameOptions, 
+			ArrayList&lt;String&gt; playerOrder, Properties playerIDs, IGameInterface callback) {
+<span class="fc" id="L134">		this.callback = callback;</span>
+		
+		// figure out what kind of game we are dealing with.
+<span class="fc" id="L137">		GameInformation info = Factory.create(options, gameOptions);</span>
+<span class="fc" id="L138">		info.setCurrentUser(me);</span>
+<span class="fc" id="L139">		info.setPlayers(playerOrder, playerIDs);</span>
+<span class="fc" id="L140">		info.setGameInterface(callback);</span>
+		
+		// grab old history contents
+<span class="fc" id="L143">		String oldChat = &quot;&quot;;</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">		if (frame != null) {</span>
+<span class="nc" id="L145">			oldChat = frame.getTableTextContents();</span>
+<span class="nc" id="L146">			exitGameWindow();</span>
+		}
+		
+		// prepare frame and have it know the user, table and callback.
+<span class="fc" id="L150">		frame = new GameFrame(info);</span>
+<span class="fc" id="L151">		frame.setTableNumber(tableID);</span>
+<span class="fc" id="L152">		frame.setGameInterface(callback);</span>
+		
+		// throw in the old table chat to give the 'veneer' we are reusing things.
+<span class="fc" id="L155">		frame.setTableTextContents(oldChat);</span>
+		
+		// all ready to go!
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">		if (!info.start(frame)) {</span>
+<span class="nc" id="L159">			System.err.println(&quot;Unable to launch game for some reason.&quot;);</span>
+<span class="nc" id="L160">			return false;</span>
+		}
+		
+<span class="fc" id="L163">		return true;</span>
+	}
+	
+	/** Standard error reporting if no game in progress. */
+	private void error(String action) {
+<span class="nc" id="L168">		System.err.println(&quot;There is no game in progress. Can't perform action: &quot; + action);</span>
+<span class="nc" id="L169">	}</span>
+	
+	/**
+	 * When it is the turn of the player on whose client this game is running,
+	 * your code must call this method to activate the game controls.
+	 * &lt;p&gt;
+	 * Note for solitaire games, this will be called on all client computers while
+	 * for turn-based games, only one client will perform this at a time. And it will
+	 * only be the current player's client that does it.
+	 * 
+	 * @param playerID
+	 * @return &lt;code&gt;true&lt;/code&gt; on success; &lt;code&gt;false&lt;/code&gt; if problem.
+	 */
+	public boolean activateTurn (String playerID) {
+<span class="pc bpc" id="L183" title="1 of 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L184">			error(&quot;activateTurn&quot;);</span>
+<span class="nc" id="L185">			return false;</span>
+		}
+		
+<span class="fc" id="L188">		GameInformation info = frame.getGameInformation();</span>
+<span class="fc" id="L189">		return info.activateTurn(playerID);</span>
+	}
+	
+	/**
+	 * Whenever an update occurs for a player, the client receives the message and then
+	 * invokes this method to pass those values along to the game implementation.
+	 * &lt;p&gt;
+	 * 
+	 * @param updatedScores   represents Properties where key=playerID and value=score
+	 * @param updatedGame     represents Properties where key=playerID and value=game-specific information
+	 *
+	 * @return &lt;code&gt;true&lt;/code&gt; on success; &lt;code&gt;false&lt;/code&gt; otherwise
+	 */
+	public boolean updateScores (Properties updatedScores, Properties updatedGame) {
+<span class="nc bnc" id="L203" title="All 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L204">			error(&quot;updateScores&quot;);</span>
+<span class="nc" id="L205">			return false;</span>
+		}
+		
+<span class="nc" id="L208">		GameInformation info = frame.getGameInformation();</span>
+<span class="nc" id="L209">		return info.updateScores(updatedScores, updatedGame);</span>
+	}
+	
+	/**
+	 * Whenever a turn for a player occurs, this method must be called to update
+	 * the game state.
+	 * &lt;p&gt;
+	 * This does not advance the turn or anything like that. It simply executes
+	 * the described move locally on the game state.
+	 * 
+	 * @param playerID    player making move
+	 * @param moveString  opaque string (from server point of view) that encodes move
+	 * @return &lt;code&gt;true&lt;/code&gt; on success; &lt;code&gt;false&lt;/code&gt; otherwise
+	 */
+	public boolean makeTurn (String playerID, String moveString) {
+<span class="nc bnc" id="L224" title="All 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L225">			error(&quot;makeTurn&quot;);</span>
+<span class="nc" id="L226">			return false;</span>
+		}
+		
+<span class="nc" id="L229">		GameInformation info = frame.getGameInformation();</span>
+<span class="nc" id="L230">		return info.makeTurn(playerID, moveString);</span>
+	}
+	
+	/**
+	 * Whenever a player decides to skip a turn, this method must be called
+	 * to update the game state.
+	 * &lt;p&gt;
+	 * Note that because this is being invoked in response to a player's move,
+	 * the info.skipTurn method MUST NOT generate a message, otherwise infinite
+	 * cycle will result.
+	 * 
+	 * @param playerID    player making move
+	 * @return &lt;code&gt;true&lt;/code&gt; on success; &lt;code&gt;false&lt;/code&gt; otherwise
+	 */
+	public boolean skipTurn (String playerID) {
+<span class="nc bnc" id="L245" title="All 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L246">			error(&quot;skipTurn&quot;);</span>
+<span class="nc" id="L247">			return false;</span>
+		}
+		
+<span class="nc" id="L250">		GameInformation info = frame.getGameInformation();</span>
+<span class="nc" id="L251">		return info.skipTurn(playerID);</span>
+	}
+	
+	
+	/**
+	 * Whenever a player exits a game (on his own volition) all other clients
+	 * on that same table must be notified by calling this method.
+	 * &lt;p&gt;
+	 * Note that this is driven by the observation that another player (other than
+	 * this client) has left the table. This is not used when the player himself
+	 * chooses to leave a table. For that logic, check out {@link IGameInterface}.
+	 * 
+	 * @param playerID
+ 	 * @return &lt;code&gt;true&lt;/code&gt; on success; &lt;code&gt;false&lt;/code&gt; otherwise
+	 */
+	public boolean requestLeave (String playerID) {
+<span class="nc bnc" id="L267" title="All 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L268">			error(&quot;requestLeave&quot;);</span>
+<span class="nc" id="L269">			return false;</span>
+		}
+		
+<span class="nc" id="L272">		GameInformation info = frame.getGameInformation();</span>
+<span class="nc" id="L273">		return info.requestLeave(playerID);</span>
+
+	}
+	
+	/** Determine whether a game is active. */
+	public boolean isGameActive() {
+<span class="nc bnc" id="L279" title="All 2 branches missed.">		return frame != null;</span>
+	}
+	
+	/**
+	 * When the main client exits, it must send a fare-thee-well message 
+	 * to eliminate the game window, if it exists.
+	 */
+	public void exitGameWindow() {
+<span class="nc bnc" id="L287" title="All 2 branches missed.">		if (frame != null) { </span>
+<span class="nc" id="L288">			frame.closeDown();</span>
+		}
+<span class="nc" id="L290">		frame = null;</span>
+<span class="nc" id="L291">	}</span>
+	
+	/**
+	 * Request to post text to the tableChat window in the GameWindow from
+	 * the given player.
+	 * 
+	 * @param fromPlayerID
+	 * @param text
+	 */
+	public void showTableText (String fromPlayerID, String text) {
+<span class="nc bnc" id="L301" title="All 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L302">			error(&quot;activateTurn&quot;);</span>
+<span class="nc" id="L303">			return;</span>
+		}
+		
+<span class="nc" id="L306">		frame.showTableText(fromPlayerID, text);</span>
+<span class="nc" id="L307">	}</span>
+
+	/**
+	 * Determine if the game is in its pristine newly started state.
+	 * 
+	 * @return &lt;code&gt;true&lt;/code&gt; if no move has yet to be made on the board; &lt;code&gt;false&lt;/code&gt; otherwise.
+	 */
+	public boolean isFirstTurn() {
+<span class="nc bnc" id="L315" title="All 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L316">			error(&quot;isFirstTurn&quot;);</span>
+<span class="nc" id="L317">			return false;</span>
+		}
+		
+<span class="nc" id="L320">		GameInformation info = frame.getGameInformation();</span>
+<span class="nc" id="L321">		return info.isFirstTurn();</span>
+	}
+
+	/**
+	 * Glorified hack.
+	 * 
+	 * Since protocol has no way to record a 'skip' we need to alert all other non-moderator
+	 * players when the first teun is a skip. Use this hack for this purpose.
+	 */
+	public void hackFirstSkipReceived() {
+<span class="nc bnc" id="L331" title="All 2 branches missed.">		if (frame == null) {</span>
+<span class="nc" id="L332">			error(&quot;hackFirstSkipReceived&quot;);</span>
+<span class="nc" id="L333">			return;</span>
+		}
+		
+<span class="nc" id="L336">		GameInformation info = frame.getGameInformation();</span>
+<span class="nc" id="L337">		info.hackFirstSkipReceived();</span>
+		
+<span class="nc" id="L339">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LogoutController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.server.controllers</a> &gt; <span class="el_source">LogoutController.java</span></div><h1>LogoutController.java</h1><pre class="source lang-java linenums">package ks.server.controllers;
+
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.framework.debug.Debug;
+import ks.server.interfaces.IProcessServerMessage;
+
+import org.w3c.dom.Document;
+
+/** Controller to handle logouts. */
+<span class="nc" id="L11">public class LogoutController implements IProcessServerMessage {</span>
+
+	public boolean process(Communicator com, Message m) {
+<span class="nc" id="L14">		Debug.println (&quot;Observe logout by: &quot; + m.getOriginator());</span>
+		
+		 // produce request.
+<span class="nc" id="L17">        StringBuilder sb = new StringBuilder(Message.responseHeader(true, m.id));</span>
+<span class="nc" id="L18">        sb.append(&quot;&lt;output&gt;&lt;text&gt;&quot;);</span>
+<span class="nc" id="L19">        sb.append(m.getOriginator()).append(&quot; logged out&quot;);</span>
+<span class="nc" id="L20">        sb.append(&quot;&lt;/text&gt;&lt;/output&gt;&lt;/response&gt;&quot;);</span>
+<span class="nc" id="L21">        Document d = Message.construct (sb.toString());</span>
+        
+        // send to all clients...
+<span class="nc" id="L24">        Message r = new Message (d);</span>
+<span class="nc" id="L25">        r.setBroadcast();</span>
+        
+<span class="nc" id="L27">        com.distribute(r);</span>
+<span class="nc" id="L28">        return true;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

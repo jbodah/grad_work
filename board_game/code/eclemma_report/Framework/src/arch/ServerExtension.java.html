@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServerExtension.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">arch</a> &gt; <span class="el_source">ServerExtension.java</span></div><h1>ServerExtension.java</h1><pre class="source lang-java linenums">package arch;
+
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.server.controllers.ChatController;
+import ks.server.controllers.ServerControllerChain;
+
+/**
+ * Sample code showing how to integrate &quot;Chat&quot; capability to the server. 
+ * &lt;p&gt;
+ * To add one (or more) controllers you need to create a new ServerControllerChain subclass
+ * which will act as one of the &quot;links&quot; in the chain. 
+ * 
+ * @author George Heineman
+ */
+<span class="nc" id="L16">public class ServerExtension extends ServerControllerChain {</span>
+	
+	/**
+	 * This extension understands Chat and that's it.
+	 */
+	@Override
+	public boolean process(Communicator com, Message m) {
+<span class="nc bnc" id="L23" title="All 2 branches missed.">		if (m.getName().equals (&quot;chat&quot;)) {</span>
+<span class="nc" id="L24">			return new ChatController().process(com, m);</span>
+		}
+		
+		// try the next one in the chain...
+<span class="nc" id="L28">		return next (com, m);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

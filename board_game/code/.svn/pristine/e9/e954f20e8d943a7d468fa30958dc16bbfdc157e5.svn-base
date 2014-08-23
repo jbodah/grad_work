@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>WindowManager.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client</a> &gt; <span class="el_source">WindowManager.java</span></div><h1>WindowManager.java</h1><pre class="source lang-java linenums">package ks.client;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
+import javax.swing.JFrame;
+
+/**
+ * Utility class for window management classes.
+ * 
+ * @author George Heineman
+ */
+<span class="nc" id="L13">public class WindowManager {</span>
+
+	/**
+	 * Center window on the screen.
+	 * 
+	 * @param frame
+	 */
+	public static final void centerWindow (JFrame frame) {
+		// Get the size of the screen
+<span class="fc" id="L22">	    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();</span>
+	    
+	    // Determine the new location of the window
+<span class="fc" id="L25">	    int w = frame.getSize().width;</span>
+<span class="fc" id="L26">	    int h = frame.getSize().height;</span>
+<span class="fc" id="L27">	    int x = (dim.width-w)/2;</span>
+<span class="fc" id="L28">	    int y = (dim.height-h)/2;</span>
+	    
+	    // Move the window
+<span class="fc" id="L31">	    frame.setLocation(x, y);</span>
+<span class="fc" id="L32">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

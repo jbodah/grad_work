@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ProcessLobbyInputController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.controllers</a> &gt; <span class="el_source">ProcessLobbyInputController.java</span></div><h1>ProcessLobbyInputController.java</h1><pre class="source lang-java linenums">package ks.client.controllers;
+
+import ks.client.UserContext;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobby2;
+import ks.client.interfaces.IProcessClientMessage;
+import ks.client.interfaces.IProcessLobbyInput;
+import ks.client.ipc.Client;
+import ks.client.lobby.LobbyPanel;
+import ks.framework.common.Message;
+
+import org.w3c.dom.Document;
+
+/**
+ * Attempt to process keyboard commands from the lobby text field.
+ * &lt;p&gt;
+ * Note that this controller is an Active-GUI controller which means that it 
+ * does not implement {@link IProcessClientMessage} or any other interface.
+ * Check out where this controller is accessed (from {@link LobbyPanel#getLobbyInput}).
+ *  
+ * @author George Heineman
+ */
+public class ProcessLobbyInputController implements IProcessLobbyInput{
+	
+	/** Lobby being controlled. */
+	ILobby lobby;
+	
+	/**
+	 * The Lobby Input processor needs to know the lobby to complete
+	 * its tasks.
+	 * 
+	 * @param lobby
+	 */
+<span class="fc" id="L34">	public ProcessLobbyInputController (ILobby lobby) {</span>
+<span class="fc" id="L35">		this.lobby = lobby;</span>
+<span class="fc" id="L36">	}</span>
+	
+	/**
+	 * Process string entered by user.
+	 *  
+	 * @param s
+	 */
+	public void process(String s) {
+<span class="nc" id="L44">		UserContext context = lobby.getContext();</span>
+<span class="nc" id="L45">		Client client = context.getClient();</span>
+
+		// must have been a chat command all along. 
+<span class="nc" id="L48">		String cmd = Message.requestHeader() + &quot;&lt;chat&gt;&quot;;</span>
+<span class="nc" id="L49">		cmd += &quot;&lt;text&gt;&quot; + s + &quot;&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L50">		Document d = Message.construct(cmd);</span>
+<span class="nc" id="L51">		Message m = new Message(d);</span>
+<span class="nc" id="L52">		client.sendToServer(m);</span>
+		
+<span class="nc" id="L54">		String who = context.getUser();</span>
+		
+		// Use new interface if it is available, otherwise resort to old one.
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		if (!(lobby instanceof ILobby2) ){</span>
+<span class="nc" id="L58">			lobby.append(who + &quot;: &quot; + s);</span>
+		} else {
+<span class="nc" id="L60">			((ILobby2) lobby).append(who, s, true);</span>
+		}
+<span class="nc" id="L62">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

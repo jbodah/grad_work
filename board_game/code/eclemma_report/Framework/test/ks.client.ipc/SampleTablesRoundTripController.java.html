@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SampleTablesRoundTripController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.ipc</a> &gt; <span class="el_source">SampleTablesRoundTripController.java</span></div><h1>SampleTablesRoundTripController.java</h1><pre class="source lang-java linenums">package ks.client.ipc;
+
+import java.util.UUID;
+
+import org.w3c.dom.Document;
+
+import ks.client.interfaces.IController;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.IProcessClientMessage;
+import ks.framework.common.Message;
+
+public class SampleTablesRoundTripController  implements IProcessClientMessage, IController {
+
+	/** Lobby over which controller is active. */
+	ILobby lobby;
+
+	// HACK: Validate message receipt through temporary boolean
+<span class="nc" id="L18">	boolean receivedResponse = false;</span>
+	
+<span class="nc" id="L20">	public SampleTablesRoundTripController (ILobby lobby) {</span>
+<span class="nc" id="L21">		this.lobby = lobby;</span>
+<span class="nc" id="L22">	}</span>
+
+	/**
+	 * HACK: Imagine this controller is responsible for sending out TABLES request and
+	 * on the other hand, getting the TableResponse for that TABLES request...
+	 */
+	public void process() { 
+		// make a getProfile request
+<span class="nc" id="L30">		String id = UUID.randomUUID().toString();</span>
+<span class="nc" id="L31">		String s = new String (&quot;&lt;request version='1.0' id='&quot; + id + &quot;'&gt;\n&quot; +</span>
+<span class="nc" id="L32">				&quot;&lt;tables/&gt;&lt;/request&gt;&quot;);</span>
+
+<span class="nc" id="L34">		Document d = Message.construct (s);</span>
+<span class="nc" id="L35">		Message m = new Message(d);</span>
+<span class="nc" id="L36">		lobby.getContext().getClient().sendToServer(lobby, m, this);</span>
+<span class="nc" id="L37">	}</span>
+
+
+	// process correlated response (to given request) when received from server
+	@Override
+	public void process(ILobby lobby, Message request, Message response) {
+		// round trip request comes here
+<span class="nc" id="L44">		receivedResponse = true;</span>
+<span class="nc" id="L45">	}</span>
+
+
+	// This handls the unexpected TABLEresponse messages from the server.
+	@Override
+	public boolean process(ILobby lobby, Message m) {
+<span class="nc" id="L51">		System.out.println(&quot;Received &quot; + m);</span>
+<span class="nc" id="L52">		return true;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

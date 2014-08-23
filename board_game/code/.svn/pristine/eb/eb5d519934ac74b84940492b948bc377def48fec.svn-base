@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MockServer.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.ipc</a> &gt; <span class="el_source">MockServer.java</span></div><h1>MockServer.java</h1><pre class="source lang-java linenums">package ks.client.ipc;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+
+import ks.client.interfaces.IController;
+import ks.client.interfaces.ILobby;
+import ks.client.processor.ClientProcessor;
+import ks.framework.common.Message;
+
+public class MockServer extends Client {
+	boolean isConnected;
+	/** ILobby. */
+	ILobby lobby;	
+	
+	/** stored information. */
+<span class="fc" id="L17">	public ArrayList&lt;Message&gt; messages = new ArrayList&lt;Message&gt;();</span>
+<span class="fc" id="L18">	public Hashtable&lt;String, IController&gt; roundTrip = new Hashtable&lt;String, IController&gt;();</span>
+<span class="fc" id="L19">	public Hashtable&lt;String, Message&gt; requests = new Hashtable&lt;String, Message&gt;();</span>
+
+	public IController firstRoundTripController() {
+<span class="pc bpc" id="L22" title="1 of 2 branches missed.">		if (roundTrip.isEmpty()) { return null; }</span>
+		
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">		for (String key : roundTrip.keySet()) {</span>
+<span class="fc" id="L25">			return roundTrip.get(key);</span>
+		}
+		
+<span class="nc" id="L28">		return null;</span>
+	}
+	
+	public Message firstRoundTripRequest() {
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">		if (roundTrip.isEmpty()) { return null; }</span>
+		
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">		for (String key : roundTrip.keySet()) {</span>
+<span class="fc" id="L35">			return requests.get(key);</span>
+		}
+		
+<span class="nc" id="L38">		return null;</span>
+	}
+	
+	public Message firstRequest () {
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">		if (messages.isEmpty()) { return null; }</span>
+<span class="fc" id="L43">		return messages.get(0);</span>
+	}
+	
+<span class="fc" id="L46">	public MockServer(ILobby l) {</span>
+<span class="fc" id="L47">		lobby = l;</span>
+<span class="fc" id="L48">	}</span>
+	
+	/** Simulate connection to server. */
+	public void connect(String hostname, int port, String user, String password, boolean selfRegister) {
+<span class="nc" id="L52">		isConnected = true;</span>
+<span class="nc" id="L53">	}</span>
+
+	/** Disconnect from the server. */
+	public boolean disconnect() {
+<span class="fc" id="L57">		isConnected = false;</span>
+<span class="fc" id="L58">		return true;</span>
+	}
+
+	/**
+	 * Deliver one-way message.
+	 */
+	public boolean sendToServer(Message m) {
+<span class="fc" id="L65">		messages.add(m);</span>
+<span class="fc" id="L66">		return true;</span>
+	}
+
+	/**
+	 * Deliver round-trip message.
+	 */
+	public boolean sendToServer(ILobby lobby, Message m, IController c) {
+<span class="fc" id="L73">		roundTrip.put(m.id, c);</span>
+<span class="fc" id="L74">		requests.put(m.id, m);</span>
+<span class="fc" id="L75">		return true;</span>
+	}
+
+
+	/** 
+	 * This method is invoked by the Talker once a connection has been
+	 * established (or terminated).
+	 * 
+	 * @param status
+	 */
+	public void connected(boolean status) {
+<span class="nc" id="L86">		isConnected = status;</span>
+<span class="nc" id="L87">		processor.connected(status);</span>
+<span class="nc" id="L88">	}</span>
+
+	/**
+	 * This message has been received from the server. It must be
+	 * delegated to the appropriate processor on the client side.
+	 * &lt;P&gt;
+	 * This message is routed to the appropriate {@link IController} if the
+	 * user has registered one via {@link #sendToServer(Message, IController)}.
+	 * The controller that processes the message is based on the id of the
+	 * message being received.
+	 * 
+	 * @param m
+	 */
+	public void process(Message m) {
+<span class="fc" id="L102">		IController ic = roundTrip.get(m.id);</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">		if (ic != null) {</span>
+<span class="fc" id="L104">			ic.process(lobby, requests.get(m.id), m);</span>
+		} else {
+<span class="nc" id="L106">			processor.process(m);</span>
+		}
+<span class="fc" id="L108">	}</span>
+
+	/**
+	 * Set the processor to respond to client messages from server.
+	 * 
+	 * @param p
+	 */
+	public void setProcessor(ClientProcessor p) {
+<span class="nc" id="L116">		this.processor = p;</span>
+<span class="nc" id="L117">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

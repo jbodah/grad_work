@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Listener.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.server.ipc</a> &gt; <span class="el_source">Listener.java</span></div><h1>Listener.java</h1><pre class="source lang-java linenums">package ks.server.ipc;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
+import ks.framework.common.Message;
+import ks.framework.common.network.CommunicationAgent;
+import ks.framework.common.network.SimpleServerConnection;
+import ks.framework.debug.Debug;
+
+/**
+ * The Listener class is responsible for processing all Client requests. Each
+ * request is a serialized &lt;code&gt;Command&lt;/code&gt; object which is read from the
+ * client socket connection.
+ * &lt;p&gt;
+ * Differentiates between administrator login (or normal) by means
+ * of 'setAdminOnly'.
+ * 
+ * @author George T. Heineman (heineman@cs.wpi.edu)
+ */
+public class Listener extends SimpleServerConnection {
+	/** Knows of logout command. */
+	public static final String logoutRequest = &quot;logout&quot;;
+
+	/** Knows of login command. */
+	public static final String loginRequest = &quot;login&quot;;
+
+	/** Knows of player/password attributes. */
+	public static final String playerAttribute = &quot;player&quot;;
+	public static final String passwordAttribute = &quot;password&quot;;
+	public static final String selfRegisterAttribute = &quot;self-register&quot;;
+
+	/** Know who the server is to process all messages. */
+	protected Server server;
+
+	/** Name of user connecting from the client. */
+<span class="nc" id="L38">	private String who = null;</span>
+
+	/** Communication port. */
+<span class="nc" id="L41">	private int port = 7878;</span>
+
+	/** Default Communication port. */
+	public static final int defaultPort = 7878;
+
+	/**
+	 * Default Listener constructed for given Server.
+	 * 
+	 * @param cs     Server
+	 */
+	public Listener(Server cs) {
+<span class="nc" id="L52">		this(cs, defaultPort);</span>
+<span class="nc" id="L53">	}</span>
+
+	/**
+	 * Listener constructed for given Server on given port.
+	 * 
+	 * @param cs    Server to process requests
+	 * @param port  port on which to listen
+	 */
+<span class="nc" id="L61">	public Listener(Server cs, int port) {</span>
+<span class="nc" id="L62">		server = cs;</span>
+<span class="nc" id="L63">		this.port = port;</span>
+<span class="nc" id="L64">	}</span>
+
+	/**
+	 * All communication from a client occurs within the context of a Listener
+	 * thread (which we call a session.)
+	 * &lt;p&gt;
+	 * Responsible for processing logoutCommands and severing the connection.
+	 * 
+	 * @param agent   Communication Agent for this session.
+	 */
+	public void handleSession(CommunicationAgent agent) {
+<span class="nc" id="L75">		Message m = (Message) agent.readObject();</span>
+
+		// client has already disconnected.
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (m == null) return;</span>
+
+		// the first one in must be the login command
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		if (!m.isRequest()) { return; }</span>
+<span class="nc" id="L82">		String name = m.getName();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">		if (!name.equalsIgnoreCase(loginRequest)) { return; }</span>
+
+		// must retrieve player/password.
+<span class="nc" id="L86">		Node login = m.contents();</span>
+<span class="nc" id="L87">		NamedNodeMap nnp = login.getAttributes();</span>
+<span class="nc" id="L88">		Node player = nnp.getNamedItem(playerAttribute);</span>
+<span class="nc" id="L89">		Node password = nnp.getNamedItem(passwordAttribute);</span>
+<span class="nc" id="L90">		Node selfRegister = nnp.getNamedItem(selfRegisterAttribute);</span>
+
+		// self registration no longer needs to send user/password.
+<span class="nc" id="L93">		boolean self = Boolean.valueOf(selfRegister.getNodeValue()).booleanValue();</span>
+
+<span class="nc bnc" id="L95" title="All 2 branches missed.">		if (self) {</span>
+			// try to self-register an account. 
+<span class="nc" id="L97">			who = server.selfRegister(password.getNodeValue());</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">			if (who == null) {</span>
+<span class="nc" id="L99">				agent.writeObject(loginFailure(m.id, &quot;&quot;, &quot;Unable to self-register user.&quot;));</span>
+<span class="nc" id="L100">				return;</span>
+			}
+		} else {
+<span class="nc bnc" id="L103" title="All 4 branches missed.">			if (player == null || password == null) { return; }</span>
+<span class="nc" id="L104">			who = player.getNodeValue();</span>
+<span class="nc" id="L105">			String hashPass = password.getNodeValue();</span>
+
+			// check that user is authorized.
+			try {
+<span class="nc bnc" id="L109" title="All 2 branches missed.">				if (!server.authorize(who, hashPass)) {</span>
+<span class="nc" id="L110">					agent.writeObject(loginFailure(m.id, who, &quot;Unable to authorize user to login&quot;));</span>
+<span class="nc" id="L111">					return;</span>
+				}
+<span class="nc" id="L113">			} catch (Exception e) {</span>
+				// failed for specific reason.
+<span class="nc" id="L115">				agent.writeObject(loginFailure(m.id, who, e.getMessage()));</span>
+<span class="nc" id="L116">				return;</span>
+			}
+		}
+
+		// Record persistent connection to this user.
+<span class="nc" id="L121">		server.connectUser(who, agent);</span>
+
+		// Corroborate with ack
+<span class="nc" id="L124">		Message ack = Listener.loginSuccess(m.id, who, &quot;accepted&quot;);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">		if (!agent.writeObject(ack)) {</span>
+<span class="nc" id="L126">			System.err.println(&quot;Unable to corroborate login with client.&quot;);</span>
+<span class="nc" id="L127">			server.disconnectUser(who);</span>
+<span class="nc" id="L128">			return;</span>
+		}
+
+		// pass along login message.
+<span class="nc" id="L132">		server.process(who, m);</span>
+<span class="nc" id="L133">		server.login(server.com, m);</span>
+		
+		// Enter Main Loop to retrieve information from these clients
+<span class="nc" id="L136">		boolean cleanLogout = false;</span>
+		try {
+			Message incoming;
+<span class="nc bnc" id="L139" title="All 2 branches missed.">			while ((incoming = (Message) agent.readObject()) != null) {</span>
+
+				// only an exception can break us out of here, or receipt
+				// of a logout message.
+<span class="nc" id="L143">				server.process(who, incoming);</span>
+
+				// if a logout was issued from our client, shut down its communication.
+<span class="nc bnc" id="L146" title="All 2 branches missed.">				if (incoming.getName().equalsIgnoreCase(logoutRequest)) {</span>
+<span class="nc" id="L147">					cleanLogout = true;</span>
+<span class="nc" id="L148">					server.logout(server.com, incoming);</span>
+<span class="nc" id="L149">					break;</span>
+				}
+			}
+<span class="nc" id="L152">		} catch (RuntimeException re) {</span>
+<span class="nc" id="L153">			re.printStackTrace();</span>
+		}
+
+		// deal with logout as required....
+<span class="nc bnc" id="L157" title="All 2 branches missed.">		if (!cleanLogout) {</span>
+<span class="nc" id="L158">			System.out.println(&quot;Generating Logout for '&quot; + who + &quot;'&quot;);</span>
+<span class="nc" id="L159">			String cmd = Message.requestHeader() + &quot;&lt;logout/&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L160">			Document d = Message.construct(cmd);</span>
+<span class="nc" id="L161">			Message logoutMessage = new Message(d);</span>
+<span class="nc" id="L162">			logoutMessage.setOriginator(who);</span>
+			
+<span class="nc" id="L164">			server.process(who, logoutMessage);</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">			if (server.com != null) {</span>
+<span class="nc" id="L166">				server.logout(server.com, logoutMessage);</span>
+			} else {
+<span class="nc" id="L168">				System.err.println(&quot;Communicator shutdown. No ability to send messages.&quot;);</span>
+			}
+		}
+
+<span class="nc" id="L172">		Debug.println(who + &quot; has disconnected.&quot;);</span>
+<span class="nc" id="L173">		server.disconnectUser(who);</span>
+<span class="nc" id="L174">	}</span>
+
+	
+	/**
+	 * Generate login failure message.
+	 * &lt;p&gt;
+	 * @param m        command which succeeded.
+	 * @param reason   failure reason.
+	 */
+	public static Message loginFailure(String id, String who, String reason) {
+		// produce request.
+<span class="nc" id="L185">		StringBuilder sb = new StringBuilder(&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='false' reason='&quot; + reason + &quot;'&gt;&quot;);</span>
+<span class="nc" id="L186">		sb.append(&quot;&lt;loginResponse player='&quot; + who + &quot;'/&gt;&lt;/response&gt;&quot;);</span>
+		
+<span class="nc" id="L188">		Document d = Message.construct(sb.toString());</span>
+
+<span class="nc" id="L190">		Message r = new Message (d);</span>
+<span class="nc" id="L191">		return r;</span>
+	}
+
+	/**
+	 * Generate login success message.
+	 * &lt;p&gt;
+	 * @param m        command which succeeded.
+	 * @param reason   failure reason.
+	 */
+	public static Message loginSuccess(String id, String who, String reason) {
+		// produce request.
+<span class="nc" id="L202">		StringBuilder sb = new StringBuilder(&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true' reason='&quot; + reason + &quot;'&gt;&quot;);</span>
+<span class="nc" id="L203">		sb.append(&quot;&lt;loginResponse player='&quot; + who + &quot;'/&gt;&lt;/response&gt;&quot;);</span>
+		
+<span class="nc" id="L205">		Document d = Message.construct(sb.toString());</span>
+<span class="nc" id="L206">		System.out.println(sb.toString());</span>
+<span class="nc" id="L207">		Message r = new Message (d);</span>
+<span class="nc" id="L208">		return r;</span>
+	}
+	
+	/**
+	 * Create listener on the prepared port.
+	 */
+	public boolean start() {
+<span class="nc" id="L215">		Debug.println(&quot;Accepting calls on &quot; + port);</span>
+<span class="nc" id="L216">		return super.start(port);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

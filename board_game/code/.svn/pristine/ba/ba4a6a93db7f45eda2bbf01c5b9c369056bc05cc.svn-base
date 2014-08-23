@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestData.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">external</a> &gt; <a href="index.html" class="el_package">test</a> &gt; <span class="el_source">TestData.java</span></div><h1>TestData.java</h1><pre class="source lang-java linenums">package test;
+
+import java.util.Hashtable;
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Table;
+import wordstealclient.entities.Table.TABLE_STATE;
+
+/**
+ * 
+ * @author cbelhumeur, jbodah
+ * 
+ */
+<span class="nc" id="L13">public class TestData {</span>
+
+	public static Hashtable&lt;Integer, Player&gt; getUsers()
+	{
+<span class="fc" id="L17">		int maxUsers = 100;</span>
+<span class="fc" id="L18">		Hashtable&lt;Integer, Player&gt; players = new Hashtable&lt;Integer, Player&gt;(maxUsers);</span>
+<span class="fc bfc" id="L19" title="All 2 branches covered.">		for (int i = 0; i &lt; maxUsers; i++)</span>
+		{
+<span class="fc" id="L21">			players.put(i, new Player(i, (&quot;Player &quot;+i), 1, 2, 3, 4, 5, 6, 7, 8, 9));</span>
+		}
+<span class="fc" id="L23">		return players;</span>
+	}
+	
+	/**
+	 * Gets a set of tables for test purposes.
+	 * @author cbelhumeur
+	 * @return
+	 */
+	public static Table[] getTables()
+	{
+<span class="fc" id="L33">		int maxTables = 100;</span>
+<span class="fc" id="L34">		Table[] tables = new Table[maxTables];</span>
+<span class="fc bfc" id="L35" title="All 2 branches covered.">		for (int i = 0; i &lt; maxTables; i++)</span>
+		{
+<span class="fc bfc" id="L37" title="All 2 branches covered.">			if (i % 17 == 0)</span>
+			{
+<span class="fc" id="L39">				tables[i] = new Table(i, TABLE_STATE.PRIVATE, new Player[1]);</span>
+			}
+<span class="fc bfc" id="L41" title="All 2 branches covered.">			else if (i % 7 ==0)</span>
+			{
+<span class="fc" id="L43">				tables[i] = new Table(i, TABLE_STATE.INGAME, new Player[4]);</span>
+			}
+			else
+			{
+<span class="fc" id="L47">				tables[i] = new Table(i, TABLE_STATE.PUBLIC, null);</span>
+			}
+		}	
+<span class="fc" id="L50">		return tables;</span>
+	}
+	
+	/* *************** XML TESTING ******************** */
+	
+	public static String samplePlayerResponse( String id ) {
+<span class="fc" id="L56">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L57">				&quot;&lt;playerResponse&gt;&quot; +</span>
+<span class="fc" id="L58">				&quot;&lt;player player='1213' realName='George Heineman'&gt;&quot; + </span>
+<span class="fc" id="L59">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L60">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L61">				&quot;&lt;/player&gt;&quot; + </span>
+<span class="fc" id="L62">				&quot;&lt;player player='1456' realName='Bob Smith'&gt;&quot; + </span>
+<span class="fc" id="L63">				&quot;&lt;rating category='sudoku' value='9000'/&gt;&quot; + </span>
+<span class="fc" id="L64">				&quot;&lt;rating category='wordsteal' value='1231'/&gt;&quot; + </span>
+<span class="fc" id="L65">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L66">				&quot;&lt;player player='100' realName='Bob Dole'&gt;&quot; + </span>
+<span class="fc" id="L67">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L68">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L69">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L70">				&quot;&lt;player player='200' realName='Neil'&gt;&quot; + </span>
+<span class="fc" id="L71">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L72">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L73">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L74">				&quot;&lt;player player='600' realName='A'&gt;&quot; + </span>
+<span class="fc" id="L75">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L76">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L77">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L78">				&quot;&lt;player player='700' realName='B'&gt;&quot; + </span>
+<span class="fc" id="L79">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L80">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L81">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L82">				&quot;&lt;player player='800' realName='C'&gt;&quot; + </span>
+<span class="fc" id="L83">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L84">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L85">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L86">				&quot;&lt;player player='900' realName='D'&gt;&quot; + </span>
+<span class="fc" id="L87">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L88">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L89">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L90">				&quot;&lt;player player='1000' realName='E'&gt;&quot; + </span>
+<span class="fc" id="L91">				&quot;&lt;rating category='solitaire' value='229'/&gt;&quot; + </span>
+<span class="fc" id="L92">				&quot;&lt;rating category='wordsteal' value='1234'/&gt;&quot; + </span>
+<span class="fc" id="L93">				&quot;&lt;/player&gt;&quot; +</span>
+<span class="fc" id="L94">				&quot;&lt;/playerResponse&gt;&quot; + </span>
+<span class="fc" id="L95">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleConfirmResponseFalse( String id ) {
+<span class="nc" id="L99">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='false'&gt;&quot; +</span>
+<span class="nc" id="L100">				&quot;&lt;confirmResponse table='1' player='1213'/&gt;&quot; +</span>
+<span class="nc" id="L101">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleConfirmResponse( String id ) {
+<span class="nc" id="L105">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="nc" id="L106">				&quot;&lt;confirmResponse table='1' player='1213'/&gt;&quot; +</span>
+<span class="nc" id="L107">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleTableResponseSuccesfulJoin( String id ) {
+<span class="fc" id="L111">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L112">				&quot;&lt;tableResponse&gt;&quot; +</span>
+<span class="fc" id="L113">				&quot;&lt;table id='1' seed='12944' type='public' full='false' moderator='1213' game='wordsteal' options='turnTime=30,noS=true,maxScore=50'&gt;&quot; +</span>
+<span class="fc" id="L114">				&quot;&lt;player-id player='1213'/&gt;&quot; +</span>
+<span class="fc" id="L115">				&quot;&lt;/table&gt;&quot; +</span>
+<span class="fc" id="L116">				&quot;&lt;/tableResponse&gt;&quot; +</span>
+<span class="fc" id="L117">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleTableResponseUnsuccesfulJoin( String id ) {
+<span class="nc" id="L121">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="nc" id="L122">				&quot;&lt;tableResponse&gt;&quot; +</span>
+<span class="nc" id="L123">				&quot;&lt;table id='1' seed='12944' type='public' full='false' moderator='1456' game='wordsteal' options='turnTime=30,noS=true,maxScore=50'&gt;&quot; +</span>
+<span class="nc" id="L124">				&quot;&lt;player-id player='1456'/&gt;&quot; +</span>
+<span class="nc" id="L125">				&quot;&lt;/table&gt;&quot; +</span>
+<span class="nc" id="L126">				&quot;&lt;/tableResponse&gt;&quot; +</span>
+<span class="nc" id="L127">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleGameResponse( String id ) {
+<span class="fc" id="L131">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L132">				&quot;&lt;gameResponse table='1' turn='12995'&gt;&quot; +</span>
+<span class="fc" id="L133">				&quot;&lt;gameState player='1213' score='10' game='numWins=5'/&gt;&quot; +</span>
+<span class="fc" id="L134">				&quot;&lt;gameState player='1456' score='10'/&gt;&quot; +</span>
+<span class="fc" id="L135">				&quot;&lt;/gameResponse&gt;&quot; +</span>
+<span class="fc" id="L136">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleGameResponse2( String id ) {
+<span class="nc" id="L140">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="nc" id="L141">				&quot;&lt;gameResponse table='13' turn='12995' move='(5/5)=L,(5/7)=E,(5/6)=I' from='113'&gt;&quot; +</span>
+<span class="nc" id="L142">				&quot;&lt;gameState player='85' score='10'/&gt;&quot; +</span>
+<span class="nc" id="L143">				&quot;&lt;gameState player='113' score='10' game='numWins=5'/&gt;&quot; +</span>
+<span class="nc" id="L144">				&quot;&lt;gameState player='12995' score='0'/&gt;&quot; +</span>
+<span class="nc" id="L145">				&quot;&lt;/gameResponse&gt;&quot; +</span>
+<span class="nc" id="L146">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleRejectResponse( String id ) {
+<span class="fc" id="L150">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L151">				&quot;&lt;rejectResponse table='1' player='1213'/&gt;&quot; +</span>
+<span class="fc" id="L152">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleTableChatResponse( String id ) {
+<span class="nc" id="L156">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="nc" id="L157">				&quot;&lt;tableChatResponse table='100' player='19834'&gt;&quot; +</span>
+<span class="nc" id="L158">				&quot;&lt;text&gt;You are all going DOWN My friend&lt;/text&gt;&quot; +</span>
+<span class="nc" id="L159">				&quot;&lt;/tableChatResponse&gt;&quot; +</span>
+<span class="nc" id="L160">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleTableEmptyResponse( String id ) {
+<span class="fc" id="L164">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L165">				&quot;&lt;tableEmpty table='1'/&gt;&quot; +</span>
+<span class="fc" id="L166">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleTableResponse( String id ) {
+<span class="fc" id="L170">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L171">				&quot;&lt;tableResponse&gt;&quot; +</span>
+<span class="fc" id="L172">				&quot;&lt;table id='1' seed='12944' type='public' full='false' moderator='1213' game='wordsteal' options='turnTime=30,noS=true,maxScore=50'&gt;&quot; +</span>
+<span class="fc" id="L173">				&quot;&lt;player-id player='1456'/&gt;&quot; +</span>
+<span class="fc" id="L174">				&quot;&lt;player-id player='1213'/&gt;&quot; +</span>
+<span class="fc" id="L175">				&quot;&lt;/table&gt;&quot; +</span>
+<span class="fc" id="L176">				&quot;&lt;table id='2' seed='11144' type='private' full='false' moderator='100' game='solitaire' options='undo=true,newHand=true,time=500'&gt;&quot; +</span>
+<span class="fc" id="L177">				&quot;&lt;player-id player='100'/&gt;&quot; +</span>
+<span class="fc" id="L178">				&quot;&lt;/table&gt;&quot; +</span>
+<span class="fc" id="L179">				&quot;&lt;table id='3' seed='11144' type='inPlay' full='false' moderator='200' game='solitaire' options='undo=true,newHand=true,time=500'&gt;&quot; +</span>
+<span class="fc" id="L180">				&quot;&lt;player-id player='200'/&gt;&quot; +</span>
+<span class="fc" id="L181">				&quot;&lt;/table&gt;&quot; +</span>
+<span class="fc" id="L182">				&quot;&lt;table id='4' seed='11144' type='byInvitation' full='false' moderator='300' game='solitaire' options='undo=true,newHand=true,time=500'&gt;&quot; +</span>
+<span class="fc" id="L183">				&quot;&lt;player-id player='300'/&gt;&quot; +</span>
+<span class="fc" id="L184">				&quot;&lt;/table&gt;&quot; +</span>
+<span class="fc" id="L185">				&quot;&lt;table id='5' seed='11144' type='byInvitation' full='false' moderator='300' game='solitaire' options='undo=true,newHand=true,time=500'&gt;&quot; +</span>
+<span class="fc" id="L186">				&quot;&lt;player-id player='600'/&gt;&quot; +</span>
+<span class="fc" id="L187">				&quot;&lt;player-id player='700'/&gt;&quot; +</span>
+<span class="fc" id="L188">				&quot;&lt;player-id player='800'/&gt;&quot; +</span>
+<span class="fc" id="L189">				&quot;&lt;player-id player='900'/&gt;&quot; +</span>
+<span class="fc" id="L190">				&quot;&lt;player-id player='1000'/&gt;&quot; +</span>
+<span class="fc" id="L191">				&quot;&lt;/table&gt;&quot; +</span>
+<span class="fc" id="L192">				&quot;&lt;/tableResponse&gt;&quot; +</span>
+<span class="fc" id="L193">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+
+	public static String sampleUpdateResponse( String id ) {
+<span class="nc" id="L197">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="nc" id="L198">				&quot;&lt;updateResponse table='100' score='99' game='wins=2,hands=3' finished='true'/&gt;&quot; +</span>
+<span class="nc" id="L199">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String samplePublicChatResponse( String id ) {
+<span class="fc" id="L203">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L204">				&quot;&lt;output from='1213'&gt;&quot; +</span>
+<span class="fc" id="L205">				&quot;&lt;text&gt;This is where the message goes&lt;/text&gt;&quot; +</span>
+<span class="fc" id="L206">				&quot;&lt;/output&gt;&quot; +</span>
+<span class="fc" id="L207">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String samplePrivateChatResponse( String id ) {
+<span class="fc" id="L211">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L212">				&quot;&lt;output from='1213' public='false'&gt;&quot; +</span>
+<span class="fc" id="L213">				&quot;&lt;text&gt;This is where the (private) message goes&lt;/text&gt;&quot; +</span>
+<span class="fc" id="L214">				&quot;&lt;/output&gt;&quot; +</span>
+<span class="fc" id="L215">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+	
+	public static String sampleSystemChatResponse( String id ) {
+<span class="fc" id="L219">		return	new String (&quot;&lt;response version='1.0' id='&quot; + id + &quot;' success='true'&gt;&quot; +</span>
+<span class="fc" id="L220">				&quot;&lt;output system='true'&gt;&quot; +</span>
+<span class="fc" id="L221">				&quot;&lt;text&gt;This Message is generates from the system.&lt;/text&gt;&quot; +</span>
+<span class="fc" id="L222">				&quot;&lt;/output&gt;&quot; +</span>
+<span class="fc" id="L223">				&quot;&lt;/response&gt;&quot;) ;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

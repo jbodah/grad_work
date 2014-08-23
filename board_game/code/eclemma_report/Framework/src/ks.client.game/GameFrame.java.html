@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GameFrame.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">GameFrame.java</span></div><h1>GameFrame.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package ks.client.game;</span>
+
+import ks.client.interfaces.IGameInterface;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.GroupLayout;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+/**
+ * Primary Window for managing the Container within which the solitaire
+ * action takes place.&lt;p&gt;
+ *
+ * GameWindow can speak back to the primary connection through 
+ * its helperClient (which it shares with KombatClient).&lt;p&gt;
+ * &lt;p&gt;
+ * Intended to be glorified arbiter among all game variation types.
+ * 
+ * @author George T. Heineman (heineman@cs.wpi.edu)
+ */
+public class GameFrame extends JFrame {
+	/**
+	 * Comment for &lt;code&gt;serialVersionUID&lt;/code&gt;
+	 */
+	private static final long serialVersionUID = 3544957666427353398L;
+
+	/** Knows which table is being played. */
+	int tableNumber;
+
+	/** Knows callback. */
+	IGameInterface callback;
+	
+	/** Initial width for the window. Must never shrink less than this. */
+<span class="fc" id="L43">	protected int initialWidth = 769;</span>
+
+	/** Initial height for the window. Must never shrink less than this. */
+<span class="fc" id="L46">	protected int initialHeight = 635;</span>
+
+	/** Last height for the window. Start with initial height. */
+<span class="fc" id="L49">	protected int lastHeight = 635;</span>
+
+	/** Last width for the window. Start with initial width. */
+<span class="fc" id="L52">	protected int lastWidth = 769;</span>
+
+	/** output and input. */
+	JTextArea output;
+	JTextField input;
+	
+	/** Game contents (works for both AWT and Swing objects). */
+<span class="fc" id="L59">	java.awt.Component gamePanel = null;</span>
+	
+	/** Controls (works for both AWT and Swing objects). */
+<span class="fc" id="L62">	java.awt.Component gameControls = null;</span>
+	
+	/** game-specific info. */
+	GameInformation info;
+	
+	public GameFrame(GameInformation info) {
+<span class="fc" id="L68">		super(info.game);</span>
+		
+<span class="fc" id="L70">		this.info = info;</span>
+<span class="fc" id="L71">		initialize();</span>
+<span class="fc" id="L72">	}</span>
+
+	/** Set the table number. */
+	public void setTableNumber (int tn) {
+<span class="fc" id="L76">		tableNumber = tn;</span>
+<span class="fc" id="L77">	}</span>
+	
+	/** Return the table number. */
+	public int getTableNumber() {
+<span class="fc" id="L81">		return tableNumber;</span>
+	}
+	
+	/** Set the callback. */
+	public void setGameInterface(IGameInterface igi) {
+<span class="fc" id="L86">		this.callback = igi;</span>
+<span class="fc" id="L87">	}</span>
+	
+	/** Allow external access to the game information. */
+	public GameInformation getGameInformation() {
+<span class="fc" id="L91">		return info;</span>
+	}
+	
+	/**
+	 * Initialize the class.
+	 */
+	private void initialize() {
+<span class="fc" id="L98">		setName(&quot;GameWindow&quot;);</span>
+<span class="fc" id="L99">		setPreferredSize(new Dimension(800, 635));</span>
+<span class="fc" id="L100">		setSize (800, 635);</span>
+<span class="fc" id="L101">		setTitle(&quot;Sample Game&quot;);</span>
+		
+<span class="fc" id="L103">		JPanel panel = new JPanel();</span>
+<span class="fc" id="L104">		GroupLayout layout = new GroupLayout(panel);</span>
+<span class="fc" id="L105">		panel.setLayout(layout);</span>
+<span class="fc" id="L106">		layout.setAutoCreateGaps(true);</span>
+<span class="fc" id="L107">		layout.setAutoCreateContainerGaps(true);</span>
+		
+		// solitaire game (heavy weight container. Hope not an issue).
+<span class="fc" id="L110">		gamePanel = info.getGameContainer();</span>
+<span class="fc" id="L111">		gameControls = info.getGameControls();		</span>
+		
+<span class="fc" id="L113">		output = new JTextArea(6, 30);</span>
+<span class="fc" id="L114">		output.setEditable(false);</span>
+<span class="fc" id="L115">		output.setMaximumSize(new Dimension (280, 120));</span>
+<span class="fc" id="L116">		input = new JTextField(30);</span>
+<span class="fc" id="L117">		input.setMaximumSize(new Dimension (280, 20));</span>
+		
+<span class="fc" id="L119">		input.addActionListener (new ActionListener() {</span>
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L123">				String s = input.getText();</span>
+<span class="nc" id="L124">				input.setText(&quot;&quot;);</span>
+<span class="nc" id="L125">				callback.sendTableChat(tableNumber, s);</span>
+				
+				// append locally
+<span class="nc" id="L128">				output.append(s + &quot;\n&quot;);</span>
+<span class="nc" id="L129">			}</span>
+		});
+		
+<span class="fc" id="L132">		layout.setHorizontalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L133">				.addComponent(gamePanel)</span>
+<span class="fc" id="L134">				.addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L135">						.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L136">								.addComponent(output)</span>
+<span class="fc" id="L137">								.addComponent(input))</span>
+<span class="fc" id="L138">						.addComponent(gameControls))</span>
+						);
+		
+<span class="fc" id="L141">		layout.setVerticalGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L142">				.addComponent(gamePanel)</span>
+<span class="fc" id="L143">				.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L144">						.addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L145">								.addComponent(output)</span>
+<span class="fc" id="L146">								.addComponent(input))</span>
+<span class="fc" id="L147">						.addComponent(gameControls))</span>
+						);
+						
+		// deal with window closing
+<span class="fc" id="L151">		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);</span>
+
+<span class="fc" id="L153">		this.addWindowListener(new WindowAdapter() {</span>
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+<span class="nc" id="L157">				int selection = JOptionPane.showConfirmDialog(null,</span>
+<span class="nc" id="L158">						&quot;Are you sure you want exit game and underlying table?&quot;, &quot;Kombat Games&quot;,</span>
+<span class="nc" id="L159">						JOptionPane.YES_NO_OPTION,</span>
+<span class="nc" id="L160">						JOptionPane.WARNING_MESSAGE);</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">				if (selection == JOptionPane.YES_OPTION) {</span>
+<span class="nc" id="L162">					callback.leaveGame(tableNumber);</span>
+					
+					// Heineman: have to be clean about the shutdown wrt game manager.
+					//closeDown();
+<span class="nc" id="L166">					GameManager.instance().exitGameWindow();</span>
+				} else {
+					
+				}
+<span class="nc" id="L170">			}</span>
+		});
+		
+<span class="fc" id="L173">		add(panel);</span>
+<span class="fc" id="L174">	}</span>
+	
+
+	/** 
+	 * Close down the game frame.
+	 */
+	public void closeDown() {
+		// shutdown here.
+<span class="nc" id="L182">		info.stop();</span>
+		
+<span class="nc" id="L184">		setVisible(false);</span>
+<span class="nc" id="L185">		dispose();</span>
+<span class="nc" id="L186">	}</span>
+
+	/**
+	 * Table chat messages are handled here.
+	 * 
+	 * @param fromPlayerID   player issuing the chat
+	 * @param text           actual chat
+	 */
+	public void showTableText(String fromPlayerID, String text) {
+<span class="nc" id="L195">		output.append(fromPlayerID + &quot;: &quot; + text + &quot;\n&quot;);</span>
+<span class="nc" id="L196">	}</span>
+
+	/**
+	 * Make it possible to extract table chat history
+	 */
+	public String getTableTextContents() {
+<span class="nc" id="L202">		return output.getText();</span>
+	}
+
+	/**
+	 * Make it possible to reset table chat history when changing games on the same table.
+	 *  
+	 * @param oldChat
+	 */
+	public void setTableTextContents(String oldChat) {
+<span class="fc" id="L211">		output.setText(oldChat);</span>
+<span class="fc" id="L212">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

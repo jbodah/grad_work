@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestGameManager.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">TestGameManager.java</span></div><h1>TestGameManager.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import heineman.Klondike;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Properties;
+
+import wordsteal.Wordsteal;
+
+import junit.framework.TestCase;
+import ks.client.interfaces.IGameInterface;
+
+<span class="nc" id="L14">public class TestGameManager extends TestCase {</span>
+
+	public void testSolitaireOptions() {
+<span class="nc" id="L17">		String s = Klondike.class.getCanonicalName();</span>
+<span class="nc" id="L18">		Collection&lt;String&gt; opts = GameManager.validOptions(s);</span>
+		
+<span class="nc" id="L20">		assertTrue (opts.contains(&quot;undo&quot;));</span>
+<span class="nc" id="L21">		assertTrue (opts.contains(&quot;newHand&quot;));</span>
+<span class="nc" id="L22">	}</span>
+	
+	public void testWordsteal() {
+<span class="nc" id="L25">		String s = Wordsteal.class.getCanonicalName();</span>
+		
+<span class="nc" id="L27">		Collection&lt;String&gt; opts = GameManager.validOptions(s);</span>
+		
+<span class="nc" id="L29">		assertTrue (opts.contains(&quot;noS&quot;));</span>
+<span class="nc" id="L30">		assertTrue (opts.contains(&quot;pink&quot;));</span>
+<span class="nc" id="L31">		assertTrue (opts.contains(&quot;turnTime&quot;));</span>
+<span class="nc" id="L32">		assertTrue (opts.contains(&quot;pointsToWin&quot;));</span>
+<span class="nc" id="L33">	}</span>
+	
+	public void testGameFrames() {
+<span class="nc" id="L36">		GameManager gm = GameManager.instance();</span>
+		
+<span class="nc" id="L38">		IGameInterface callback = new SampleInterface();</span>
+<span class="nc" id="L39">		Properties options = new Properties();</span>
+<span class="nc" id="L40">		options.setProperty(&quot;game&quot;, &quot;heineman.Klondike&quot;);</span>
+<span class="nc" id="L41">		options.setProperty(&quot;seed&quot;, &quot;117&quot;);</span>
+		
+<span class="nc" id="L43">		Properties gameOptions = new Properties();</span>
+<span class="nc" id="L44">		gameOptions.setProperty(&quot;undo&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L45">		gameOptions.setProperty(&quot;newHand&quot;, &quot;true&quot;);</span>
+		
+<span class="nc" id="L47">		Properties players = new Properties();</span>
+<span class="nc" id="L48">		players.setProperty(&quot;982&quot;, &quot;George Heineman&quot;);</span>
+<span class="nc" id="L49">		players.setProperty(&quot;1124&quot;, &quot;Paul Simon&quot;);</span>
+<span class="nc" id="L50">		players.setProperty(&quot;135&quot;, &quot;&quot;);</span>
+		
+		
+		// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L54">		ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L55">		order.add(&quot;982&quot;);</span>
+<span class="nc" id="L56">		order.add(&quot;1124&quot;);</span>
+<span class="nc" id="L57">		order.add(&quot;135&quot;);</span>
+		
+<span class="nc" id="L59">		boolean success = gm.createGameWindow(13, &quot;11234&quot;, options, gameOptions, order, players, callback);</span>
+<span class="nc" id="L60">		assertTrue (success);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		assertTrue (gm.frame != null);</span>
+		
+<span class="nc" id="L63">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

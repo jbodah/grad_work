@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ClientProcessor.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.processor</a> &gt; <span class="el_source">ClientProcessor.java</span></div><h1>ClientProcessor.java</h1><pre class="source lang-java linenums">package ks.client.processor;
+
+import ks.client.controllers.ClientControllerChain;
+import ks.client.controllers.DefaultClientChain;
+import ks.client.controllers.LoginResponseController;
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+import ks.framework.debug.Debug;
+import ks.server.controllers.DefaultServerChain;
+
+/**
+ * Client-side processor of messages received from Server.
+ * &lt;p&gt;
+ * 
+ * @author George Heineman
+ */
+<span class="fc" id="L17">public class ClientProcessor  {</span>
+
+	/** The core Processor knows about the Lobby for which it is in control. */
+	ILobby lobby;
+
+	/** 
+	 * Head of the chain of processors. Defaults to one built in. 
+	 */
+<span class="fc" id="L25">	protected static ClientControllerChain head = new DefaultClientChain();</span>
+
+	/** Return the head of the chain of agents managing the server-side controllers. */
+	public static ClientControllerChain head() {
+<span class="fc" id="L29">		return head;</span>
+	}
+	
+	/** NOTE: Only to be called by testing code. */
+	public static void resetControllers() {
+<span class="nc" id="L34">		head = new DefaultClientChain();</span>
+<span class="nc" id="L35">	}</span>
+	
+	/** 
+	 * The processor knows the lobby for which it is responsible.
+	 * 
+	 * @param lob
+	 */
+<span class="fc" id="L42">	public ClientProcessor (ILobby lob) {</span>
+<span class="fc" id="L43">		this.lobby = lob;</span>
+<span class="fc" id="L44">	}</span>
+
+	/**
+	 * Process the message.
+	 * 
+	 * @param m
+	 * @return
+	 */
+	public boolean process(Message m) {
+
+<span class="fc" id="L54">		Debug.println(&quot;Received:&quot; + m.toString());</span>
+<span class="pc bpc" id="L55" title="1 of 2 branches missed.">		if (m.getName().equals(&quot;loginResponse&quot;)) {</span>
+<span class="nc" id="L56">			return new LoginResponseController().process(lobby, m);</span>
+		}
+		
+		// delegate the processing on to the chain of agents that know of 
+		// all controllers on the client side.
+<span class="fc" id="L61">		return head.process(lobby, m);</span>
+	}
+
+	/**
+	 * Connection has been made. Tell lobby.
+	 * 
+	 * @param status
+	 */
+	public void connected(boolean status) {
+<span class="fc" id="L70">		lobby.connected(status);</span>
+		
+<span class="pc bpc" id="L72" title="1 of 2 branches missed.">		if (!status) {</span>
+<span class="fc" id="L73">			lobby.append(&quot;You have lost your server connection.&quot;);</span>
+		}
+		
+<span class="fc" id="L76">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

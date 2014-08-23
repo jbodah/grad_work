@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MyLobbyInitialization.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">arch</a> &gt; <span class="el_source">MyLobbyInitialization.java</span></div><h1>MyLobbyInitialization.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package arch;</span>
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+
+import ks.client.game.GameManager;
+import ks.client.interfaces.IGameInterface;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.client.lobby.LobbyFrame;
+import wordstealclient.controllers.correlated_requests.*;
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Table;
+import wordstealclient.interfaces.IGameProvider;
+
+/**
+ * My sample shows how to integrate the client code with the GameManager I am
+ * providing.
+ * 
+ * Note: Don't edit this class here. Rather copy this sample code into your
+ * own project and (1) rename it; and (2) modify as you need
+ * 
+ * @author George Heineman, cbelhumeur
+ */
+public class MyLobbyInitialization implements ILobbyInitialize, IGameInterface, IGameProvider {
+	
+	/** Panels. */
+	JPanel tmgui;
+	JPanel umgui;
+	
+	/** Enclosing lobby. */
+	static ILobby lobby;
+	
+<span class="fc" id="L41">	public MyLobbyInitialization (JPanel tm, JPanel um) {</span>
+<span class="fc" id="L42">		this.tmgui = tm;</span>
+<span class="fc" id="L43">		this.umgui = um;</span>
+<span class="fc" id="L44">	}</span>
+	
+	public ILobby getLobby()
+	{
+<span class="fc" id="L48">		return lobby;</span>
+	}
+	
+	// How to launch a game? (From the button click, controller to use? how to get MLI to respond accordingly)
+	// Which controllers are necessary for game management? (skip, turn, start, won[in xml], etc.)
+	// How to get moderator parameters, then pass along prior to game start?
+	//
+	// Switch between table and room view? (through controllers, during button clicks)
+	//
+	//
+	public void startGame(Table table)
+	{
+		// Launch wordsteal
+<span class="fc" id="L61">		GameManager gm = GameManager.instance();</span>
+<span class="fc" id="L62">		Properties options = new Properties();</span>
+		
+		// Default game options
+<span class="fc" id="L65">		options.setProperty(&quot;seed&quot;, &quot;&quot;+table.getSeed());</span>
+<span class="fc" id="L66">		options.setProperty(&quot;game&quot;, &quot;wordsteal.Wordsteal&quot;);</span>
+	
+		// Wordsteal game options
+<span class="fc" id="L69">		Properties gameOptions = new Properties();</span>
+<span class="fc" id="L70">		gameOptions.setProperty(&quot;noS&quot;, &quot;&quot;+table.isNos());</span>
+<span class="fc" id="L71">		gameOptions.setProperty(&quot;pink&quot;, &quot;&quot;+table.isPink());</span>
+<span class="fc" id="L72">		gameOptions.setProperty(&quot;turnTime&quot;, &quot;&quot;+table.getTurnTime());</span>
+<span class="fc" id="L73">		gameOptions.setProperty(&quot;pointsToWin&quot;, &quot;&quot;+table.getPointsToWin());</span>
+		
+		// Players to add in game
+<span class="fc" id="L76">		Properties players = new Properties();</span>
+<span class="fc" id="L77">		ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">		for (int i = 0; i &lt; table.getPlayers().length; i++)</span>
+		{
+<span class="fc" id="L80">			Player p = table.getPlayerAt(i);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">			if (p != null) {</span>
+<span class="fc" id="L82">				players.setProperty(&quot;&quot;+p.getLogin(), p.getAlias());</span>
+<span class="fc" id="L83">				order.add(&quot;&quot;+p.getLogin());</span>
+			}
+		}
+		
+		// request creation of game window. Will start in locked mode.
+<span class="fc" id="L88">		gm.createGameWindow(table.getTableID(), &quot;&quot;+lobby.getContext().getUser(), options, gameOptions, order, players, MyLobbyInitialization.this);</span>
+		
+		// go ahead and activate this person's turn (presumably as moderator).
+<span class="fc" id="L91">		gm.activateTurn(Integer.toString(table.getModerator().getLogin()));</span>
+		//gm.skipTurn(&quot;982&quot;);
+<span class="fc" id="L93">	}</span>
+	
+	@Override
+	public void initializeLobby(final LobbyFrame frame) {
+		// remember this lobby for later use
+<span class="fc" id="L98">		this.lobby = frame;</span>
+		
+		// install the two manager GUIs and callback
+<span class="fc" id="L101">		frame.setUserManagerGUI(umgui);</span>
+<span class="fc" id="L102">		frame.setTableManagerGUI(tmgui);</span>
+<span class="fc" id="L103">		frame.setLobbyInitialization(this);</span>
+		
+		// callback object will likely need to know about things.
+<span class="fc" id="L106">		frame.getContext();</span>
+		
+		// grab the menu bar and make an update 
+<span class="fc" id="L109">		JMenuBar menu = frame.getJMenuBar();</span>
+<span class="fc" id="L110">		JMenu help = new JMenu(&quot;Debug&quot;);</span>
+		
+<span class="fc" id="L112">		addMenuItemsForControllers(help);	</span>
+		
+<span class="fc" id="L114">		menu.add(help);</span>
+<span class="fc" id="L115">	}</span>
+
+	/**
+	 * Debug menu items for controllers
+	 * @author jbodah
+	 * @param menu
+	 */
+	private void addMenuItemsForControllers(JMenu menu) {
+		JMenuItem item ;
+		
+		/*
+		// ban request
+		item = new JMenuItem(&quot;generate 'ban' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new BanRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+				
+		// chat request
+		item = new JMenuItem(&quot;generate 'chat' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ChatRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// confirm request
+		item = new JMenuItem(&quot;generate 'confirm' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ConfirmRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// getProfile request
+		item = new JMenuItem(&quot;generate 'getProfile' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new GetProfileRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// invite request
+		item = new JMenuItem(&quot;generate 'invite' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new InviteRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// join request
+		item = new JMenuItem(&quot;generate 'join' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new JoinRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// leave request
+		item = new JMenuItem(&quot;generate 'leave' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new LeaveRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// options request
+		item = new JMenuItem(&quot;generate 'options' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new OptionsRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// playerInfo request
+		item = new JMenuItem(&quot;generate 'playerInfo' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new PlayerInfoRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		*/
+		
+		// players request
+<span class="fc" id="L218">		item = new JMenuItem(&quot;generate 'players' request&quot;);</span>
+<span class="fc" id="L219">		item.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L222">				new PlayersRequestController(lobby).process() ;</span>
+<span class="nc" id="L223">			}</span>
+		});
+<span class="fc" id="L225">		menu.add(item);</span>
+		
+		/*
+		// start request
+		item = new JMenuItem(&quot;generate 'start' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new StartRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);		
+		
+		// tableChat request
+		item = new JMenuItem(&quot;generate 'tableChat' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TableChatRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		*/
+		
+		// tables request
+<span class="fc" id="L250">		item = new JMenuItem(&quot;generate 'tables' request&quot;);</span>
+<span class="fc" id="L251">		item.addActionListener(new ActionListener() {</span>
+			@Override
+			public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L254">				new TablesRequestController(lobby).process() ;</span>
+<span class="nc" id="L255">			}</span>
+		});
+<span class="fc" id="L257">		menu.add(item);</span>
+		
+		/*
+		// turn request
+		item = new JMenuItem(&quot;generate 'turn' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new TurnRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// unregister request
+		item = new JMenuItem(&quot;generate 'unregister' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new UnregisterRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+		
+		// updaterequest
+		item = new JMenuItem(&quot;generate 'update' request&quot;);
+		item.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new UpdateRequestController(lobby).process() ;
+			}
+		});
+		menu.add(item);
+	*/
+<span class="fc" id="L290">	}</span>
+
+	@Override
+	public void sendTableChat(int tableID, String text) {
+<span class="fc" id="L294">		System.err.println(&quot;Table Chat request:&quot; + text);	</span>
+<span class="fc" id="L295">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="fc" id="L296">	}</span>
+
+	@Override
+	public void update(int tableID, int score, String game, boolean complete) {
+<span class="fc" id="L300">		System.err.println(&quot;Update request:&quot; + score + &quot;, complete=&quot; + complete);</span>
+<span class="fc" id="L301">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="fc" id="L302">	}</span>
+
+	@Override
+	public void leaveGame(int tableID) {
+<span class="fc" id="L306">		System.err.println(&quot;Player leaves table &quot; + tableID);</span>
+<span class="fc" id="L307">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="fc" id="L308">	}</span>
+
+	@Override
+	public void turn(int tableID, Properties scores, String move, boolean complete) {
+<span class="fc" id="L312">		System.err.println(&quot;Player makes move, complete=&quot; + complete);</span>
+<span class="fc" id="L313">		System.err.println(&quot;Move:&quot; + move);</span>
+<span class="pc bpc" id="L314" title="1 of 2 branches missed.">		for (Object p : scores.keySet()) {</span>
+<span class="nc" id="L315">			String value = scores.getProperty((String)p);</span>
+<span class="nc" id="L316">			System.err.println(&quot;player &quot; + p + &quot;, score=&quot; + value);</span>
+		}
+<span class="fc" id="L318">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="fc" id="L319">	}</span>
+
+	@Override
+	public void skip(int tableNumber) {
+<span class="fc" id="L323">		System.err.println(&quot;Player has skipped on table &quot; + tableNumber);</span>
+<span class="fc" id="L324">		System.err.println(&quot;Do something about it!&quot;);</span>
+<span class="fc" id="L325">	}</span>
+
+	@Override
+	public void connected(boolean status) {
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">		if (!status) {</span>
+<span class="fc" id="L330">			lobby.append(&quot;Server connection lost&quot;);</span>
+		} else {
+<span class="nc" id="L332">			lobby.append(&quot;My Initializer welcomes you&quot;);</span>
+<span class="nc" id="L333">			new PlayersRequestController(lobby).process() ;</span>
+<span class="nc" id="L334">			new TablesRequestController(lobby).process() ;</span>
+		}
+		
+<span class="fc" id="L337">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

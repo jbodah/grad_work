@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestSubmitWordController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">TestSubmitWordController.java</span></div><h1>TestSubmitWordController.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import java.util.ArrayList;
+import java.util.Properties;
+
+import wordsteal.boundaries.main.MainJPanel;
+import wordsteal.entities.Board;
+import wordsteal.entities.Cell;
+import wordsteal.entities.Game;
+import wordsteal.entities.Rack;
+import wordsteal.entities.Tile;
+import junit.framework.TestCase;
+import ks.client.game.wordsteal.SubmitWordController;
+import ks.client.game.wordsteal.WordstealGameInformation;
+
+/**
+ * Makes sure we have tied in the functionality appropriately.
+ * 
+ * @author George Heineman
+ *
+ */
+<span class="nc" id="L22">public class TestSubmitWordController extends TestCase {</span>
+
+
+	GameManager gm;
+	
+<span class="nc" id="L27">	int tableID = 13;</span>
+<span class="nc" id="L28">	String me = &quot;982&quot;;</span>
+	Properties options;
+	Properties gameOptions;
+	Properties playerIDs;
+	SampleInterface sample;
+	
+<span class="nc" id="L34">	String player1 = &quot;1124&quot;;</span>
+<span class="nc" id="L35">	String player2 = &quot;997&quot;;</span>
+	
+	/** My info. */
+	WordstealGameInformation info;
+	
+	/** IWordstealApp. */
+	MainJPanel mjp;
+	
+	/** internal info. */
+	Game game;
+	
+	// create the wordsteal game/app
+	protected void setUp() {
+<span class="nc" id="L48">		gm = GameManager.instance();</span>
+<span class="nc" id="L49">		Properties options = new Properties();</span>
+		// default ones from message
+<span class="nc" id="L51">		options.setProperty(&quot;seed&quot;, &quot;1234&quot;);</span>
+<span class="nc" id="L52">		options.setProperty(&quot;game&quot;, &quot;wordsteal.Wordsteal&quot;);</span>
+	
+<span class="nc" id="L54">		sample = new SampleInterface();</span>
+		
+		// game specific ones for wordsteal variations. note
+		// that the pointsToWin of 4 means any word played of
+		// four or more letters will win the game.
+<span class="nc" id="L59">		Properties gameOptions = new Properties();</span>
+<span class="nc" id="L60">		gameOptions.setProperty(&quot;noS&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L61">		gameOptions.setProperty(&quot;pink&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L62">		gameOptions.setProperty(&quot;turnTime&quot;, &quot;80&quot;);</span>
+		
+		// make score low enough that we can actually win a game, but
+		// high enough that we can try it out
+<span class="nc" id="L66">		gameOptions.setProperty(&quot;pointsToWin&quot;, &quot;10&quot;);</span>
+		
+		// player ids and real names (example where one has no real name)
+<span class="nc" id="L69">		Properties players = new Properties();</span>
+<span class="nc" id="L70">		players.setProperty(me,  &quot;George Heineman&quot;);</span>
+<span class="nc" id="L71">		players.setProperty(player1, &quot;Paul Simon&quot;);</span>
+<span class="nc" id="L72">		players.setProperty(player2,  &quot;&quot;);</span>
+		
+		// note that for the purpose of this demonstration, I am assuming
+		// that I am the moderator. This need not be the case. Indeed, 
+		// getting this bit of logic right will be a partnership between
+		// myself and all other groups.
+		
+		// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L80">		ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L81">		order.add(&quot;982&quot;);</span>
+<span class="nc" id="L82">		order.add(player1);</span>
+<span class="nc" id="L83">		order.add(player2);</span>
+		
+		// request creation of game window. Will start in locked mode.
+<span class="nc" id="L86">		assertTrue (gm.createGameWindow(tableID, me, options, gameOptions, order, players, sample));</span>
+		
+		// extract constructed info.
+<span class="nc" id="L89">		info = (WordstealGameInformation) gm.frame.getGameInformation();</span>
+<span class="nc" id="L90">		mjp = (MainJPanel) info.getGameContainer();</span>
+<span class="nc" id="L91">		game = mjp.getGame();</span>
+<span class="nc" id="L92">	}</span>
+	
+	protected void tearDown() {
+<span class="nc" id="L95">		gm.frame.setVisible(false);</span>
+<span class="nc" id="L96">		gm.frame.dispose();</span>
+<span class="nc" id="L97">	}</span>
+	
+	// have to at least place a single tile
+	public void testNoMoveMade() {
+<span class="nc" id="L101">		assertFalse (new SubmitWordController(mjp).process(info, sample));</span>
+<span class="nc" id="L102">	}</span>
+	
+	private void helperPlaceTile(Tile t, int row, int col) {
+<span class="nc" id="L105">		Rack rack = game.getRack();</span>
+<span class="nc" id="L106">		Board board = game.getBoard();</span>
+<span class="nc" id="L107">		Cell cell = board.getCell(row, col);</span>
+<span class="nc" id="L108">		cell.setTile(t);</span>
+<span class="nc" id="L109">		rack.removeTile(t); </span>
+<span class="nc" id="L110">	}</span>
+	
+	// place some tiles from Rack (initial OUSLHEH)
+	public void testHouse() {
+<span class="nc" id="L114">		Rack rack = game.getRack();</span>
+<span class="nc" id="L115">		ArrayList&lt;Tile&gt; allTiles = rack.getTiles();</span>
+		
+		// as they are placed, they are deleted from the rack, and positions adjust
+		// this is why we start from the RIGHT and add in that order.
+<span class="nc" id="L119">		Tile t = allTiles.get(6);  // H</span>
+<span class="nc" id="L120">		helperPlaceTile(t, 6, 6);</span>
+		
+<span class="nc" id="L122">		t = allTiles.get(5);       // E</span>
+<span class="nc" id="L123">		helperPlaceTile(t, 6, 10);</span>
+		
+<span class="nc" id="L125">		t = allTiles.get(2);       // S</span>
+<span class="nc" id="L126">		helperPlaceTile(t, 6, 9);</span>
+				
+<span class="nc" id="L128">		t = allTiles.get(1);       // U</span>
+<span class="nc" id="L129">		helperPlaceTile(t, 6, 8);</span>
+
+<span class="nc" id="L131">		t = allTiles.get(0);       // O</span>
+<span class="nc" id="L132">		helperPlaceTile(t, 6, 7);</span>
+		
+<span class="nc" id="L134">		assertTrue (new SubmitWordController(mjp).process(info, sample));</span>
+<span class="nc" id="L135">	}</span>
+	
+	// place some tiles from Rack (initial OUSLHEH)
+	public void testInvalidWord() {
+<span class="nc" id="L139">		Rack rack = game.getRack();</span>
+<span class="nc" id="L140">		ArrayList&lt;Tile&gt; allTiles = rack.getTiles();</span>
+		
+		// as they are placed, they are deleted from the rack, and positions adjust
+		// this is why we start from the RIGHT and add in that order.
+<span class="nc" id="L144">		Tile t = allTiles.get(6);  // H</span>
+<span class="nc" id="L145">		helperPlaceTile(t, 6, 6);</span>
+		
+<span class="nc" id="L147">		t = allTiles.get(5);       // E</span>
+<span class="nc" id="L148">		helperPlaceTile(t, 6, 10);</span>
+		
+<span class="nc" id="L150">		t = allTiles.get(1);       // U</span>
+<span class="nc" id="L151">		helperPlaceTile(t, 6, 8);</span>
+		
+<span class="nc" id="L153">		assertFalse (new SubmitWordController(mjp).process(info, sample));</span>
+<span class="nc" id="L154">	}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

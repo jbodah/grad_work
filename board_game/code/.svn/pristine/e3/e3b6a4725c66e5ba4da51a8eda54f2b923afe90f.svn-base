@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ServerArchitecture.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">arch</a> &gt; <span class="el_source">ServerArchitecture.java</span></div><h1>ServerArchitecture.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package arch;</span>
+
+import ks.framework.common.Configure;
+import ks.framework.communicator.Communicator;
+import ks.framework.interfaces.IAuthorization;
+import ks.server.controllers.ServerControllerChain;
+import ks.server.ipc.Server;
+import ks.server.processor.ServerProcessor;
+import ks.framework.common.Message;
+
+/**
+ * This is a sample class that shows how to configure the server to function.
+ * Copy (and rename) this into your appropriate location and then you can 
+ * begin the process of building up your own server implementation.
+ * 
+ * Note that you will have to provide your own manager that implements
+ * {@link IAuthorization}.
+ * 
+ * @author George Heineman
+ */
+<span class="nc" id="L21">public class ServerArchitecture {</span>
+
+
+	/** Instantiated server. */
+	static Server srv;
+	
+	/**
+	 * Launch server app.
+	 * 
+	 * @param args
+	 * @throws Exception 
+	 */
+	public static void main(String[] args) throws Exception {
+		// Determine the XML schema we are going to use
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		if (!Configure.configure()) {</span>
+<span class="nc" id="L36">			System.err.println(&quot;Unable to configure Message XML&quot;);</span>
+<span class="nc" id="L37">			return;</span>
+		}
+
+		// HACK: You'll need to come up with something better than this.
+<span class="nc" id="L41">		IAuthorization auth = new IAuthorization() {</span>
+<span class="nc" id="L42">			int ctr = 1000000;</span>
+
+			public boolean authorize(String who, String pwd) {
+<span class="nc" id="L45">				return true;</span>
+			}
+
+			// (not-so) random accounts
+			public String selfRegister(String pwd) {
+<span class="nc" id="L50">				ctr++;</span>
+<span class="nc" id="L51">				return &quot;&quot; + ctr;</span>
+			}	
+
+			public void login(Communicator com, Message m) {
+<span class="nc" id="L55">				System.out.println(m.getOriginator() + &quot; has logged in&quot;);</span>
+<span class="nc" id="L56">			}</span>
+
+			public void logout(Communicator com, Message m) {
+<span class="nc" id="L59">				System.out.println(m.getOriginator() + &quot; has logged out&quot;);</span>
+<span class="nc" id="L60">			}</span>
+		};
+
+
+<span class="nc" id="L64">		srv = new Server(auth);</span>
+
+		// here is where you can augment the chain of server-side controllers
+<span class="nc" id="L67">		ServerControllerChain head = ServerProcessor.head();</span>
+		
+<span class="nc" id="L69">		head.append(new SampleServerExtension());</span>
+<span class="nc" id="L70">		head.append(new ServerExtension());</span>
+
+<span class="nc" id="L72">		srv.activate();</span>
+<span class="nc" id="L73">	}</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

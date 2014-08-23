@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LobbyFrame.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.lobby</a> &gt; <span class="el_source">LobbyFrame.java</span></div><h1>LobbyFrame.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package ks.client.lobby;</span>
+
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import ks.client.UserContext;
+import ks.client.controllers.DefaultClientCloseController;
+import ks.client.game.GameManager;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobby2;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.client.ipc.Client;
+import ks.client.processor.ClientProcessor;
+import ks.framework.interfaces.IConnectionHandler;
+
+/**
+ * Primary KS client frontEnd that acts as the central hub for much of the
+ * client-side behavior.
+ * &lt;p&gt;
+ * From the lobby you can always get the UserContext.
+ * &lt;p&gt;
+ * @author George Heineman
+ */
+public class LobbyFrame extends JFrame implements IConnectionHandler, ILobby, ILobby2 {
+	// keep eclipse happy
+	private static final long serialVersionUID = 1L;
+
+	// my GUI
+	LobbyPanel inner;
+
+	// my menu bar.
+	JMenuBar menu;
+	
+	/** User context for connection information. */
+	UserContext context;
+
+	/** Callback for connected status. */
+	ILobbyInitialize lobbyCallback;
+	
+	/** Default client quit handler. */
+	DefaultClientCloseController quitHandler;
+	
+	/**
+	 * Each lobby must have a context in which to operate.
+	 */
+<span class="fc" id="L58">	public LobbyFrame(UserContext context) {</span>
+<span class="fc" id="L59">		this.context = context;</span>
+		
+		// prepare 
+<span class="fc" id="L62">		initialize();</span>
+<span class="fc" id="L63">	}</span>
+	
+	/**
+	 * Initialize GUI elements of this component.
+	 */
+	private void initialize() {
+<span class="fc" id="L69">		inner = new LobbyPanel(this);</span>
+<span class="fc" id="L70">		setContentPane(inner);</span>
+<span class="fc" id="L71">		setTitle(&quot;Sample KS frontend&quot;);</span>
+<span class="fc" id="L72">		setSize(850, 750);</span>
+<span class="fc" id="L73">		setMinimumSize(new Dimension(600, 420));</span>
+
+<span class="fc" id="L75">		setJMenuBar(getKSMenuBar());</span>
+		
+<span class="fc" id="L77">		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);</span>
+
+<span class="fc" id="L79">		addWindowListener(new WindowAdapter() {</span>
+			
+			@Override
+			public void windowClosing(WindowEvent we) {
+
+<span class="nc" id="L84">				int selection = JOptionPane.showConfirmDialog(null,</span>
+<span class="nc" id="L85">						&quot;Are you sure you want exit?&quot;, &quot;Kombat Games&quot;,</span>
+<span class="nc" id="L86">						JOptionPane.YES_NO_OPTION,</span>
+<span class="nc" id="L87">						JOptionPane.WARNING_MESSAGE);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">				if( selection == JOptionPane.YES_OPTION ) {</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">					if (quitHandler == null) {</span>
+<span class="nc" id="L90">						new DefaultClientCloseController(LobbyFrame.this).process();</span>
+					} else {
+<span class="nc" id="L92">						quitHandler.process();</span>
+					}
+				} else {
+<span class="nc" id="L95">					inner.append(&quot;Thank goodness you came to your senses!&quot;);</span>
+				}
+<span class="nc" id="L97">			}</span>
+		});
+<span class="fc" id="L99">	}</span>
+
+	/**
+	 * Get or create the menu bar for the LobbyFrame
+	 * @return
+	 */
+	public JMenuBar getKSMenuBar() {
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">		if (menu == null) {</span>
+<span class="fc" id="L107">			menu = new JMenuBar();</span>
+			
+			// create default
+<span class="fc" id="L110">			JMenu ksg = new JMenu(&quot;KombatGames&quot;);</span>
+<span class="fc" id="L111">			menu.add(ksg);</span>
+			
+<span class="fc" id="L113">			JMenuItem about = new JMenuItem(&quot;About...&quot;);</span>
+<span class="fc" id="L114">			ksg.add(about);</span>
+			
+<span class="fc" id="L116">			about.addActionListener(new ActionListener() {</span>
+
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L121">					System.err.println (&quot;ABOUT goes here...&quot;);				</span>
+<span class="nc" id="L122">				}</span>
+				
+			});
+			
+		}
+		
+<span class="fc" id="L128">		return menu;</span>
+	}
+
+	/**
+	 * Respond to changes in our connected status
+	 * 
+	 * @param status
+	 */
+	public void connected(boolean status) {
+<span class="fc" id="L137">		inner.getLobbyInput().setEditable(status);</span>
+
+		// update connect
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">		if (status) {</span>
+			// now that we are connected we can set up the processor
+			// for all requests coming back from the server
+<span class="nc" id="L143">			Client client = context.getClient();</span>
+<span class="nc" id="L144">			client.setProcessor(new ClientProcessor(this));</span>
+		}
+		
+		// make sure we tell our lobby initializer.
+<span class="pc bpc" id="L148" title="1 of 2 branches missed.">		if (lobbyCallback != null) {</span>
+<span class="nc" id="L149">			lobbyCallback.connected(status);</span>
+		}
+<span class="fc" id="L151">	}</span>
+	
+	/**
+	 * If you want to register your own controller to deal with window close events, do so here. 
+	 * 
+	 * @param handler
+	 */
+	public void registerCloseWindowHandler(DefaultClientCloseController handler) {
+<span class="nc" id="L159">		quitHandler = handler;</span>
+<span class="nc" id="L160">	}</span>
+
+	/**
+	 * Try to disconnect from remote server.
+	 * &lt;p&gt;
+	 * If client not yet connected (because client is null) then return true
+	 * since that is ok.
+	 */
+	public boolean tryToDisconnect() {
+<span class="nc" id="L169">		Client client = context.getClient();</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">		if (client == null) { return true; }</span>
+
+		// close down games, if any in progress...
+<span class="nc" id="L173">		GameManager.instance().exitGameWindow();</span>
+		
+<span class="nc bnc" id="L175" title="All 2 branches missed.">		if (!client.disconnect()) {</span>
+<span class="nc" id="L176">			return false;</span>
+		}
+
+<span class="nc" id="L179">		return true;</span>
+	}
+
+	/**
+	 * Append string to RoomGUI output.
+	 * 
+	 * @param s
+	 */
+	public void append(String s) {
+<span class="fc" id="L188">		inner.append(s);</span>
+<span class="fc" id="L189">	}</span>
+	
+	/**
+	 * Append string to RoomGUI output.
+	 * 
+	 * @param s
+	 */
+	public void append(String who, String s, boolean isPublic) {
+<span class="nc" id="L197">		inner.append(who, s, isPublic);</span>
+<span class="nc" id="L198">	}</span>
+
+	@Override
+	public UserContext getContext() {
+<span class="fc" id="L202">		return context;</span>
+	}
+
+	/** Expose inner lobby panel, mostly for testing. */
+	public LobbyPanel getInnerPanel() {
+<span class="fc" id="L207">		return inner;</span>
+	}
+
+	public void setTableManagerGUI(JPanel tableManagerGUI) {
+<span class="fc" id="L211">		inner.setTableManagerGUI(tableManagerGUI);</span>
+<span class="fc" id="L212">	}</span>
+
+	public void setUserManagerGUI(JPanel userManagerGUI) {
+<span class="fc" id="L215">		inner.setUserManagerGUI(userManagerGUI);</span>
+<span class="fc" id="L216">	}</span>
+
+	@Override
+	public JPanel getTableManagerGUI() {
+<span class="fc" id="L220">		return inner.getTableManagerGUI();</span>
+	}
+
+	@Override
+	public JPanel getUserManagerGUI() {
+<span class="fc" id="L225">		return inner.getUserManagerGUI();</span>
+	}
+
+	/**
+	 * Need to have frame know of the initialization callback.
+	 * @param lobbyCallback
+	 */
+	public void setLobbyInitialization(ILobbyInitialize lobbyCallback) {
+<span class="fc" id="L233">		this.lobbyCallback = lobbyCallback;</span>
+<span class="fc" id="L234">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

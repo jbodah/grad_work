@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>UserManagerGUI.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.boundaries</a> &gt; <span class="el_source">UserManagerGUI.java</span></div><h1>UserManagerGUI.java</h1><pre class="source lang-java linenums">package wordstealclient.boundaries;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Collection;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import wordstealclient.entities.Player;
+
+<span class="nc" id="L13">public class UserManagerGUI {</span>
+	
+	protected static JLabel userDetails;
+	protected static WSUsersTable usersTable;
+	protected static WSUserPanel userPanel;
+	
+	/**
+	 * @author cbelhumeur
+	 * @return
+	 */
+	public static JPanel create(Collection&lt;Player&gt; players) {
+<span class="fc" id="L24">		JPanel tempUserManagerGUI = new JPanel();</span>
+<span class="fc" id="L25">		tempUserManagerGUI.setLayout(new BorderLayout());</span>
+		//tempUserManagerGUI.setMaximumSize(new Dimension(220, 600));
+		
+<span class="fc" id="L28">		userPanel = new WSUserPanel();</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">		if (players != null)</span>
+		{
+<span class="fc" id="L31">			usersTable = new WSUsersTable(players.toArray(new Player[players.size()]), userPanel);	</span>
+		}
+		else 
+		{
+<span class="fc" id="L35">			usersTable = new WSUsersTable(new Player[0], userPanel);</span>
+		}
+<span class="fc" id="L37">		usersTable.setMaximumSize(new Dimension(200, 600));</span>
+<span class="fc" id="L38">		JScrollPane pane = new JScrollPane(usersTable);</span>
+<span class="fc" id="L39">		tempUserManagerGUI.add(pane, BorderLayout.PAGE_START);		</span>
+<span class="fc" id="L40">		tempUserManagerGUI.add(userPanel, BorderLayout.LINE_START);</span>
+<span class="fc" id="L41">		return tempUserManagerGUI;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestMessage.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.framework.common</a> &gt; <span class="el_source">TestMessage.java</span></div><h1>TestMessage.java</h1><pre class="source lang-java linenums">package ks.framework.common;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+
+
+import junit.framework.TestCase;
+import ks.framework.common.Message.MessageType;
+
+<span class="nc" id="L10">public class TestMessage extends TestCase {</span>
+
+	protected void setUp() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L15">			Message.unconfigure();</span>
+<span class="nc" id="L16">			assertTrue (Configure.configure());</span>
+<span class="nc" id="L17">		} catch (Exception e) {</span>
+<span class="nc" id="L18">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+
+<span class="nc" id="L21">	}</span>
+	
+	/**
+	 * Reset back to normal.
+	 * &lt;p&gt;
+	 * Be careful when using this unconfigure method. It enables testing
+	 * but could prove dangerous
+	 */
+	protected void tearDown() {
+<span class="nc" id="L30">		Message.unconfigure();</span>
+<span class="nc" id="L31">	}</span>
+	
+	public void testMessageConfigure() {
+		// validate a simple tables
+<span class="nc" id="L35">		String s = Message.requestHeader() + &quot;&lt;tables/&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L36">		Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">		assertTrue (d != null);</span>
+		
+<span class="nc" id="L39">		Message m = new Message (d);</span>
+<span class="nc" id="L40">		assertEquals (&quot;tables&quot;, m.getName());</span>
+<span class="nc" id="L41">	}</span>
+	
+	public void testMessageContents() {
+		// validate a simple chat
+<span class="nc" id="L45">		String s = Message.requestHeader() + &quot;&lt;chat&gt;&lt;text&gt;Here is the message&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L46">		Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">		assertTrue (d != null);</span>
+		
+		// access CHAT
+<span class="nc" id="L50">		Message m = new Message (d);</span>
+<span class="nc" id="L51">		Node n = m.contents();</span>
+<span class="nc" id="L52">		assertEquals (&quot;chat&quot;, n.getNodeName());</span>
+		
+		// access its child, TEXT
+<span class="nc" id="L55">		m = new Message (d);</span>
+<span class="nc" id="L56">		n = m.contentsChild();</span>
+<span class="nc" id="L57">		assertEquals (&quot;text&quot;, n.getNodeName());</span>
+		
+		// this is a request
+<span class="nc" id="L60">		assertTrue (m.isRequest());</span>
+<span class="nc" id="L61">	}</span>
+	
+	public void testMessageMetaData() {
+		// validate a simple chat
+<span class="nc" id="L65">		String s = Message.requestHeader() + &quot;&lt;chat&gt;&lt;text&gt;Here is the message&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L66">		Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		assertTrue (d != null);</span>
+		
+<span class="nc" id="L69">		Message m = new Message (d);</span>
+		
+<span class="nc" id="L71">		String orig = &quot;heineman&quot;;</span>
+<span class="nc" id="L72">		String dest = &quot;admin&quot;;</span>
+<span class="nc" id="L73">		m.setOriginator(orig);</span>
+<span class="nc" id="L74">		m.setRecipient(dest);</span>
+		
+<span class="nc" id="L76">		assertEquals (dest, m.getRecipient());</span>
+<span class="nc" id="L77">		assertEquals (orig, m.getOriginator());</span>
+		
+		// by default, no message is a broadcast message.
+<span class="nc" id="L80">		assertFalse (m.isBroadcast()); </span>
+		
+<span class="nc" id="L82">		m.setBroadcast();</span>
+		
+<span class="nc" id="L84">		assertTrue (m.isBroadcast());</span>
+		
+		// note that setting of broadcast MUST NOT lose originator or recipient
+<span class="nc" id="L87">		assertEquals (dest, m.getRecipient());</span>
+<span class="nc" id="L88">		assertEquals (orig, m.getOriginator());</span>
+<span class="nc" id="L89">	}</span>
+	
+	// validate misguided attempts to reconfigure
+	public void testReconfigure() {
+		try {
+<span class="nc" id="L94">			assertTrue (Configure.configure());</span>
+			// succeed is let through ok
+<span class="nc" id="L96">		} catch (Exception e) {</span>
+<span class="nc" id="L97">			fail(&quot;This should work&quot;);</span>
+		}
+		
+		try {
+<span class="nc" id="L101">			Message.configure(&quot;ks.xsd&quot;, null);</span>
+<span class="nc" id="L102">			fail (&quot;Must detect bad configurations.&quot;);</span>
+<span class="nc" id="L103">		} catch (Exception e) {</span>
+			// success
+		}
+		
+<span class="nc" id="L107">	}</span>
+	
+	// test the inner MessageType class
+	public void testMessageType() {
+<span class="nc" id="L111">		MessageType m = MessageType.Request;</span>
+<span class="nc" id="L112">		MessageType n = MessageType.Response;</span>
+<span class="nc" id="L113">		assertTrue (MessageType.Request.same(m));</span>
+		
+<span class="nc" id="L115">		assertFalse (m.same(null));</span>
+<span class="nc" id="L116">		assertTrue (m.same(m));</span>
+<span class="nc" id="L117">		assertFalse (n.same(m));</span>
+<span class="nc" id="L118">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

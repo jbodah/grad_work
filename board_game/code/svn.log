@@ -1,0 +1,2989 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log>
+<logentry
+   revision="104">
+<author>jbodah</author>
+<date>2012-04-28T18:36:33.937938Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/README</path>
+<path
+   kind=""
+   action="M">/WordstealClient/Team-Final-Report-Task2.docx</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/GameResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/XMLSchema.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/PlayerResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/ChatResponseHandler.java</path>
+</paths>
+<msg>README, comments</msg>
+</logentry>
+<logentry
+   revision="103">
+<author>cbelhumeur</author>
+<date>2012-04-28T18:13:27.342991Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/ChatRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/JoinRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/arch/MyLobbyInitializationTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/ContextRequestControllerTests.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSInviteFrame.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/arch/ConsolidatedClientProfileControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/TablesRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIHelper.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/boundaries/ManagerGUITest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/LeaveRequestControllerTest.java</path>
+</paths>
+<msg>Clean up</msg>
+</logentry>
+<logentry
+   revision="102">
+<author>cbelhumeur</author>
+<date>2012-04-28T17:35:24.961354Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/test/wordstealclient/controllers/requests/ConfirmRequestControllerTest.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/test/wordstealclient/controllers/requests/InviteRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/arch/MyLobbyInitializationTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/ContextRequestControllerTests.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/boundaries/ManagerGUITest.java</path>
+</paths>
+<msg>Test fixes.</msg>
+</logentry>
+<logentry
+   revision="101">
+<author>jbodah</author>
+<date>2012-04-28T17:32:11.900099Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver</path>
+</paths>
+<msg>Delete unused package</msg>
+</logentry>
+<logentry
+   revision="100">
+<author>cbelhumeur</author>
+<date>2012-04-28T02:26:09.878238Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/ConfirmRequestControllerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/ChatRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/PlayersRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/LeaveRequestControllerTest.java</path>
+</paths>
+<msg>More code coverage!</msg>
+</logentry>
+<logentry
+   revision="99">
+<author>jbodah</author>
+<date>2012-04-28T01:42:02.669189Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/Team-Final-Report-Task2.docx</path>
+</paths>
+<msg>Final Doc</msg>
+</logentry>
+<logentry
+   revision="98">
+<author>cbelhumeur</author>
+<date>2012-04-28T01:41:34.982555Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/ConfirmRequestControllerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/arch/MyLobbyInitializationTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+</paths>
+<msg>More tests!</msg>
+</logentry>
+<logentry
+   revision="97">
+<author>cbelhumeur</author>
+<date>2012-04-28T01:11:49.550210Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/boundaries</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/JoinRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/arch/ConsolidatedClientProfileControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/test/TestData.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/boundaries/ManagerGUITest.java</path>
+</paths>
+<msg>More tests!</msg>
+</logentry>
+<logentry
+   revision="96">
+<author>cbelhumeur</author>
+<date>2012-04-27T23:58:38.411674Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/InviteRequestControllerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/PlayersRequestControllerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/TablesRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/OptionsRequestControllerTest.java</path>
+</paths>
+<msg>controller tests!</msg>
+</logentry>
+<logentry
+   revision="95">
+<author>cbelhumeur</author>
+<date>2012-04-27T23:41:10.906369Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/requests/ConfirmRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/.classpath</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+</paths>
+<msg>playerslist and invite controller tests</msg>
+</logentry>
+<logentry
+   revision="94">
+<author>jbodah</author>
+<date>2012-04-27T22:12:41.813291Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/util/GUIHelperTest.java</path>
+</paths>
+<msg>GUIHelper tests</msg>
+</logentry>
+<logentry
+   revision="93">
+<author>jbodah</author>
+<date>2012-04-27T21:35:18.234887Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/InviteRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/xml_handlers/JoinTableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/ChatControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/GameResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSInviteFrame.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUsersTable.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/ConfirmRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/StartRequestController.java</path>
+</paths>
+<msg>Removing unused code and references</msg>
+</logentry>
+<logentry
+   revision="92">
+<author>jbodah</author>
+<date>2012-04-27T21:31:03.955370Z</date>
+<paths>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/_placeholders"
+   copyfrom-rev="89"
+   action="A">/WordstealClient/external/wordstealclient/controllers/_placeholders</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders</path>
+<path
+   kind=""
+   action="A">/WordstealClient/external/wordstealclient</path>
+<path
+   kind=""
+   action="A">/WordstealClient/external/wordstealclient/controllers</path>
+</paths>
+<msg>Moving more into external</msg>
+</logentry>
+<logentry
+   revision="91">
+<author>jbodah</author>
+<date>2012-04-27T21:29:48.036591Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/our_server/SGameResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/our_server/SRejectResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/GameResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/our_server/SUpdateResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/ChatResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/our_server/STableChatResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/our_server/STableResponse.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/util/TestData.java"
+   copyfrom-rev="89"
+   action="A">/WordstealClient/external/test/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/our_server/SPlayerResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/external/our_server/SConfirmResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableEmptyHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>Moving more into external</msg>
+</logentry>
+<logentry
+   revision="90">
+<author>jbodah</author>
+<date>2012-04-27T21:27:42.740337Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/test/arch/WSServerArchitectureTest.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/arch/ServerExtension.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/ServerExtension.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/external/dummyserver</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/SGameResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/arch/WSServerArchitecture.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/SRejectResponse.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/SGameResponse.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/SGameResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/dummyserver</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/dummyserver/controllers</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/SRejectResponse.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/SRejectResponse.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/external/our_server</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/SUpdateResponse.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/arch/WSServerArchitecture.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/WSServerArchitecture.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/SUpdateResponse.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/SUpdateResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/SControllerChainLink.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/STableResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/STableChatResponse.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/SControllerChainLink.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/SControllerChainLink.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/STableChatResponse.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/STableChatResponse.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/STableResponse.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/STableResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/arch/ServerExtension.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/SPlayerResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/external/dummyserver/controllers/SConfirmResponse.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/SPlayerResponse.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/SPlayerResponse.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/dummyserver/controllers/SConfirmResponse.java"
+   copyfrom-rev="88"
+   action="A">/WordstealClient/external/our_server/SConfirmResponse.java</path>
+</paths>
+<msg>Moving things into external folder</msg>
+</logentry>
+<logentry
+   revision="89">
+<author>jbodah</author>
+<date>2012-04-27T21:23:47.870654Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/xml_handlers/GameResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/external/test</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/external</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/ChatResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/GameResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/external/test/Utilities.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableEmptyHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>GameResponseHandlerTest, cleaned up unit tests a bit, made an "external" package for code that isn't immediately related to our client</msg>
+</logentry>
+<logentry
+   revision="88">
+<author>cbelhumeur</author>
+<date>2012-04-27T20:58:48.000559Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/ConfirmRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/OptionsRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/ConfirmRequestController.java</path>
+</paths>
+<msg>Confirm and options controller tests</msg>
+</logentry>
+<logentry
+   revision="87">
+<author>jbodah</author>
+<date>2012-04-27T20:19:37.100052Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>More tests</msg>
+</logentry>
+<logentry
+   revision="86">
+<author>jbodah</author>
+<date>2012-04-27T20:03:14.561330Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/GameControllerChainLink.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/TailControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/StartResponseController.java"
+   copyfrom-rev="84"
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/GameResponseController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/xml_handlers/GameResponseHandler.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/StartResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/StartRequestController.java</path>
+</paths>
+<msg>Starting a game now launches game for all players on table</msg>
+</logentry>
+<logentry
+   revision="85">
+<author>jbodah</author>
+<date>2012-04-27T18:42:29.994032Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/util</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/util/XMLSchemaTest.java</path>
+</paths>
+<msg>XMLSchema tests</msg>
+</logentry>
+<logentry
+   revision="84">
+<author>jbodah</author>
+<date>2012-04-26T21:56:41.420836Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUserPanel.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders/StartRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/StartResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/_placeholders/StartRequestController.java"
+   copyfrom-rev="83"
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/StartRequestController.java</path>
+</paths>
+<msg>Bunch of crap, forget what I did</msg>
+</logentry>
+<logentry
+   revision="83">
+<author>cbelhumeur</author>
+<date>2012-04-26T21:07:48.484423Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/InviteRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders/InviteRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSInviteFrame.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/ConfirmResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/XMLSchema.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIHelper.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/ConfirmRequestController.java</path>
+</paths>
+<msg>Invitations now work if a table is set to by invitation only.</msg>
+</logentry>
+<logentry
+   revision="82">
+<author>cbelhumeur</author>
+<date>2012-04-26T17:40:41.455857Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders/ConfirmRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/ConfirmResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/XMLSchema.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/OptionsRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/ConfirmRequestController.java</path>
+</paths>
+<msg>Added confirm request and response controllers.</msg>
+</logentry>
+<logentry
+   revision="81">
+<author>cbelhumeur</author>
+<date>2012-04-24T19:08:11.372400Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/OptionsRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIHelper.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders/OptionsRequestController.java</path>
+</paths>
+<msg>Added the OptionsRequestController functionality and tightened up the table UI.</msg>
+</logentry>
+<logentry
+   revision="80">
+<author>jbodah</author>
+<date>2012-04-22T21:20:54.836233Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders/LeaveRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/_placeholders/LeaveRequestController.java"
+   copyfrom-rev="76"
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/LeaveRequestController.java</path>
+</paths>
+<msg>LeaveRequest implemented and working with GUI. Client now tracks EVERY players location (probably unnecessary, but makes out lives easier). There is an issue that 1) Table is redrawn when TableResponses come in 2) No TablesRequest is sent when a player leaves a table. Both of these need to happen to prevent the issue</msg>
+</logentry>
+<logentry
+   revision="79">
+<author>jbodah</author>
+<date>2012-04-22T16:07:14.381677Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/TableEmptyController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/TableResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableEmptyHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/JoinRequestController.java</path>
+</paths>
+<msg>Centralized and encapsulated logic for deciding whether to display table list or table view</msg>
+</logentry>
+<logentry
+   revision="78">
+<author>jbodah</author>
+<date>2012-04-22T15:52:38.827267Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/JoinRequestController.java</path>
+</paths>
+<msg>Encapsulated Table vs. Tables  view redraw logic</msg>
+</logentry>
+<logentry
+   revision="77">
+<author>jbodah</author>
+<date>2012-04-22T15:46:49.287087Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+</paths>
+<msg>Added comments</msg>
+</logentry>
+<logentry
+   revision="76">
+<author>jbodah</author>
+<date>2012-04-22T15:40:42.420452Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/JoinRequestController.java</path>
+</paths>
+<msg>Updates so codes passes all tests</msg>
+</logentry>
+<logentry
+   revision="75">
+<author>jbodah</author>
+<date>2012-04-20T17:59:10.953654Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/java_workspace3(4-20).zip</path>
+</paths>
+<msg>Check in of entire workspace</msg>
+</logentry>
+<logentry
+   revision="74">
+<author>jbodah</author>
+<date>2012-04-20T17:58:42.529325Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+</paths>
+<msg>Forgot to check something in</msg>
+</logentry>
+<logentry
+   revision="73">
+<author>jbodah</author>
+<date>2012-04-20T00:58:43.346500Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/JoinRequestController.java</path>
+</paths>
+<msg>Working JoinRequest</msg>
+</logentry>
+<logentry
+   revision="72">
+<author>jbodah</author>
+<date>2012-04-19T23:46:11.872709Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/JoinRequestController.java</path>
+</paths>
+<msg>Moved GUIUpdater call into JoinRequest controller</msg>
+</logentry>
+<logentry
+   revision="71">
+<author>jbodah</author>
+<date>2012-04-19T20:41:41.120140Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+</paths>
+<msg>WSClientArchitecture.getThisPlayer() now returns currently logged in player</msg>
+</logentry>
+<logentry
+   revision="70">
+<author>jbodah</author>
+<date>2012-04-19T20:00:33.516570Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+</paths>
+<msg>Treat each tableResponse as a new reinitialization of the table</msg>
+</logentry>
+<logentry
+   revision="69">
+<author>jbodah</author>
+<date>2012-04-19T19:47:13.661361Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+</paths>
+<msg>Funneled accessors for Player into one method</msg>
+</logentry>
+<logentry
+   revision="68">
+<author>jbodah</author>
+<date>2012-04-19T19:28:57.907736Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+</paths>
+<msg>Player.getAlias() returns "User 376" or whatever login they have now</msg>
+</logentry>
+<logentry
+   revision="67">
+<author>jbodah</author>
+<date>2012-04-19T19:22:35.293850Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/ChatControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/ChatResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableEmptyHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>Reverted previous hack to send players/tables requests on login</msg>
+</logentry>
+<logentry
+   revision="66">
+<author>cbelhumeur</author>
+<date>2012-04-19T19:18:46.810117Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSInviteFrame.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+</paths>
+<msg>Minor changes</msg>
+</logentry>
+<logentry
+   revision="65">
+<author>jbodah</author>
+<date>2012-04-19T17:22:00.814026Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+</paths>
+<msg>Changed Player.tableID to Player.table, added unit tests, sets to null when Table.removePlayerAt() is called.</msg>
+</logentry>
+<logentry
+   revision="64">
+<author>jbodah</author>
+<date>2012-04-19T17:14:02.581889Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/JoinTableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/JoinRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</path>
+</paths>
+<msg>JoinRequest now expects TableResponse. Players now have a tableID they are associated with.</msg>
+</logentry>
+<logentry
+   revision="63">
+<author>jbodah</author>
+<date>2012-04-18T18:56:52.223318Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>Automatically send players and tables requests on login; TableResponse now handles table state properly</msg>
+</logentry>
+<logentry
+   revision="62">
+<author>cbelhumeur</author>
+<date>2012-04-17T19:52:10.987976Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/WSInviteFrame.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/interfaces/IGameProvider.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIHelper.java</path>
+</paths>
+<msg>Invitations and other modifications to the table to support gameplay.</msg>
+</logentry>
+<logentry
+   revision="61">
+<author>cbelhumeur</author>
+<date>2012-04-17T00:49:51.450269Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/interfaces/IGameProvider.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIHelper.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Fixed event system. Game now launches from table panel which can be accessed by double clicking on a table. Most UI is functional provided we have built the content. Half of the table panel is currently working.</msg>
+</logentry>
+<logentry
+   revision="60">
+<author>cbelhumeur</author>
+<date>2012-04-13T17:06:04.357053Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/.classpath</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/ImagePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUsersTable.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/resources</path>
+<path
+   kind=""
+   action="A">/WordstealClient/resources/blueWhiteBg.jpg</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/util/GUIHelper.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Major updates to in-table GUI, new resources added, new GUI helper added, other modifications.
+Defaults to in-table GUI. This can be modified in the TableManagerGUI file.</msg>
+</logentry>
+<logentry
+   revision="59">
+<author>jbodah</author>
+<date>2012-04-12T20:47:16.865690Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/ChatControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/ChatResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableEmptyHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>HACK: found a way to automatically make players/tables requests on login</msg>
+</logentry>
+<logentry
+   revision="58">
+<author>jbodah</author>
+<date>2012-04-12T20:04:40.088857Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+</paths>
+<msg>Changed WSTablesPanel to show correct number of players at table</msg>
+</logentry>
+<logentry
+   revision="57">
+<author>cbelhumeur</author>
+<date>2012-04-12T19:31:54.964103Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/WSTablePanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Lobby fix, UI changes, new Table boundary</msg>
+</logentry>
+<logentry
+   revision="56">
+<author>jbodah</author>
+<date>2012-04-12T19:04:07.853327Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+</paths>
+<msg>Shifted tableID's by one so now they go from 1-100 instead of 0-99. Room.tables[0] is null</msg>
+</logentry>
+<logentry
+   revision="55">
+<author>cbelhumeur</author>
+<date>2012-04-12T18:37:43.835558Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUserPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/TableResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUsersTable.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>GUI updates, link with requests, etc</msg>
+</logentry>
+<logentry
+   revision="54">
+<author>jbodah</author>
+<date>2012-04-12T18:01:43.938340Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders/JoinRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/JoinTableResponseHandler.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/_placeholders/JoinRequestController.java"
+   copyfrom-rev="53"
+   action="A">/WordstealClient/src/wordstealclient/controllers/correlated_requests/JoinRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</path>
+</paths>
+<msg>Moved JoinRequestController to the appropriate package and put a placeholder function in GUI updater</msg>
+</logentry>
+<logentry
+   revision="53">
+<author>jbodah</author>
+<date>2012-04-12T17:38:04.984270Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/JoinRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/xml_handlers/JoinTableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</path>
+</paths>
+<msg>JoinTable functionality + testing</msg>
+</logentry>
+<logentry
+   revision="52">
+<author>jbodah</author>
+<date>2012-04-12T15:24:47.568196Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/ChatRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/arch/ClientExtension.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/xml_handlers/ChatResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableEmptyHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>Everything for Room Chat (incl private chat). Response Chat doesn't update gui properly since I haven't figured out how to override the default controller</msg>
+</logentry>
+<logentry
+   revision="51">
+<author>jbodah</author>
+<date>2012-04-11T21:14:42.252133Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/ChatRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/arch/ClientExtension.java"
+   copyfrom-rev="47"
+   action="A">/WordstealClient/src/wordstealclient/controllers/ChatControllerChainLink.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/ChatResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/xml_handlers/ChatResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/NodeHelper.java</path>
+</paths>
+<msg>Added the three ChatResponse cases as well as tests</msg>
+</logentry>
+<logentry
+   revision="50">
+<author>jbodah</author>
+<date>2012-04-11T17:45:18.075249Z</date>
+<paths>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/_placeholders/ChatRequestController.java"
+   copyfrom-rev="47"
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests/ChatRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/_placeholders/ChatRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_requests</path>
+</paths>
+<msg>Moved ChatRequestController</msg>
+</logentry>
+<logentry
+   revision="49">
+<author>jbodah</author>
+<date>2012-04-11T17:43:09.013014Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/placeholders</path>
+</paths>
+<msg>Synchronization error, this should've been deleted</msg>
+</logentry>
+<logentry
+   revision="48">
+<author>jbodah</author>
+<date>2012-04-11T17:26:23.943563Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/src/arch/SampleServerController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/arch/SampleServerExtension.java</path>
+</paths>
+<msg>Removed unused sample files</msg>
+</logentry>
+<logentry
+   revision="47">
+<author>jbodah</author>
+<date>2012-04-11T16:49:54.794832Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/LeaveRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/ConfirmRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/StartRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/InviteRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/ChatRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/JoinRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/BanRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/GetProfileRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/UpdateRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/TableChatRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/UnregisterRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/PlayerInfoRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/TurnRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/_placeholders/OptionsRequestController.java</path>
+</paths>
+<msg>Fixed some synchronization errors that occurred when changing package name</msg>
+</logentry>
+<logentry
+   revision="46">
+<author>jbodah</author>
+<date>2012-04-11T16:47:37.722737Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/placeholders"
+   copyfrom-rev="45"
+   action="A">/WordstealClient/src/wordstealclient/controllers/_placeholders</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableEmptyHandler.java</path>
+<path
+   kind=""
+   action="R">/WordstealClient/src/wordstealclient/controllers/placeholders</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests"
+   copyfrom-rev="45"
+   action="A">/WordstealClient/src/wordstealclient/controllers/correlated_requests</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/responses</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/TableEmptyController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/TableResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses/PlayerResponseController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/responses"
+   copyfrom-rev="45"
+   action="A">/WordstealClient/src/wordstealclient/controllers/uncorrelated_responses</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/correlated_requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableEmptyHandlerTest.java</path>
+</paths>
+<msg>TableEmpty logic and testing, renamed a few controller packages to improve clarity</msg>
+</logentry>
+<logentry
+   revision="45">
+<author>jbodah</author>
+<date>2012-04-11T15:50:23.463821Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/responses/TableResponseController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</path>
+</paths>
+<msg>Testing for TableResponseHandler</msg>
+</logentry>
+<logentry
+   revision="44">
+<author>jbodah</author>
+<date>2012-04-11T00:35:39.096400Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/xml_handlers</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/xml_handlers/PlayerResponseHandler.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+</paths>
+<msg>Got a controller test working and caught an interesting bug</msg>
+</logentry>
+<logentry
+   revision="43">
+<author>jbodah</author>
+<date>2012-04-10T23:14:09.378320Z</date>
+<paths>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/OptionsRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/OptionsRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/LeaveRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/LeaveRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/StartRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/StartRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/JoinRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/JoinRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/ConfirmRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/InviteRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/GetProfileRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/BanRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/PlayerInfoRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/ChatRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/ChatRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/UpdateRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/UpdateRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/ConfirmRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/ConfirmRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/TableChatRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/UnregisterRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/InviteRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/InviteRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/TurnRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/GetProfileRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/GetProfileRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/BanRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/BanRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/OptionsRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/LeaveRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/StartRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/JoinRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/xml_handlers/PlayerResponseHandler.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/PlayerInfoRequestController.java"
+   copyfrom-rev="36"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/PlayerInfoRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/responses/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/xml_handlers</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/ChatRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/TableChatRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/TableChatRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/UnregisterRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/UnregisterRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/requests/UpdateRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/TurnRequestController.java"
+   copyfrom-rev="38"
+   action="A">/WordstealClient/src/wordstealclient/controllers/placeholders/TurnRequestController.java</path>
+</paths>
+<msg>Big refactoring. Moved all unused controllers into a placeholder package, commented out all of the menu items for these controllers. Request/response controllers now ONLY handle communications and top-level logic. Low level logic (parsing, updating entities) is handled by an xml_handler</msg>
+</logentry>
+<logentry
+   revision="42">
+<author>jbodah</author>
+<date>2012-04-10T22:04:23.959079Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+</paths>
+<msg>Added a bunch of test cases for entities</msg>
+</logentry>
+<logentry
+   revision="41">
+<author>jbodah</author>
+<date>2012-04-10T19:58:27.623212Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+</paths>
+<msg>TableRequestController should be working, removed a defunct constructor in Room, added basic methods and tests to Table, commented out some defunct TestData, organized TableTest tests into a suite</msg>
+</logentry>
+<logentry
+   revision="40">
+<author>jbodah</author>
+<date>2012-04-09T20:48:08.779143Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SRejectResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SConfirmResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SUpdateResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SControllerChainLink.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java"
+   copyfrom-rev="39"
+   action="R">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/STableChatResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/STableResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SGameResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/util/NodeHelper.java</path>
+</paths>
+<msg>Rerouted response controllers since I just copied/pasted before, reimplemented PlayersRequestController, cleaned up other files a little (minor stuff), added NodeHelper to help with XML parsing</msg>
+</logentry>
+<logentry
+   revision="39">
+<author>jbodah</author>
+<date>2012-04-09T17:43:35.622285Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SPlayerResponse.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/SRejectResponse.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/SConfirmResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/SUpdateResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/STableChatResponse.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/STableResponse.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/SGameResponse.java</path>
+</paths>
+<msg>Added boiler plate code for server responses and added a bunch of test data</msg>
+</logentry>
+<logentry
+   revision="38">
+<author>jbodah</author>
+<date>2012-04-09T17:15:49.081545Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/UnregisterRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/TableChatRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/TurnRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/OptionsRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/LeaveRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/ConfirmRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/StartRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/InviteRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/JoinRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/GetProfileRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/BanRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/ChatRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/UpdateRequestController.java</path>
+</paths>
+<msg>Added boiler plate code for all of the request controllers</msg>
+</logentry>
+<logentry
+   revision="37">
+<author>jbodah</author>
+<date>2012-04-09T16:27:42.592595Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/responses/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/util/GUIUpdater.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+</paths>
+<msg>Refactored code</msg>
+</logentry>
+<logentry
+   revision="36">
+<author>jbodah</author>
+<date>2012-04-09T15:44:44.419750Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/UnregisterRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/TableChatRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/TurnRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/OptionsRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/LeaveRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/StartRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/ConfirmRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/InviteRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/JoinRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/BanRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/GetProfileRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayerInfoRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/responses/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/TablesRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/ChatRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/UpdateRequestController.java</path>
+</paths>
+<msg>Added prototypes for the rest of the request controllers (except login/logout). Beefed up the comments in all the controllers</msg>
+</logentry>
+<logentry
+   revision="35">
+<author>jbodah</author>
+<date>2012-04-09T14:46:31.437698Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/test/wordstealclient/controllers/requests/PlayersRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/test/wordstealclient/controllers/placeholder.java</path>
+</paths>
+<msg>Refactoring, removing old code</msg>
+</logentry>
+<logentry
+   revision="34">
+<author>cbelhumeur</author>
+<date>2012-04-05T20:24:19.103084Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUserPanel.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/util/TestData.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUsersTable.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Added TestData.java
+UI is now tied in with the test data.
+Updated GUI objects.</msg>
+</logentry>
+<logentry
+   revision="33">
+<author>jbodah</author>
+<date>2012-04-05T20:02:17.406093Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/arch/WSServerArchitectureTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/arch/WSClientArchitectureTest.java</path>
+</paths>
+<msg>adding tests</msg>
+</logentry>
+<logentry
+   revision="32">
+<author>cbelhumeur</author>
+<date>2012-04-05T19:23:20.461259Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/entities/TableState.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Table UI updated.  Tables are now properly generated through the room. Other minor changes.</msg>
+</logentry>
+<logentry
+   revision="31">
+<author>jbodah</author>
+<date>2012-04-05T19:01:59.888168Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/test/wordstealclient/entities/TableStateTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/arch/WSServerArchitectureTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests/PlayersRequestControllerTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/requests</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/arch/WSClientArchitectureTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/responses</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers/placeholder.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/arch</path>
+</paths>
+<msg>Fixed some tests, deleted one which was completely irrelevant now. Setup the structure for several more.</msg>
+</logentry>
+<logentry
+   revision="30">
+<author>jbodah</author>
+<date>2012-04-05T18:37:28.295012Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+</paths>
+<msg>Resolved conflict and refactored XML parsing</msg>
+</logentry>
+<logentry
+   revision="29">
+<author>cbelhumeur</author>
+<date>2012-04-05T18:33:25.055908Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+</paths>
+<msg>Josh wants the new UI code.</msg>
+</logentry>
+<logentry
+   revision="28">
+<author>jbodah</author>
+<date>2012-04-05T18:05:00.347612Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+</paths>
+<msg>Fixed some warnings</msg>
+</logentry>
+<logentry
+   revision="27">
+<author>cbelhumeur</author>
+<date>2012-04-05T17:58:32.753016Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUserPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableStateTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/TableState.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/WSUsersTable.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/WSTablesPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Tables UI enabled. Linked user requests with the user UI. Test cases changed. Other UI modifications.</msg>
+</logentry>
+<logentry
+   revision="25">
+<author>cbelhumeur</author>
+<date>2012-03-31T19:33:30.981937Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/WSUserPanel.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/WSUsersTable.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Initial UI modifications</msg>
+</logentry>
+<logentry
+   revision="24">
+<author>jbodah</author>
+<date>2012-03-29T21:51:11.326844Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/bin</path>
+</paths>
+<msg>Removed /bin/ from svn</msg>
+</logentry>
+<logentry
+   revision="23">
+<author>jbodah</author>
+<date>2012-03-29T21:43:42.300555Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SPlayerResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/Player.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/dummyserver/controllers/SPlayerResponse.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/WSClientArchitecture$1.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/RoomTest.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/Room.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/responses/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayerInfoRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/WSClientArchitecture.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/responses/PlayerResponseController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/requests/PlayerInfoRequestController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/requests/PlayersRequestController.class</path>
+</paths>
+<msg>All the code to get players added to the Room after sending a playerRequest</msg>
+</logentry>
+<logentry
+   revision="22">
+<author>jbodah</author>
+<date>2012-03-29T17:34:22.351376Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/SampleServerExtension.class</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/SampleServerController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/responses</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/wordstealclient/controllers/PlayerResponseController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/SampleServerController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/MyLobbyInitialization$5.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSServerArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/util/XMLSchema.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/WSClientArchitecture$1.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/WSServerArchitecture.class</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/util/XMLSchema.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/PlayerInfoRequestController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/PlayerResponseController.java"
+   copyfrom-rev="21"
+   action="A">/WordstealClient/src/wordstealclient/controllers/responses/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/responses</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/wordstealclient/controllers/PlayersRequestController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/WSClientArchitecture.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/requests/PlayerInfoRequestController.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/responses/PlayerResponseController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/RoomControllerChainLink.class</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/PlayersRequestController.java"
+   copyfrom-rev="21"
+   action="A">/WordstealClient/src/wordstealclient/controllers/requests/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/SampleServerExtension.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/requests</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/requests/PlayersRequestController.class</path>
+</paths>
+<msg>Reorganizing code requests and responses into subpackages. Removed some imports to settle some warnings in Eclipse.</msg>
+</logentry>
+<logentry
+   revision="21">
+<author>jbodah</author>
+<date>2012-03-27T19:22:42.059547Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/src/dummyserver/controllers/SPlayerResponse.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/PlayersRequestController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/dummyserver/controllers/SPlayerResponse.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/PlayerResponseController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/RoomControllerChainLink.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/PlayersRequestController.java</path>
+</paths>
+<msg>Minor text changes</msg>
+</logentry>
+<logentry
+   revision="20">
+<author>jbodah</author>
+<date>2012-03-27T18:56:02.728732Z</date>
+<paths>
+<path
+   kind=""
+   action="D">/WordstealClient/src/arch/ServerArchitecture.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/wordstealclient/controllers/UserManager.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/controllers/PlayerResponseController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/Player.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/PlayerTest.class</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/RoomController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/boundaries/TableManagerGUI.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/WSServerArchitecture$1.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/dummyserver/controllers/SPlayerResponse.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/MyLobbyInitialization$1.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/MyLobbyInitialization$2.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/controllers/PlayerResponseController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/MyLobbyInitialization$3.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/MyLobbyInitialization$4.class</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/arch/ServerArchitecture.java"
+   copyfrom-rev="18"
+   action="A">/WordstealClient/src/arch/WSServerArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/MyLobbyInitialization$5.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/arch/ClientArchitecture.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/PlayersRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/Room.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/RoomTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/RoomController.java"
+   copyfrom-rev="18"
+   action="A">/WordstealClient/src/wordstealclient/controllers/RoomControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/WSClientArchitecture.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/TableState.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/SControllerChainLink.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/boundaries/UserManagerGUI.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/dummyserver</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/TableStateTest.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/TableState.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/dummyserver/controllers/SPlayerResponse.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/arch/ClientArchitecture$1.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/dummyserver/controllers</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/arch/ServerArchitecture.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/wordstealclient/controllers/RoomController.class</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/arch/ClientArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/WSClientArchitecture$1.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/WSServerArchitecture.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/MyLobbyInitialization.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableStateTest.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/arch/ClientArchitecture.java"
+   copyfrom-rev="18"
+   action="A">/WordstealClient/src/arch/WSClientArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/PlayersRequestController.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/RoomControllerChainLink.class</path>
+<path
+   kind=""
+   action="D">/WordstealClient/bin/arch/ServerArchitecture$1.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/Table.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/TableTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/dummyserver/controllers/SControllerChainLink.class</path>
+</paths>
+<msg>Added a working request/response ("players" request =&gt; "playerInfo" response)</msg>
+</logentry>
+<logentry
+   revision="17">
+<author>jbodah</author>
+<date>2012-03-27T14:45:21.672757Z</date>
+<paths>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/ClientArchitecture$1.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/boundaries/TableManagerGUI.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/UserManagerGUI.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/arch/ClientArchitecture.java"
+   copyfrom-rev="16"
+   action="R">/WordstealClient/src/arch/ClientArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/boundaries/UserManagerGUI.class</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/UserManager.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/arch/ClientArchitecture.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries/TableManagerGUI.java</path>
+</paths>
+<msg>Moved Corey's GUI stuff into their own classes</msg>
+</logentry>
+<logentry
+   revision="16">
+<author>jbodah</author>
+<date>2012-03-27T14:28:36.289050Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/SampleServerExtension.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/ClientArchitecture$1.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/Player.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/PlayerTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/ServerArchitecture.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/MyLobbyInitialization$1.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/PlayerResponseController.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/MyLobbyInitialization$2.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/ClientExtension.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/ClientArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/MyLobbyInitialization$3.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/SampleServerController.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/RoomController.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/MyLobbyInitialization$4.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/ClientArchitecture.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/MyLobbyInitialization.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/Room.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/ConsolidatedClientProfileController.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/ServerArchitecture$1.class</path>
+<path
+   kind=""
+   action="M">/WordstealClient/bin/wordstealclient/entities/TableTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/arch/ServerExtension.class</path>
+</paths>
+<msg>Moved Corey's GUI stuff into our wordstealclient.arch package</msg>
+</logentry>
+<logentry
+   revision="15">
+<author>jbodah</author>
+<date>2012-03-26T21:55:23.592739Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/PlayerResponseController.java</path>
+<path
+   kind=""
+   copyfrom-path="/WordstealClient/src/wordstealclient/controllers/PlayerListRequestController.java"
+   copyfrom-rev="14"
+   action="A">/WordstealClient/src/wordstealclient/controllers/RoomController.java</path>
+<path
+   kind=""
+   action="D">/WordstealClient/src/wordstealclient/controllers/PlayerListRequestController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/arch/ClientArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/controllers</path>
+</paths>
+<msg>Cleaned up code and refactored</msg>
+</logentry>
+<logentry
+   revision="14">
+<author>jbodah</author>
+<date>2012-03-26T20:12:13.665042Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/ServerArchitecture.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/ClientExtension.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/.classpath</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/ConsolidatedClientProfileController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/SampleServerController.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/ClientArchitecture.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/PlayerListRequestController.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/ServerExtension.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/MyLobbyInitialization.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/arch/SampleServerExtension.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+<path
+   kind=""
+   action="M">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+</paths>
+<msg>Copied arch package to our project, changed all Integer to int in Player class, started working on PlayerListRequestController.java</msg>
+</logentry>
+<logentry
+   revision="10">
+<author>jbodah</author>
+<date>2012-03-22T22:37:41.089944Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers/UserManager.class</path>
+<path
+   kind=""
+   action="D">/StandAlone</path>
+<path
+   kind=""
+   action="D">/Sudoku</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers/UserManager.java</path>
+<path
+   kind=""
+   action="D">/Framework</path>
+</paths>
+<msg>Updating Heineman's code</msg>
+</logentry>
+<logentry
+   revision="1">
+<author>jbodah</author>
+<date>2012-03-20T22:45:30.389405Z</date>
+<paths>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/PlayerTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/Player.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/.classpath</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/boundaries</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/entities/Room.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/entities/TableTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/entities</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/Room.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/RoomTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/entities/PlayerTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/boundaries</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/entities/TableState.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/util</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/TableStateTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/TableState.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/interfaces</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/controllers</path>
+<path
+   kind=""
+   action="A">/WordstealClient</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/entities/RoomTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/entities</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/util</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/interfaces</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient/entities/TableStateTest.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/controllers</path>
+<path
+   kind=""
+   action="A">/WordstealClient/test/wordstealclient</path>
+<path
+   kind=""
+   action="A">/WordstealClient/.project</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/entities/Table.java</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/Table.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/bin/wordstealclient/entities/TableTest.class</path>
+<path
+   kind=""
+   action="A">/WordstealClient/src/wordstealclient/entities/Player.java</path>
+</paths>
+<msg>Basic package structure, Player, Table, Room, TableState all implemented with tests</msg>
+</logentry>
+</log>

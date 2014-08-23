@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PlayerResponseController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.uncorrelated_responses</a> &gt; <span class="el_source">PlayerResponseController.java</span></div><h1>PlayerResponseController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.uncorrelated_responses;
+
+import wordstealclient.controllers.xml_handlers.PlayerResponseHandler;
+import wordstealclient.util.GUIUpdater;
+import ks.client.interfaces.IProcessClientMessage;
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+
+/**
+ * This class manages top-level logic with respect to an uncorrelated response.
+ * Lower level logic is forwarded to a Handler.
+ * 
+ * @author jbodah, heineman
+ */
+<span class="fc" id="L15">public class PlayerResponseController implements IProcessClientMessage {</span>
+	// process independent response received from server
+	@Override
+	public boolean process(ILobby lobby, Message m) {
+<span class="fc" id="L19">		System.out.println(&quot;PlayerResponseController.process(ILobby, Message): Received &quot; + m);</span>
+<span class="fc" id="L20">		PlayerResponseHandler.parseXML( m ) ;</span>
+<span class="fc" id="L21">		GUIUpdater.updateUserListGUI(lobby);</span>
+<span class="fc" id="L22">		return true;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

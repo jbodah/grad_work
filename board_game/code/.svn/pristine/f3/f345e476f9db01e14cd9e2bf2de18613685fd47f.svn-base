@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SampleInterface.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">SampleInterface.java</span></div><h1>SampleInterface.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Properties;
+
+import ks.client.interfaces.IGameInterface;
+
+/**
+ * Sample interface used exclusively for testing purposes.
+ * &lt;p&gt;
+ * Each 'element' in the queue is tagged with a ID: prefix
+ * and then the rest of the info comes after that.
+ * &lt;p&gt;
+ * You can dequeue messages from this queue to reflect the order of 
+ * events from this point of view. 
+ * 
+ * @author George Heineman
+ */
+<span class="nc" id="L20">public class SampleInterface implements IGameInterface {</span>
+	
+<span class="nc" id="L22">	String[] prefixes = { &quot;TableChat:&quot;, &quot;Update:&quot;, &quot;LeaveGame:&quot;, &quot;Turn:&quot;, &quot;Skip:&quot; };</span>
+	
+	/** Queue of actions. */
+<span class="nc" id="L25">	ArrayList&lt;String&gt; queue = new ArrayList&lt;String&gt;(); </span>
+	
+	
+	@Override
+	public void sendTableChat(int tableID, String text) {
+<span class="nc" id="L30">		synchronized (queue) {</span>
+<span class="nc" id="L31">			queue.add(prefixes[0] + tableID + &quot;,&quot; + text);</span>
+		}		
+<span class="nc" id="L33">	}</span>
+
+	@Override
+	public void update(int tableID, int score, String game, boolean complete) {
+<span class="nc" id="L37">		synchronized (queue) {</span>
+<span class="nc" id="L38">			queue.add(prefixes[1] + tableID + &quot;,&quot; + score + &quot;,&quot; + game + &quot;,&quot; + complete);</span>
+		}	
+<span class="nc" id="L40">	}</span>
+
+	@Override
+	public void leaveGame(int tableID) {
+<span class="nc" id="L44">		synchronized (queue) {</span>
+<span class="nc" id="L45">			queue.add(prefixes[2] + tableID );</span>
+		}	
+<span class="nc" id="L47">	}</span>
+
+	@Override
+	public void turn(int tableID, Properties scores, String move, boolean complete) {
+		
+		// linearize the scores.
+<span class="nc" id="L53">		String sc = &quot;[&quot;;</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		for (Enumeration&lt;?&gt; en = scores.keys(); en.hasMoreElements(); ) {</span>
+<span class="nc" id="L55">			String key = (String) en.nextElement();</span>
+<span class="nc" id="L56">			String value = (String) scores.getProperty(key);</span>
+<span class="nc" id="L57">			sc += key + &quot;,&quot; + value;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">			if (en.hasMoreElements()) { sc += &quot;,&quot;; }</span>
+		}
+		
+<span class="nc" id="L61">		sc += &quot;]&quot;;</span>
+<span class="nc" id="L62">		synchronized (queue) {</span>
+<span class="nc" id="L63">			queue.add(prefixes[3] + tableID + &quot;,&quot; + move + &quot;,&quot; + complete + &quot;,&quot; + sc);</span>
+		}	
+<span class="nc" id="L65">	}</span>
+
+	@Override
+	public void skip(int tableID) {
+<span class="nc" id="L69">		synchronized (queue) {</span>
+<span class="nc" id="L70">			queue.add(prefixes[4] + tableID );</span>
+		}	
+<span class="nc" id="L72">	}</span>
+	
+	public boolean isSkip (String s) { 
+<span class="nc" id="L75">		return s.startsWith(prefixes[4]);</span>
+	}
+
+	/** retrieve the next string in the queue. */
+	public String dequeue() {
+		
+<span class="nc" id="L81">		synchronized (queue) {</span>
+<span class="nc" id="L82">			return queue.remove(0);</span>
+		}
+		
+	}
+
+	public boolean isTurn(String s) {
+<span class="nc" id="L88">		return s.startsWith(prefixes[3]);</span>
+	}
+
+	public boolean isUpdate(String s) {
+<span class="nc" id="L92">		return s.startsWith(prefixes[1]);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

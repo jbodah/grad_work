@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestMockServer.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.ipc</a> &gt; <span class="el_source">TestMockServer.java</span></div><h1>TestMockServer.java</h1><pre class="source lang-java linenums">package ks.client.ipc;
+
+import org.w3c.dom.Document;
+
+
+import junit.framework.TestCase;
+import ks.client.UserContext;
+import ks.client.interfaces.IController;
+import ks.client.lobby.LobbyFrame;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+
+/**
+ * Validate IController interface
+ */
+<span class="nc" id="L16">public class TestMockServer extends TestCase {</span>
+
+	// host
+	public static final String localhost = &quot;localhost&quot;;
+	
+	// sample credentials
+	public static final String user = &quot;11323&quot;;
+	public static final String password = &quot;password&quot;;
+	
+	// sample client front-end
+	UserContext context;
+	
+	// GUI object
+	LobbyFrame lobby;
+	
+	// mock server for the code
+	MockServer mockServer;
+	
+	// prepare client front-end through a mock-server object
+	protected void setUp() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L38">			Message.unconfigure();</span>
+<span class="nc" id="L39">			assertTrue (Configure.configure());</span>
+			
+			// create client to connect
+<span class="nc" id="L42">			context = new UserContext();  </span>
+<span class="nc" id="L43">			lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L44">			lobby.setVisible(true);</span>
+			
+<span class="nc" id="L46">			context.setUser(user);</span>
+<span class="nc" id="L47">			context.setPassword(password);</span>
+<span class="nc" id="L48">			context.setSelfRegister(false);</span>
+			
+<span class="nc" id="L50">			mockServer = new MockServer(lobby);</span>
+<span class="nc" id="L51">			context.setClient(mockServer);</span>
+			
+			
+<span class="nc" id="L54">		} catch (Exception e) {</span>
+<span class="nc" id="L55">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+<span class="nc" id="L57">	}</span>
+
+	// This test case exists solely to validate round-trip. That is, given code that should generate a request
+	// which receives a round-trip response, how to test that controller?
+	public void testClient() {
+		
+		// This is a request to be sent out to the server, whose round-trip is to be processed by the same
+		// controller that sent out the request. 
+		
+		// this example is rather contrived, but I hope you get the point. For example, the following code that
+		// GENERATES the request should actually be within a controller class.
+<span class="nc" id="L68">		SampleTablesRoundTripController strtc = new SampleTablesRoundTripController(lobby);</span>
+<span class="nc" id="L69">		strtc.process();</span>
+		
+		// now have mockserver process response
+<span class="nc" id="L72">		Message req = mockServer.firstRoundTripRequest();</span>
+<span class="nc" id="L73">		IController ic = mockServer.firstRoundTripController();</span>
+		
+<span class="nc" id="L75">		String xmlString = Message.responseHeader(true, req.id) + &quot;&lt;tableResponse/&gt;&lt;/response&gt;&quot;;</span>
+<span class="nc" id="L76">		Document d = Message.construct (xmlString);</span>
+<span class="nc" id="L77">		Message resp = new Message(d);</span>
+<span class="nc" id="L78">		mockServer.process(resp);</span>
+		
+		// make sure it was received.
+<span class="nc" id="L81">		assertTrue (strtc.receivedResponse);</span>
+		
+<span class="nc" id="L83">		lobby.dispose();</span>
+<span class="nc" id="L84">	}	</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

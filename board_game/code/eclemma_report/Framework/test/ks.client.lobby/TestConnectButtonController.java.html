@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestConnectButtonController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.lobby</a> &gt; <span class="el_source">TestConnectButtonController.java</span></div><h1>TestConnectButtonController.java</h1><pre class="source lang-java linenums">package ks.client.lobby;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.w3c.dom.Document;
+
+import arch.MyLobbyInitialization;
+import junit.framework.TestCase;
+import ks.client.controllers.DisconnectController;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.server.ipc.Server;
+
+/** Validate controller works as expected. */
+<span class="nc" id="L21">public class TestConnectButtonController extends TestCase {</span>
+
+	ILobbyInitialize init;
+	ConnectFrame cf;
+	Server server;
+	JPanel tempUserManagerGUI;
+	JPanel tempTableManagerGUI;
+	
+	protected void setUp() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L32">			assertTrue (Configure.configure());</span>
+			
+			// validate a simple tables
+<span class="nc" id="L35">			String s = Message.requestHeader() + &quot;&lt;tables/&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L36">			Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">			assertTrue (d != null);</span>
+			
+<span class="nc" id="L39">		} catch (Exception e) {</span>
+<span class="nc" id="L40">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+		
+		// standard 7878
+<span class="nc" id="L44">		server = new Server();</span>
+<span class="nc" id="L45">		server.activate();</span>
+		
+		// create mock-User manager now outside. You should replace with 
+		// the appropriate class construction on your end.
+<span class="nc" id="L49">		 tempUserManagerGUI = new JPanel();</span>
+<span class="nc" id="L50">		JLabel jLabel = new JLabel();</span>
+<span class="nc" id="L51">		jLabel.setText(&quot;UMGUI To Be Inserted&quot;);</span>
+<span class="nc" id="L52">		tempUserManagerGUI.setLayout(new FlowLayout());</span>
+<span class="nc" id="L53">		tempUserManagerGUI.add(jLabel, null);</span>
+		
+		// create mock-Table manager now outside. You should replace with 
+		// the appropriate class construction on your end.
+<span class="nc" id="L57">		 tempTableManagerGUI = new JPanel();</span>
+<span class="nc" id="L58">		JLabel jLabel1 = new JLabel();</span>
+<span class="nc" id="L59">		jLabel1.setText(&quot;TMGUI To Be Inserted&quot;);</span>
+<span class="nc" id="L60">		tempTableManagerGUI.setLayout(new FlowLayout());</span>
+<span class="nc" id="L61">		tempTableManagerGUI.add(jLabel1, null);</span>
+				
+		// initialization callback. Client-side groups can pass in 
+		// an object that provides this interface into the ConnectFrame
+		// constructor and it will be called at the proper time.
+<span class="nc" id="L66">		init = new MyLobbyInitialization(tempTableManagerGUI, tempUserManagerGUI);</span>
+<span class="nc" id="L67">		cf = new ConnectFrame(init);</span>
+<span class="nc" id="L68">	}</span>
+	
+	protected void tearDown() {
+<span class="nc" id="L71">		server.deactivate();</span>
+		
+<span class="nc" id="L73">	}</span>
+	
+	// helper function to sleep for a second.
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="nc" id="L79">			Thread.sleep(1000);</span>
+<span class="nc" id="L80">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="nc" id="L83">	}</span>
+	
+	public void testProcess() {
+<span class="nc" id="L86">		cf.getLoginUserText().setText(&quot;113344&quot;);</span>
+<span class="nc" id="L87">		cf.getLoginPassText().setText(&quot;password&quot;);</span>
+		
+<span class="nc" id="L89">		ILobby lobby = new ConnectButtonController(cf).process(init);</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		assertTrue (lobby != null);</span>
+		
+		// make sure our GUIs are in place
+<span class="nc bnc" id="L93" title="All 2 branches missed.">		assertTrue (tempTableManagerGUI == lobby.getTableManagerGUI());</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		assertTrue (tempUserManagerGUI == lobby.getUserManagerGUI());</span>
+		
+<span class="nc" id="L96">		waitASecond();</span>
+		
+		// validate server has someone
+<span class="nc" id="L99">		Communicator c = server.getCommunicator();</span>
+<span class="nc" id="L100">		assertTrue (c.isOnline(&quot;113344&quot;));</span>
+		
+		// request log out from client.
+<span class="nc" id="L103">		new DisconnectController(lobby).process(lobby.getContext());</span>
+		
+<span class="nc" id="L105">		waitASecond();</span>
+<span class="nc" id="L106">		waitASecond();</span>
+<span class="nc" id="L107">		waitASecond();</span>
+<span class="nc" id="L108">		assertFalse (c.isOnline(&quot;113344&quot;));</span>
+		
+<span class="nc" id="L110">		((LobbyFrame) lobby).setVisible(false);</span>
+<span class="nc" id="L111">		((LobbyFrame) lobby).dispose();</span>
+		
+<span class="nc" id="L113">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

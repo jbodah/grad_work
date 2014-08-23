@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestSolitaireGameInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">TestSolitaireGameInformation.java</span></div><h1>TestSolitaireGameInformation.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import heineman.Klondike;
+
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Properties;
+
+import junit.framework.TestCase;
+import ks.client.game.Factory;
+import ks.client.game.GameInformation;
+import ks.client.game.GameManager;
+import ks.client.game.solitaire.SolitaireGameInformation;
+import ks.client.gamefactory.PlayerJPanel;
+import ks.client.interfaces.IGameInterface;
+import ks.common.games.Solitaire;
+import ks.common.view.Widget;
+
+/**
+ * Placed in this package to access 'package private' information
+ * in SolitaireInformation.
+ * 
+ * @author George
+ *
+ */
+<span class="nc" id="L27">public class TestSolitaireGameInformation extends TestCase {</span>
+	
+	Properties props;
+	Properties options;
+	ArrayList&lt;String&gt; order;
+	Properties players;
+	
+<span class="nc" id="L34">	String me = &quot;982&quot;;</span>
+<span class="nc" id="L35">	String paul = &quot;1124&quot;;</span>
+<span class="nc" id="L36">	String unknown = &quot;135&quot;;</span>
+	
+<span class="nc" id="L38">	int tableID = 13;</span>
+	
+	SampleInterface callback;
+	GameManager gm;
+	SolitaireGameInformation info;
+	PlayerJPanel control;
+	
+	/** Create Klondike variations. */
+	protected void setUp() {
+<span class="nc" id="L47">		props  = new Properties();</span>
+<span class="nc" id="L48">		String s = &quot;heineman.Klondike&quot;;</span>
+<span class="nc" id="L49">		props.setProperty(&quot;game&quot;, s);</span>
+		
+<span class="nc" id="L51">		options = new Properties();</span>
+<span class="nc" id="L52">		options.setProperty(&quot;undo&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L53">		options.setProperty(&quot;newHand&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L54">		options.setProperty(&quot;time&quot;, &quot;4&quot;);    // brief game</span>
+		
+<span class="nc" id="L56">		GameInformation game = Factory.create(props, options);</span>
+
+<span class="nc" id="L58">		players = new Properties();</span>
+<span class="nc" id="L59">		players.setProperty(me, &quot;George Heineman&quot;);</span>
+<span class="nc" id="L60">		players.setProperty(paul, &quot;Paul Simon&quot;);</span>
+<span class="nc" id="L61">		players.setProperty(unknown, &quot;&quot;);</span>
+
+		// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L64">		order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L65">		order.add(me);</span>
+<span class="nc" id="L66">		order.add(paul);</span>
+<span class="nc" id="L67">		order.add(unknown);</span>
+
+<span class="nc" id="L69">		game.setPlayers(order, players);</span>
+		
+<span class="nc" id="L71">		callback = new SampleInterface();</span>
+		
+<span class="nc" id="L73">		gm = GameManager.instance();</span>
+<span class="nc" id="L74">		assertTrue(gm.createGameWindow(tableID, me, props, options, order, players, callback));</span>
+		
+<span class="nc" id="L76">		info = ((SolitaireGameInformation)gm.frame.info);</span>
+<span class="nc" id="L77">		control = info.getPlayerRanking();</span>
+<span class="nc" id="L78">	}</span>
+	
+	protected void tearDown() {
+<span class="nc" id="L81">		gm.frame.setVisible(false);</span>
+<span class="nc" id="L82">		gm.frame.dispose();</span>
+<span class="nc" id="L83">	}</span>
+	
+	public void testBasis() {
+		// start of game, all points are ZERO in Klondike
+<span class="nc" id="L87">		assertEquals (0, control.getPlayerPoints(info.fullName(me)));</span>
+<span class="nc" id="L88">		assertEquals (0, control.getPlayerPoints(info.fullName(paul)));</span>
+		
+		// now make an update assertion.
+<span class="nc" id="L91">		Properties us = new Properties();</span>
+<span class="nc" id="L92">		us.setProperty(me, &quot;36&quot;);</span>
+<span class="nc" id="L93">		us.setProperty(paul, &quot;23&quot;);</span>
+<span class="nc" id="L94">		us.setProperty(unknown, &quot;0&quot;);</span>
+		
+		// Note that Paul has the most number of wins and this 
+		// means he is in the lead, even though he doesn't have the
+		// most accumulated total points. A bit contrived.
+<span class="nc" id="L99">		Properties ug = new Properties();</span>
+<span class="nc" id="L100">		ug.setProperty(me, &quot;numWins=0,numNewHands=5&quot;);</span>
+<span class="nc" id="L101">		ug.setProperty(paul, &quot;numWins=2,numNewHands=0&quot;);</span>
+<span class="nc" id="L102">		ug.setProperty(unknown, &quot;numWins=0,numNewHands=0&quot;);</span>
+		
+<span class="nc" id="L104">		assertTrue (info.updateScores(us, ug));</span>
+			
+		// note we need to use fullName when speaking to the control
+<span class="nc" id="L107">		assertEquals (2, control.getPlayerHandsWon(info.fullName(paul)));</span>
+<span class="nc" id="L108">		assertEquals (0, control.getPlayerHandsWon(info.fullName(me)));</span>
+<span class="nc" id="L109">	}</span>
+
+	public void testNopMethods() {
+<span class="nc" id="L112">		assertFalse (info.activateTurn(me));</span>
+<span class="nc" id="L113">		assertFalse (info.makeTurn(me, &quot;garbage String&quot;));</span>
+<span class="nc" id="L114">		assertFalse (info.skipTurn(me));		</span>
+<span class="nc" id="L115">	}</span>
+	
+	public void testPointMethods() {
+		// this updates my score (me); invoked directly by 
+		// the specific solitaire plugin
+<span class="nc" id="L120">		info.updateScore(10);</span>
+<span class="nc" id="L121">		assertEquals (10, info.getScore());</span>
+		
+<span class="nc" id="L123">		info.updateScore(8);</span>
+<span class="nc" id="L124">		assertEquals (8, info.getScore());</span>
+		
+<span class="nc" id="L126">		info.incrementNumWins();  // player wins</span>
+<span class="nc" id="L127">		info.updateScore(3);</span>
+<span class="nc" id="L128">		assertEquals (11, info.getScore());</span>
+		
+		// Locks in their partial points
+<span class="nc" id="L131">		info.incrementNumNewHands();</span>
+<span class="nc" id="L132">		assertEquals (11, info.getScore());</span>
+	
+<span class="nc" id="L134">	}</span>
+	
+	public void testLeaving() {
+		// start of game, all points are ZERO in Klondike
+<span class="nc" id="L138">		assertEquals (0, control.getPlayerPoints(info.fullName(me)));</span>
+<span class="nc" id="L139">		assertEquals (0, control.getPlayerPoints(info.fullName(paul)));</span>
+		
+		// validate players are NOT disabled.
+<span class="nc" id="L142">		assertFalse (control.isDisabled(null));</span>
+		
+		// must cache because requestLeave eliminates info that we use to construct name.
+<span class="nc" id="L145">		String fullPaul = info.fullName(paul);</span>
+<span class="nc" id="L146">		assertFalse (control.isDisabled(info.fullName(me)));</span>
+<span class="nc" id="L147">		assertFalse (control.isDisabled(fullPaul));</span>
+		
+<span class="nc" id="L149">		assertTrue(info.requestLeave(paul));</span>
+		
+<span class="nc" id="L151">		assertFalse (control.isDisabled(info.fullName(me)));</span>
+<span class="nc" id="L152">		assertTrue (control.isDisabled(fullPaul));</span>
+		
+<span class="nc" id="L154">	}</span>
+
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="nc" id="L159">			Thread.sleep(1000);</span>
+<span class="nc" id="L160">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="nc" id="L163">	}</span>
+	
+	/** (dx,dy) are offsets into the widget space. Feel Free to Use as Is. */
+	public MouseEvent createDoubleClicked (Solitaire game, Widget view, int dx, int dy) {
+<span class="nc" id="L167">		MouseEvent me = new MouseEvent(game.getContainer(), MouseEvent.MOUSE_CLICKED, </span>
+<span class="nc" id="L168">				System.currentTimeMillis(), 0, </span>
+<span class="nc" id="L169">				view.getX()+dx, view.getY()+dy, 2, false);</span>
+<span class="nc" id="L170">		return me;</span>
+	}
+	
+	public void testTimer() {
+		// this updates my score (me); invoked directly by 
+		// the specific solitaire plugin. Forces a callback invocation.
+<span class="nc" id="L176">		info.updateScore(10);</span>
+<span class="nc" id="L177">		assertEquals (10, info.getScore());</span>
+		
+		// move the AceSpades up by double clicking on it
+<span class="nc" id="L180">		Klondike game = (Klondike) ((SolitaireGameInformation) gm.frame.getGameInformation()).getActiveGame();</span>
+		
+<span class="nc bnc" id="L182" title="All 2 branches missed.">		for (Enumeration&lt;Widget&gt; en = game.getWidgets(); en.hasMoreElements(); ) {</span>
+<span class="nc" id="L183">			Widget w = en.nextElement(); </span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">			if (w.getName().equals (&quot;BuildablePileView5&quot;)) {</span>
+<span class="nc" id="L185">				MouseEvent dbl = createDoubleClicked (game, w, 0, 0);</span>
+<span class="nc" id="L186">				w.getMouseManager().handleMouseEvent(dbl);</span>
+<span class="nc" id="L187">				break;</span>
+			}
+		}
+		
+		// wait long enough (5 seconds) for the ticks to become externally processed.
+<span class="nc" id="L192">		waitASecond();</span>
+<span class="nc" id="L193">		waitASecond();</span>
+<span class="nc" id="L194">		waitASecond();</span>
+<span class="nc" id="L195">		waitASecond();</span>
+<span class="nc" id="L196">		waitASecond();</span>
+		
+<span class="nc" id="L198">		String s = callback.dequeue();</span>
+<span class="nc" id="L199">		assertTrue (callback.isUpdate(s));</span>
+		
+<span class="nc" id="L201">		info.stop();</span>
+<span class="nc" id="L202">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

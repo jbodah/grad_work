@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestModel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.common.model</a> &gt; <span class="el_source">TestModel.java</span></div><h1>TestModel.java</h1><pre class="source lang-java linenums">package ks.common.model;
+
+import java.util.Enumeration;
+
+import junit.framework.TestCase;
+
+<span class="nc" id="L7">public class TestModel extends TestCase {</span>
+
+	public void testBase() {
+<span class="nc" id="L10">		Model m = new Model();</span>
+		
+<span class="nc" id="L12">		Element e1 = new Element();</span>
+<span class="nc" id="L13">		e1.setName(&quot;1&quot;);</span>
+		
+<span class="nc" id="L15">		Element e2 = new Element();</span>
+<span class="nc" id="L16">		e2.setName(&quot;2&quot;);</span>
+		
+		// none in there
+<span class="nc" id="L19">		assertFalse (m.elements().hasMoreElements());</span>
+		
+<span class="nc" id="L21">		assertTrue(m.addElement(e2));</span>
+		
+<span class="nc" id="L23">		boolean found = false;</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">		for (Enumeration&lt;Element&gt; en = m.elements(); en.hasMoreElements(); ) {</span>
+<span class="nc" id="L25">			Element e = en.nextElement();</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">			if (e.getName().equals(&quot;2&quot;)) {</span>
+<span class="nc" id="L27">				found = true;</span>
+			}
+		}
+
+<span class="nc" id="L31">		assertTrue (found);</span>
+<span class="nc" id="L32">	}</span>
+	
+	// prevent multiple elements with same name
+	public void testMult() {
+<span class="nc" id="L36">		Model m = new Model();</span>
+		
+<span class="nc" id="L38">		Element e1 = new Element();</span>
+<span class="nc" id="L39">		e1.setName(&quot;1&quot;);</span>
+		
+<span class="nc" id="L41">		Element e2 = new Element();</span>
+<span class="nc" id="L42">		e2.setName(&quot;1&quot;);</span>
+	
+<span class="nc" id="L44">		assertTrue (m.addElement(e1));</span>
+<span class="nc" id="L45">		assertFalse (m.addElement(e2));</span>
+		
+		try {
+<span class="nc" id="L48">			m.addElement(null);</span>
+<span class="nc" id="L49">			fail (&quot;can't add NULL element!&quot;);</span>
+<span class="nc" id="L50">		} catch (Exception e) {</span>
+			
+		}
+<span class="nc" id="L53">	}</span>
+	
+	// test retrieval
+	public void testRetrieval() {
+<span class="nc" id="L57">		Model m = new Model();</span>
+		
+<span class="nc" id="L59">		Element e1 = new Element();</span>
+<span class="nc" id="L60">		e1.setName(&quot;1&quot;);</span>
+		
+<span class="nc" id="L62">		Element e2 = new Element();</span>
+<span class="nc" id="L63">		e2.setName(&quot;2&quot;);</span>
+	
+<span class="nc" id="L65">		assertTrue (m.addElement(e1));</span>
+<span class="nc" id="L66">		assertTrue (m.addElement(e2));</span>
+		
+<span class="nc" id="L68">		assertEquals (e1, m.getElement(&quot;1&quot;));</span>
+		
+		//  bad query
+<span class="nc bnc" id="L71" title="All 2 branches missed.">		assertTrue (m.getElement(null) == null);</span>
+<span class="nc" id="L72">	}</span>
+	
+	// test removal
+	public void testRemoval() {
+<span class="nc" id="L76">		Model m = new Model();</span>
+		
+<span class="nc" id="L78">		Element e1 = new Element();</span>
+<span class="nc" id="L79">		e1.setName(&quot;1&quot;);</span>
+		
+<span class="nc" id="L81">		Element e2 = new Element();</span>
+<span class="nc" id="L82">		e2.setName(&quot;2&quot;);</span>
+	
+<span class="nc" id="L84">		assertTrue (m.addElement(e1));</span>
+<span class="nc" id="L85">		assertTrue (m.addElement(e2));</span>
+		
+<span class="nc" id="L87">		assertTrue (m.removeElement(e2));</span>
+<span class="nc" id="L88">		assertFalse (m.removeElement(e2));</span>
+<span class="nc" id="L89">		assertFalse (m.removeElement(null));</span>
+		
+<span class="nc" id="L91">		m.removeAllElements();</span>
+<span class="nc" id="L92">		assertFalse(m.elements().hasMoreElements());</span>
+<span class="nc" id="L93">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

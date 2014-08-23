@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>WSTablePanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.boundaries</a> &gt; <span class="el_source">WSTablePanel.java</span></div><h1>WSTablePanel.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package wordstealclient.boundaries;</span>
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import arch.WSClientArchitecture;
+
+import wordstealclient.controllers.uncorrelated_requests.LeaveRequestController;
+import wordstealclient.controllers.uncorrelated_requests.OptionsRequestController;
+import wordstealclient.controllers.uncorrelated_requests.StartRequestController;
+import wordstealclient.entities.Room;
+import wordstealclient.entities.Table;
+import wordstealclient.entities.Table.TABLE_STATE;
+import wordstealclient.interfaces.IGameProvider;
+import wordstealclient.util.GUIHelper;
+import wordstealclient.util.GUIUpdater;
+
+/**
+ * 
+ * @author cbelhumeur
+ *
+ */
+public class WSTablePanel extends JPanel {
+
+	protected Table mTable;
+	protected int  serial;
+	protected JLabel id, state, playerCount;
+	private float[] rgbDefault, rgbPublic, rgbPrivate, rgbIngame;
+	private JButton cancel;
+	private ImagePanel background;
+	protected IGameProvider provider;
+	
+	private javax.swing.JButton inviteButton;
+    private javax.swing.JScrollPane jScrollPane;
+    private javax.swing.JButton leaveButton;
+    private javax.swing.JLabel mod;
+    private javax.swing.JLabel modLabel;
+    private javax.swing.JCheckBox nosCheck;
+    private javax.swing.JLabel optionsLabel;
+    private javax.swing.JCheckBox pinkCheck;
+    private javax.swing.JTable playerTable;
+    private javax.swing.JLabel playersLabel;
+    private javax.swing.JLabel pointsLabel;
+    private javax.swing.JTextField pointsText;
+    private javax.swing.JButton readyButton;
+    private javax.swing.JLabel status;
+    private javax.swing.JComboBox statusCombo;
+    private javax.swing.JLabel statusLabel;
+    private javax.swing.JLabel statusLabel1;
+    private javax.swing.JLabel timeLabel;
+    private javax.swing.JTextField timeText;
+    private javax.swing.JLabel titleLabel;
+	
+	public WSTablePanel(Table table)
+	{
+<span class="fc" id="L62">		super();</span>
+<span class="fc" id="L63">		mTable = table;</span>
+<span class="fc" id="L64">		this.provider = provider;</span>
+		
+<span class="fc" id="L66">		initComponents();</span>
+<span class="fc" id="L67">		initModComponents();</span>
+<span class="fc" id="L68">		setColorScheme();</span>
+		
+<span class="fc" id="L70">		background = new ImagePanel(new ImageIcon(&quot;resources/blueWhiteBg.jpg&quot;).getImage());</span>
+<span class="fc" id="L71">		background.setLayout(new BorderLayout());</span>
+<span class="fc" id="L72">		background.setMinimumSize(new Dimension(100,100));</span>
+<span class="fc" id="L73">		background.setMaximumSize(new Dimension(100,100));</span>
+<span class="fc" id="L74">		add(background);</span>
+<span class="fc" id="L75">	}</span>
+	
+	private void setColorScheme()
+	{
+<span class="fc" id="L79">		rgbDefault = Color.RGBtoHSB(200, 200, 200, null); // gray</span>
+<span class="fc" id="L80">		rgbPublic = Color.RGBtoHSB(147, 185, 241, null);  // blue</span>
+<span class="fc" id="L81">		rgbPrivate = Color.RGBtoHSB(255, 167, 34, null);  // orange</span>
+<span class="fc" id="L82">		rgbIngame = Color.RGBtoHSB(48, 238, 88, null);    // green</span>
+<span class="fc" id="L83">	}</span>
+	
+	public void update()
+	{
+<span class="nc" id="L87">		new OptionsRequestController(WSClientArchitecture.getLobby()).process(</span>
+<span class="nc" id="L88">				mTable.getTableID(), mTable.getTableState(), mTable.getSeed(), &quot;wordsteal.Wordsteal&quot;);</span>
+<span class="nc" id="L89">	}</span>
+	
+	private void readyButtonActionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		if (verifyOptions())</span>
+		{
+<span class="nc" id="L94">			new StartRequestController(WSClientArchitecture.getLobby()).process();</span>
+		}
+<span class="nc" id="L96">    }</span>
+	
+	private void leaveButtonActionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L99">		new LeaveRequestController(WSClientArchitecture.getLobby()).process();</span>
+<span class="nc" id="L100">		GUIUpdater.updateGUIWithTableOrTables();</span>
+<span class="nc" id="L101">    }</span>
+
+    private void inviteButtonActionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L104">        new WSInviteFrame(Room.getInstance().getPlayers());</span>
+<span class="nc" id="L105">    }</span>
+    
+    private void statusComboActionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L108">    	mTable.setTableState(GUIHelper.resolveTableStatus(statusCombo.getSelectedItem().toString()));</span>
+<span class="nc" id="L109">    	status.setText(mTable.getTableState().toString());</span>
+<span class="nc" id="L110">    	update();</span>
+<span class="nc" id="L111">    }</span>
+    
+    private void initModComponents()
+    {
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">    	boolean opt = (WSClientArchitecture.getThisPlayer() == mTable.getModerator());</span>
+<span class="fc" id="L116">		nosCheck.setEnabled(opt);</span>
+<span class="fc" id="L117">		pinkCheck.setEnabled(opt);</span>
+<span class="fc" id="L118">		timeText.setEnabled(opt);</span>
+<span class="fc" id="L119">		pointsText.setEnabled(opt);</span>
+<span class="fc" id="L120">		statusCombo.setEnabled(opt);</span>
+<span class="fc" id="L121">		inviteButton.setEnabled(opt);</span>
+<span class="fc" id="L122">		readyButton.setEnabled(opt);</span>
+<span class="fc" id="L123">    }</span>
+    
+    private boolean verifyOptions()
+    {
+<span class="nc bnc" id="L127" title="All 2 branches missed.">    	if (timeText.getText() == null) {return false;}</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">    	else if (pointsText.getText() == null) {return false;}</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">    	else if (timeText.getText().equals(&quot;&quot;)){return false;}</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">    	else if (pointsText.getText().equals(&quot;&quot;)){return false;}</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">    	else if (!GUIHelper.containsOnlyNumbers(pointsText.getText())) {return false;}</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">    	else if (!GUIHelper.containsOnlyNumbers(timeText.getText())) {return false;}</span>
+<span class="nc" id="L133">    	return true;</span>
+    }
+    
+    private void initComponents() {
+
+<span class="fc" id="L138">        readyButton = new javax.swing.JButton();</span>
+<span class="fc" id="L139">        titleLabel = new javax.swing.JLabel();</span>
+<span class="fc" id="L140">        statusLabel = new javax.swing.JLabel();</span>
+<span class="fc" id="L141">        modLabel = new javax.swing.JLabel();</span>
+<span class="fc" id="L142">        playersLabel = new javax.swing.JLabel();</span>
+<span class="fc" id="L143">        leaveButton = new javax.swing.JButton();</span>
+<span class="fc" id="L144">        jScrollPane = new javax.swing.JScrollPane();</span>
+<span class="fc" id="L145">        playerTable = new javax.swing.JTable();</span>
+<span class="fc" id="L146">        inviteButton = new javax.swing.JButton();</span>
+<span class="fc" id="L147">        status = new javax.swing.JLabel();</span>
+<span class="fc" id="L148">        pointsLabel = new javax.swing.JLabel();</span>
+<span class="fc" id="L149">        timeLabel = new javax.swing.JLabel();</span>
+<span class="fc" id="L150">        pointsText = new javax.swing.JTextField();</span>
+<span class="fc" id="L151">        timeText = new javax.swing.JTextField();</span>
+<span class="fc" id="L152">        nosCheck = new javax.swing.JCheckBox();</span>
+<span class="fc" id="L153">        pinkCheck = new javax.swing.JCheckBox();</span>
+<span class="fc" id="L154">        mod = new javax.swing.JLabel();</span>
+<span class="fc" id="L155">        statusCombo = new javax.swing.JComboBox();</span>
+<span class="fc" id="L156">        optionsLabel = new javax.swing.JLabel();</span>
+<span class="fc" id="L157">        statusLabel1 = new javax.swing.JLabel();</span>
+
+<span class="fc" id="L159">        setBackground(new java.awt.Color(137, 182, 227));</span>
+
+<span class="fc" id="L161">        readyButton.setFont(new java.awt.Font(&quot;Tahoma&quot;, 1, 11)); // NOI18N</span>
+<span class="fc" id="L162">        readyButton.setText(&quot;Ready!&quot;);</span>
+<span class="fc" id="L163">        readyButton.setMaximumSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L164">        readyButton.setMinimumSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L165">        readyButton.setPreferredSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L166">        readyButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L168">                readyButtonActionPerformed(evt);</span>
+<span class="nc" id="L169">            }</span>
+        });
+
+<span class="fc" id="L172">        titleLabel.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 36)); // NOI18N</span>
+<span class="fc" id="L173">        titleLabel.setText(&quot;WordSteal &quot;);</span>
+
+<span class="fc" id="L175">        statusLabel.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L176">        statusLabel.setText(&quot;Table Status: &quot;);</span>
+
+<span class="fc" id="L178">        modLabel.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L179">        modLabel.setText(&quot;Moderator:&quot;);</span>
+
+<span class="fc" id="L181">        playersLabel.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L182">        playersLabel.setText(&quot;Players:&quot;);</span>
+
+<span class="fc" id="L184">        leaveButton.setText(&quot;Leave Table&quot;);</span>
+<span class="fc" id="L185">        leaveButton.setMaximumSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L186">        leaveButton.setMinimumSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L187">        leaveButton.setPreferredSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L188">        leaveButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L190">                leaveButtonActionPerformed(evt);</span>
+<span class="nc" id="L191">            }</span>
+        });
+
+<span class="fc" id="L194">        playerTable.setModel(new javax.swing.table.DefaultTableModel(</span>
+<span class="fc" id="L195">            new Object [][] {</span>
+<span class="fc" id="L196">                {null, null, null, null},</span>
+<span class="fc" id="L197">                {null, null, null, null},</span>
+<span class="fc" id="L198">                {null, null, null, null},</span>
+<span class="fc" id="L199">                {null, null, null, null}</span>
+            },
+<span class="fc" id="L201">            new String [] {</span>
+<span class="fc" id="L202">                &quot;Title 1&quot;, &quot;Title 2&quot;, &quot;Title 3&quot;, &quot;Title 4&quot;</span>
+            }
+        ));
+<span class="fc" id="L205">        jScrollPane.setViewportView(playerTable);</span>
+
+<span class="fc" id="L207">        inviteButton.setText(&quot;Invite Players&quot;);</span>
+<span class="fc" id="L208">        inviteButton.setMaximumSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L209">        inviteButton.setMinimumSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L210">        inviteButton.setPreferredSize(new java.awt.Dimension(150, 50));</span>
+<span class="fc" id="L211">        inviteButton.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L213">                inviteButtonActionPerformed(evt);</span>
+<span class="nc" id="L214">            }</span>
+        });
+
+<span class="fc" id="L217">        status.setBackground(new java.awt.Color(255, 255, 255));</span>
+<span class="fc" id="L218">        status.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L219">        status.setText(&quot;PUBLIC&quot;);</span>
+
+<span class="fc" id="L221">        pointsLabel.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L222">        pointsLabel.setText(&quot;Points To Win:&quot;);</span>
+
+<span class="fc" id="L224">        timeLabel.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L225">        timeLabel.setText(&quot;Turn Time:&quot;);</span>
+
+<span class="fc" id="L227">        pointsText.setText(&quot;30&quot;);</span>
+<span class="fc" id="L228">        pointsText.setPreferredSize(new Dimension(60, 20));</span>
+
+<span class="fc" id="L230">        timeText.setText(&quot;30&quot;);</span>
+<span class="fc" id="L231">        timeText.setPreferredSize(new Dimension(60, 20));</span>
+
+<span class="fc" id="L233">        nosCheck.setText(&quot;No 's'&quot;);</span>
+
+<span class="fc" id="L235">        pinkCheck.setText(&quot;Pink&quot;);</span>
+
+<span class="fc" id="L237">        mod.setBackground(new java.awt.Color(255, 255, 255));</span>
+<span class="fc" id="L238">        mod.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+
+<span class="fc" id="L240">        optionsLabel.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L241">        optionsLabel.setText(&quot;Options:&quot;);</span>
+
+<span class="fc" id="L243">        statusLabel1.setFont(new java.awt.Font(&quot;Tahoma&quot;, 0, 14)); // NOI18N</span>
+<span class="fc" id="L244">        statusLabel1.setText(&quot;Table Status: &quot;);</span>
+        
+<span class="fc" id="L246">        statusCombo.addActionListener(new java.awt.event.ActionListener() {</span>
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+<span class="nc" id="L248">                statusComboActionPerformed(evt);</span>
+<span class="nc" id="L249">            }</span>
+        });
+        
+<span class="pc bpc" id="L252" title="1 of 2 branches missed.">        if (mTable != null) {</span>
+<span class="fc" id="L253">	        playerTable.setModel(new javax.swing.table.DefaultTableModel(</span>
+<span class="fc" id="L254">	            GUIHelper.formatPlayerInfo(mTable.getPlayers()), GUIHelper.formatColumnHeaders()));</span>
+<span class="fc" id="L255">	        statusCombo.setModel(new javax.swing.DefaultComboBoxModel(GUIHelper.formatTableStatuses()));</span>
+<span class="fc" id="L256">	        status.setText(mTable.getTableState().toString());</span>
+<span class="fc" id="L257">	        titleLabel.setText(&quot;WordSteal [#&quot; + mTable.getTableID() + &quot;]&quot;);</span>
+<span class="fc" id="L258">	        mod.setText(mTable.getModerator().getAlias());</span>
+        }
+        else {
+<span class="nc" id="L261">        	playerTable.setModel(new javax.swing.table.DefaultTableModel(null, GUIHelper.formatColumnHeaders()));</span>
+<span class="nc" id="L262">        	statusCombo.setModel(new javax.swing.DefaultComboBoxModel(new String[] { &quot;Item 1&quot;, &quot;Item 2&quot;, &quot;Item 3&quot;, &quot;Item 4&quot; }));</span>
+<span class="nc" id="L263">        	status.setText(TABLE_STATE.UNKNOWN.toString());</span>
+<span class="nc" id="L264">        	titleLabel.setText(&quot;WordSteal [#000]&quot;);</span>
+<span class="nc" id="L265">        	mod.setText(&quot;MODERATOR&quot;);</span>
+        }
+
+<span class="fc" id="L268">        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);</span>
+<span class="fc" id="L269">        this.setLayout(layout);</span>
+<span class="fc" id="L270">        layout.setHorizontalGroup(</span>
+<span class="fc" id="L271">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L272">            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L273">                .addContainerGap()</span>
+<span class="fc" id="L274">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L275">                    .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)</span>
+<span class="fc" id="L276">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L277">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L278">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L279">                                .addComponent(statusLabel)</span>
+<span class="fc" id="L280">                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L281">                                .addComponent(status))</span>
+<span class="fc" id="L282">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L283">                                .addComponent(modLabel)</span>
+<span class="fc" id="L284">                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)</span>
+<span class="fc" id="L285">                                .addComponent(mod))</span>
+<span class="fc" id="L286">                            .addComponent(titleLabel))</span>
+<span class="fc" id="L287">                        .addGap(0, 0, Short.MAX_VALUE))</span>
+<span class="fc" id="L288">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L289">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L290">                            .addComponent(playersLabel)</span>
+<span class="fc" id="L291">                            .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L292">                                .addGap(10, 10, 10)</span>
+<span class="fc" id="L293">                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)</span>
+<span class="fc" id="L294">                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L295">                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()</span>
+<span class="fc" id="L296">                                            .addComponent(pointsLabel)</span>
+<span class="fc" id="L297">                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L298">                                            .addComponent(pointsText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="fc" id="L299">                                        .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L300">                                            .addComponent(timeLabel)</span>
+<span class="fc" id="L301">                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L302">                                            .addComponent(timeText, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="fc" id="L303">                                        .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L304">                                            .addComponent(nosCheck)</span>
+<span class="fc" id="L305">                                            .addGap(18, 18, 18)</span>
+<span class="fc" id="L306">                                            .addComponent(pinkCheck)))</span>
+<span class="fc" id="L307">                                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L308">                                        .addComponent(statusLabel1)</span>
+<span class="fc" id="L309">                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L310">                                        .addComponent(statusCombo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))</span>
+<span class="fc" id="L311">                            .addComponent(optionsLabel))</span>
+<span class="fc" id="L312">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)</span>
+<span class="fc" id="L313">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L314">                            .addComponent(leaveButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L315">                            .addComponent(readyButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L316">                            .addComponent(inviteButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))</span>
+<span class="fc" id="L317">                .addContainerGap())</span>
+        );
+<span class="fc" id="L319">        layout.setVerticalGroup(</span>
+<span class="fc" id="L320">            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L321">            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()</span>
+<span class="fc" id="L322">                .addContainerGap()</span>
+<span class="fc" id="L323">                .addComponent(titleLabel)</span>
+<span class="fc" id="L324">                .addGap(18, 18, 18)</span>
+<span class="fc" id="L325">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L326">                    .addComponent(statusLabel)</span>
+<span class="fc" id="L327">                    .addComponent(status))</span>
+<span class="fc" id="L328">                .addGap(18, 18, 18)</span>
+<span class="fc" id="L329">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L330">                    .addComponent(modLabel)</span>
+<span class="fc" id="L331">                    .addComponent(mod))</span>
+<span class="fc" id="L332">                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L333">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L334">                        .addGap(26, 26, 26)</span>
+<span class="fc" id="L335">                        .addComponent(inviteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L336">                        .addGap(18, 18, 18)</span>
+<span class="fc" id="L337">                        .addComponent(readyButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)</span>
+<span class="fc" id="L338">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L339">                        .addComponent(leaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="fc" id="L340">                    .addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L341">                        .addGap(18, 18, 18)</span>
+<span class="fc" id="L342">                        .addComponent(optionsLabel)</span>
+<span class="fc" id="L343">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L344">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L345">                            .addComponent(statusLabel1)</span>
+<span class="fc" id="L346">                            .addComponent(statusCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="fc" id="L347">                        .addGap(7, 7, 7)</span>
+<span class="fc" id="L348">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L349">                            .addComponent(pointsLabel)</span>
+<span class="fc" id="L350">                            .addComponent(pointsText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="fc" id="L351">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L352">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L353">                            .addComponent(timeLabel)</span>
+<span class="fc" id="L354">                            .addComponent(timeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))</span>
+<span class="fc" id="L355">                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)</span>
+<span class="fc" id="L356">                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)</span>
+<span class="fc" id="L357">                            .addComponent(nosCheck)</span>
+<span class="fc" id="L358">                            .addComponent(pinkCheck))</span>
+<span class="fc" id="L359">                        .addGap(15, 15, 15)</span>
+<span class="fc" id="L360">                        .addComponent(playersLabel)))</span>
+<span class="fc" id="L361">                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)</span>
+<span class="fc" id="L362">                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)</span>
+<span class="fc" id="L363">                .addContainerGap())</span>
+        );
+<span class="fc" id="L365">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

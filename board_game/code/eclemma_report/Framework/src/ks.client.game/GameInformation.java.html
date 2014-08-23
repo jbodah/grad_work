@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>GameInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">GameInformation.java</span></div><h1>GameInformation.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Properties;
+
+import ks.client.interfaces.IGameInterface;
+
+/**
+ * Represents class of information for each game.
+ * &lt;p&gt;
+ * When starting a game, GameManager properly calls the {@link #start(GameFrame)}
+ * and {@link #initialize()} methods of this base class (and the proper 
+ * logic is encoded in the subclasses.)
+ * &lt;p&gt;
+ * Externally, as responses are received from the server, your teams
+ * will have to process these responses and determine how to update
+ * the internal game state. To do this you will need to invoke 
+ * a number of methods as defined by this abstract class.
+ * &lt;ol&gt;
+ * &lt;li&gt;{@link #activateTurn(String)} is to be called when it is the 
+ * player's turn to make moves. In solitaire, this is always the case
+ * so make sure you call at the start of each game. In turn-based games,
+ * you should only invoke this method when you are told that it is the
+ * player's turn (check the gameResponse method).
+ * &lt;li&gt;{@link #makeTurn(String, String)} is to be called when the
+ * current client is quiescent and the appropriate player on the table
+ * makes a move.
+ * &lt;li&gt;{@link #updateScores(Properties, Properties)} is to be called when
+ * the current client is playing a solitiare game and the server has 
+ * emitted a gameResponse message in response to changing player scores
+ * &lt;li&gt;{@link #skipTurn(String)} is to be called when in a multi-player
+ * game a player (whether current or not) skips a turn (whether by
+ * choice or by timer expiration).
+ * &lt;li&gt;{@link #requestLeave(String)} is to be called when any player
+ * other than the current one decides to leave a table/game. 
+ * &lt;p&gt;
+ * 
+ * 
+ * @author George Heineman
+ */
+public abstract class GameInformation {
+
+	/** Seed to use. */
+	final public int seed;
+	
+	/** Game information. */
+	final public String game;
+	
+	/** Default seed to use. */
+	public static final int defaultSeed = 110;
+	
+	/** Player's id. */
+	protected String player;
+	
+	/**
+	 * Player ids on the table. Keys are the IDs while values are the real player names.  
+	 */
+<span class="fc" id="L59">	protected Properties players = new Properties();</span>
+	
+	/** Order of players on the table. */
+	protected ArrayList&lt;String&gt; order;
+	
+	/** Callback object. */
+	protected IGameInterface callback;
+	
+	/** Whether game is in its initial state. */
+<span class="fc" id="L68">	boolean initialState = true;</span>
+		
+	/**
+	 * Handles game-generic options.
+	 * &lt;p&gt;
+	 * Note that this constructor is protected so it can be accessed
+	 * by subclasses.
+	 * 
+	 * If 'seed' is missing, then the {@link #defaultSeed} value is used.
+	 * 
+	 * @param options contains 'game' and 'seed' attributes.
+	 * @exception     if game or seed attribute is missing or invalid
+	 */
+<span class="fc" id="L81">	protected GameInformation(Properties options) throws IllegalArgumentException {</span>
+		
+<span class="fc" id="L83">		game = options.getProperty(&quot;game&quot;);</span>
+<span class="fc" id="L84">		String seedS = options.getProperty(&quot;seed&quot;);</span>
+		
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">		if (seedS == null) {</span>
+<span class="nc" id="L87">			seed = defaultSeed;</span>
+		} else {
+			// interpret as Integer, if possible.
+			try {
+<span class="fc" id="L91">				seed = Integer.valueOf(seedS);</span>
+<span class="nc" id="L92">			} catch (Exception e) {</span>
+<span class="nc" id="L93">				throw new IllegalArgumentException(&quot;invalid seed value:&quot; + seedS);</span>
+			}
+		}
+<span class="fc" id="L96">	}</span>
+
+	/** Game may need to know who the player is for display purposes. */
+	public void setCurrentUser(String me) {
+<span class="fc" id="L100">		this.player = me;</span>
+<span class="fc" id="L101">	}</span>
+	
+	/** Retrieve owner for this game. */
+	public String getCurrentUser() {
+<span class="nc" id="L105">		return player;</span>
+	}
+
+	/** To ensure consistency, use this seed when requesting a new random number. */
+	public int getSeed() {
+<span class="nc" id="L110">		return seed;</span>
+	}
+	
+	/** Start the game. */
+	public abstract boolean start(GameFrame frame);
+
+	/** Return the graphical container within which game-specific controls exist. */
+	public abstract java.awt.Component getGameControls();
+	
+	/** Return the graphical container within which game plays. */
+	public abstract java.awt.Component getGameContainer();
+
+	/** Initialize the game to start. */
+	public void initialize() {
+<span class="nc" id="L124">		initialState = true;</span>
+<span class="nc" id="L125">	}</span>
+
+	/** Do what it takes to stop the game. */
+	public abstract void stop();
+
+	/**
+	 * Set the players for the table as defined within the playerIDs 
+	 * properties object.
+	 * &lt;p&gt;
+	 * If there were existing players on the table, then this invocation
+	 * replaces those (which means you can either add or remove names by
+	 * calling this method multiple times as you see fit). 
+	 * 
+	 * The keys for the Properties object contain the unique Player IDs
+	 * used on the system and the value (if it exists) represents the 
+	 * real name associated with that player.
+	 * &lt;p&gt;
+	 * @param playerOrder   order of players on table
+	 * @param playerIDs     pass in &lt;Key=ID, Value=RealName&gt;
+	 */
+	public void setPlayers(ArrayList&lt;String&gt; playerOrder, Properties playerIDs) {
+<span class="fc" id="L146">		Properties newP = new Properties();</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">		for (Enumeration&lt;?&gt; en = playerIDs.keys(); en.hasMoreElements(); ) {</span>
+<span class="fc" id="L148">			String id = (String) en.nextElement();</span>
+<span class="fc" id="L149">			String val = playerIDs.getProperty(id);</span>
+<span class="fc" id="L150">			newP.setProperty(id, val);</span>
+		}
+		
+<span class="fc" id="L153">		players = newP;</span>
+<span class="fc" id="L154">		order = new ArrayList&lt;String&gt;();</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">		for (String s: playerOrder) {</span>
+<span class="fc" id="L156">			order.add(s);</span>
+		}
+<span class="fc" id="L158">	}</span>
+	
+	/** 
+	 * Get full name for player &quot;Real Name [id]&quot;. 
+	 * 
+	 * @param playerID
+	 */
+	public String fullName(String playerID) {
+<span class="fc" id="L166">		String realname = (String) players.get(playerID);</span>
+<span class="fc" id="L167">		String fullName = &quot;[&quot; + playerID + &quot;]&quot;;</span>
+<span class="pc bpc" id="L168" title="2 of 4 branches missed.">		if (realname == null || realname.equals (&quot;&quot;)) { return fullName; }</span>
+		
+		// append the real name.
+<span class="fc" id="L171">		return fullName + &quot; &quot; + realname;</span>
+	}
+
+	/**
+	 * Specialized game logic also needs access to callback object.
+	 * 
+	 * @param callback
+	 */
+	public void setGameInterface(IGameInterface callback) {
+<span class="fc" id="L180">		this.callback = callback;		</span>
+<span class="fc" id="L181">	}</span>
+
+	/**
+	 * Ensure that the current player gets the chance to play.
+	 * &lt;p&gt;
+	 * This is redundant in solitaire-based games but it is essential
+	 * in turn-based games.
+	 * &lt;p&gt;
+	 * Not sure how much error handling is possible here.
+	 * &lt;p&gt;
+	 * Overriding method must properly return true or false.
+	 * 
+	 * @param playerID   player whose turn has come up
+	 * @return &lt;code&gt;true&lt;/code&gt; if successfully changed turn; &lt;code&gt;false&lt;/code&gt; on problem.
+	 */
+	public boolean activateTurn(String playerID) {
+<span class="fc" id="L197">		initialState = false;</span>
+<span class="fc" id="L198">		return false;</span>
+	}
+
+	/**
+	 * Ensure that the given player's move is executed on the game
+	 * state. 
+	 * &lt;p&gt;
+	 * In turn-based games, the client is paused waiting for external
+	 * clients to complete their moves, as determined by the incoming
+	 * string. The underlying game class knows how to process this 
+	 * incoming data.
+	 * &lt;p&gt;
+	 * There is no need to pass in 'player score' information because the
+	 * underlying turn-based game will simply &quot;play the move&quot; and in doing
+	 * so compute the last player's score (and posssibly affecting other
+	 * player scores as well).
+	 * &lt;p&gt;
+	 * Not sure how much error handling is possible here.
+	 * &lt;p&gt;
+	 * Overriding method must properly return true or false.
+	 * 
+	 * @param playerID    player whose turn has been made
+	 * @param moveString  move that was executed (opaque to server and client code).
+	 * 
+	 * @return &lt;code&gt;true&lt;/code&gt; if successfully played turn; &lt;code&gt;false&lt;/code&gt; on problem.
+	 */
+	public boolean makeTurn(String playerID, String moveString) {
+<span class="nc" id="L225">		initialState = false;</span>
+<span class="nc" id="L226">		return false;</span>
+	}
+
+	/**
+	 * Ensure that the game's player scores are properly updated to reflect
+	 * the changing scores.
+	 * &lt;p&gt;
+	 * This is to be invoked when the GameResponse is received from the server
+	 * and you have to update the game with information from other players on 
+	 * the same table.
+	 *
+	 * Check out sample gameResponse message for info on the updatedGame value.
+	 *
+	 * @param updatedScores   represents Properties where key=playerID and value=score
+	 * @param updatedGame     represents Properties where key=playerID and value=game-specific information
+	 * @return &lt;code&gt;true&lt;/code&gt; if successfully updated scores; &lt;code&gt;false&lt;/code&gt; on problem.
+	 */
+	public abstract boolean updateScores(Properties updatedScores, Properties updatedGame);
+	
+	/**
+	 * Ensure that the given player's move is identified as a skip.
+	 * &lt;p&gt;
+	 * Overriding method must properly return true or false.
+	 * 
+	 * @return &lt;code&gt;true&lt;/code&gt; if successfully skipped turn; &lt;code&gt;false&lt;/code&gt; on problem.
+	 */
+	public boolean skipTurn(String playerID) {
+<span class="nc" id="L253">		initialState = false;	</span>
+<span class="nc" id="L254">		return false;</span>
+	}
+
+	/**
+	 * Ensure that the given player is eliminated from the game.
+	 *
+	 * @return &lt;code&gt;true&lt;/code&gt; if successfully removed; &lt;code&gt;false&lt;/code&gt; on problem.
+	 */
+	public boolean requestLeave(String playerID) {
+<span class="nc bnc" id="L263" title="All 2 branches missed.">		if (!order.contains(playerID)) { return false; }</span>
+		
+		// remove player from consideration.
+<span class="nc" id="L266">		order.remove(playerID);</span>
+<span class="nc" id="L267">		players.remove(playerID);</span>
+		
+<span class="nc" id="L269">		return true;</span>
+	}
+
+
+	/**
+	 * Determine if the game is in its pristine newly started state.
+	 * 
+	 * @return &lt;code&gt;true&lt;/code&gt; if no move has yet to be made on the board; &lt;code&gt;false&lt;/code&gt; otherwise.
+	 */
+	public boolean isFirstTurn() {
+<span class="nc" id="L279">		return initialState;</span>
+	}
+
+	/**
+	 * Glorified hack to be able to declare that the opening move (which was a skip) has 
+	 * advanced the board state so it no longer is pristine. SHEESH.
+	 */
+	public void hackFirstSkipReceived() {
+<span class="nc" id="L287">		initialState = false;</span>
+<span class="nc" id="L288">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

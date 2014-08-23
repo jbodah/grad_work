@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LeaveRequestControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.requests</a> &gt; <span class="el_source">LeaveRequestControllerTest.java</span></div><h1>LeaveRequestControllerTest.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.requests;
+
+import ks.client.UserContext;
+import ks.client.interfaces.IController;
+import ks.client.ipc.MockServer;
+import ks.client.lobby.LobbyFrame;
+
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+
+import org.junit.*;
+
+import arch.MyLobbyInitialization;
+
+import wordstealclient.controllers.correlated_requests.JoinRequestController;
+import wordstealclient.controllers.uncorrelated_requests.ChatRequestController;
+import wordstealclient.controllers.uncorrelated_requests.ConfirmRequestController;
+import wordstealclient.controllers.uncorrelated_requests.InviteRequestController;
+import wordstealclient.controllers.uncorrelated_requests.LeaveRequestController;
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Room;
+import static org.junit.Assert.*;
+
+<span class="fc" id="L24">public class LeaveRequestControllerTest {</span>
+	
+	public static final String localhost = &quot;localhost&quot;;
+	public static final String user = &quot;123&quot;;
+	public static final String password = &quot;password&quot;;
+	UserContext context;
+	LobbyFrame lobby;
+	MockServer mockServer;
+	
+	@Before
+	public void setUp() {
+		try {
+<span class="fc" id="L36">			Message.unconfigure();</span>
+<span class="fc" id="L37">			assertTrue (Configure.configure());</span>
+			
+			// create client to connect
+<span class="fc" id="L40">			context = new UserContext();  </span>
+<span class="fc" id="L41">			lobby = new LobbyFrame (context);</span>
+<span class="fc" id="L42">			lobby.setVisible(true);</span>
+			
+<span class="fc" id="L44">			context.setUser(user);</span>
+<span class="fc" id="L45">			context.setPassword(password);</span>
+<span class="fc" id="L46">			context.setSelfRegister(false);</span>
+			
+<span class="fc" id="L48">			mockServer = new MockServer(lobby);</span>
+<span class="fc" id="L49">			context.setClient(mockServer);</span>
+			
+			
+<span class="nc" id="L52">		} catch (Exception e) {</span>
+<span class="nc" id="L53">			fail (&quot;Unable to perform setup for LeaveRequestControllerTest&quot;);</span>
+		}		
+<span class="fc" id="L55">	}</span>
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L59">		lobby.dispose();</span>
+<span class="fc" id="L60">		mockServer.disconnect();</span>
+<span class="fc" id="L61">		context = null;</span>
+<span class="fc" id="L62">		mockServer = null;</span>
+<span class="fc" id="L63">	}</span>
+	
+	@Test
+	public void processLeaveRequest()
+	{
+		try {			
+<span class="fc" id="L69">			String tableID = &quot;10&quot;;</span>
+<span class="fc" id="L70">			String playerID = user;</span>
+<span class="fc" id="L71">			Player p = new Player(Integer.parseInt(playerID));</span>
+<span class="fc" id="L72">			p.setTableID(Integer.parseInt(tableID));</span>
+<span class="fc" id="L73">			Room.getInstance().addPlayer(p);</span>
+			
+			MyLobbyInitialization mli;
+<span class="fc" id="L76">			mli = new MyLobbyInitialization(null, null);</span>
+<span class="fc" id="L77">			mli.initializeLobby(lobby);</span>
+			
+<span class="fc" id="L79">			LeaveRequestController lrc = new LeaveRequestController(lobby);</span>
+<span class="fc" id="L80">			lrc.process();</span>
+			
+<span class="fc" id="L82">			Message req = mockServer.firstRequest();			</span>
+<span class="fc" id="L83">			assertNotNull(req);	</span>
+			
+<span class="fc" id="L85">			lrc.process(lobby, null, req);</span>
+			
+<span class="fc" id="L87">			lobby.dispose();</span>
+		}
+<span class="nc" id="L89">		catch (Exception e){</span>
+<span class="nc" id="L90">			fail(e.getMessage());</span>
+		}
+<span class="fc" id="L92">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

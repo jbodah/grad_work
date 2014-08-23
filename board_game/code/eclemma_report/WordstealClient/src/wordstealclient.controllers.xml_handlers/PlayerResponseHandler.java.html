@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PlayerResponseHandler.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.xml_handlers</a> &gt; <span class="el_source">PlayerResponseHandler.java</span></div><h1>PlayerResponseHandler.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.xml_handlers;
+
+import ks.framework.common.Message;
+
+import org.w3c.dom.Node;
+
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Room;
+import wordstealclient.util.NodeHelper;
+
+/**
+ * This code handles the parsing of XML and middle-layer logic with respect to the response received.
+ * This code was factored out to keep code DRY between correlated and uncorrelated responses.
+ * 
+ * @author jbodah
+ *
+ */
+<span class="nc" id="L18">public class PlayerResponseHandler {</span>
+	
+	/**
+	 * Parse XML response and extract the nodes we need
+	 * @author jbodah
+	 */
+	public static void parseXML(Message response) {
+<span class="fc" id="L25">		Node responseNode = response.contents() ; // Root's children</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">		while( responseNode.hasChildNodes() ) {	</span>
+<span class="fc" id="L27">			addPlayerToRoom(responseNode.getFirstChild());</span>
+<span class="fc" id="L28">			responseNode.removeChild(responseNode.getFirstChild());</span>
+		}
+<span class="fc" id="L30">	}</span>
+
+	/**
+	 * @author jbodah
+	 * @param playerNode
+	 */
+	private static void addPlayerToRoom(Node playerNode) {
+<span class="fc" id="L37">		Player player = new Player() ;</span>
+<span class="fc" id="L38">		setupPlayerTierOne(playerNode, player);</span>
+<span class="fc" id="L39">		Room.getInstance().addPlayer( player ) ;</span>
+<span class="fc" id="L40">	}</span>
+
+	private static void setupPlayerTierOne(Node playerNode, Player player) {
+<span class="fc" id="L43">		player.setLogin( NodeHelper.intAttribute(playerNode, &quot;player&quot;)) ;</span>
+<span class="fc" id="L44">		player.setAlias( NodeHelper.strAttribute(playerNode, &quot;realName&quot;)) ;</span>
+		
+<span class="fc bfc" id="L46" title="All 2 branches covered.">		while( playerNode.hasChildNodes()) {</span>
+<span class="fc" id="L47">			setupPlayerTierTwo(playerNode.getFirstChild(), player) ;</span>
+<span class="fc" id="L48">			playerNode.removeChild(playerNode.getFirstChild());</span>
+		}
+<span class="fc" id="L50">	}</span>
+	
+	/**
+	 * @author jbodah
+	 * @param player
+	 * @param ratingNode
+	 */
+	private static void setupPlayerTierTwo(Node ratingNode, Player player) {	
+<span class="fc bfc" id="L58" title="All 2 branches covered.">		if( NodeHelper.strAttribute(ratingNode, &quot;category&quot;).equals(&quot;solitaire&quot;))</span>
+<span class="fc" id="L59">			player.setSolitaireRating( NodeHelper.intAttribute(ratingNode, &quot;value&quot;)) ;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">		else if( NodeHelper.strAttribute(ratingNode, &quot;category&quot;).equals(&quot;wordsteal&quot;))</span>
+<span class="fc" id="L61">			player.setWordstealRating( NodeHelper.intAttribute(ratingNode, &quot;value&quot;)) ;</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">		else if( NodeHelper.strAttribute(ratingNode, &quot;category&quot;).equals(&quot;sudoku&quot;))</span>
+<span class="fc" id="L63">			player.setSudokuRating( NodeHelper.intAttribute(ratingNode, &quot;value&quot;)) ;</span>
+<span class="fc" id="L64">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

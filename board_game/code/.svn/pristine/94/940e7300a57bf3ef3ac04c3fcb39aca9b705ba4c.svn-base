@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SolitaireGameInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game.solitaire</a> &gt; <span class="el_source">SolitaireGameInformation.java</span></div><h1>SolitaireGameInformation.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package ks.client.game.solitaire;</span>
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.Properties;
+import java.util.StringTokenizer;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import ks.client.game.GameFrame;
+import ks.client.game.GameInformation;
+import ks.client.gamefactory.IUpdateStatus;
+import ks.client.gamefactory.PlayerJPanel;
+import ks.client.timer.TimerPanel;
+import ks.client.timer.TimerUpdate;
+import ks.common.games.Solitaire;
+import ks.common.view.Container;
+/**
+ * Information known for a Solitaire variation.
+ * 
+ * @author George Heineman
+ */
+public class SolitaireGameInformation extends GameInformation implements IUpdateStatus {
+
+	// attributes of a solitaire game.
+	int time;
+	boolean undo;
+	boolean newHand;
+	
+	/** Solitaire container within which we are being played. */
+	Container solitaireContainer;
+	
+	/** Active game being played. */
+	Solitaire activeGame;
+	
+	/** Controls for solitaire. */
+	JPanel controlPanel;
+	
+	/** New Hand button. */
+	JButton newHandButton;
+	
+	/** Player ranking. */
+	PlayerJPanel playerRanking;
+	
+	/** Stats on game (solitaire only). */
+<span class="nc" id="L53">	int numNewHands = 0;</span>
+<span class="nc" id="L54">	int numWins = 0;</span>
+<span class="nc" id="L55">	int gameTime = 0;</span>
+	
+	/** Score since last 'init' or 'new Hand'. Enables incremental count. */
+	int accumulatedScore;
+
+	/** Score for the current game only. */
+<span class="nc" id="L61">	int partialScore = 0;</span>
+	
+	
+	/** Timer panel. */
+	TimerPanel timerPanel;
+	
+	/** Enclosing GameFrame. */
+	GameFrame frame;
+	
+	/**
+	 * Options for solitaire include:
+	 * 
+	 * undo&lt;boolean&gt;
+	 * newHand&lt;boolean&gt;
+	 * time&lt;int&gt;
+	 * 
+	 * @param options
+	 * @param gameOptions
+	 */
+	public SolitaireGameInformation(Properties options, Properties gameOptions) {
+<span class="nc" id="L81">		super(options);</span>
+		
+		// set game time.
+<span class="nc" id="L84">		String gameTimeS = gameOptions.getProperty(&quot;time&quot;);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">		if (gameTimeS == null) {</span>
+<span class="nc" id="L86">			gameTime = 300;</span>
+		} else {
+			try {
+<span class="nc" id="L89">				gameTime = Integer.valueOf(gameTimeS);</span>
+<span class="nc" id="L90">			} catch (Exception e) {</span>
+<span class="nc" id="L91">				e.printStackTrace();</span>
+<span class="nc" id="L92">				gameTime = 300;</span>
+			}
+		}
+<span class="nc" id="L95">	}</span>
+
+	/**
+	 * Start the game within the given frame.
+	 * 
+	 * @param frame
+	 * @return
+	 */
+	public boolean start(GameFrame frame) {
+<span class="nc" id="L104">		this.frame = frame;</span>
+<span class="nc" id="L105">		frame.setVisible(true);</span>
+		
+		Class&lt;?&gt; c;
+		try {
+<span class="nc" id="L109">			c = Class.forName(game);</span>
+<span class="nc" id="L110">			activeGame = (Solitaire) c.newInstance();</span>
+<span class="nc" id="L111">			activeGame.setSeed(getSeed());</span>
+			
+			// Get Game Container and initialize game within it. Make sure
+			// that container is as large as preferred size of solitaire...
+<span class="nc" id="L115">			java.awt.Dimension d = activeGame.getPreferredSize();</span>
+			
+<span class="nc" id="L117">			((Container)getGameContainer()).setBounds(0, 0, Math.max(764, d.width), Math.max(512, d.height));</span>
+			
+<span class="nc" id="L119">			getGameContainer().setPreferredSize(d);</span>
+<span class="nc" id="L120">			getGameContainer().setMinimumSize(d);</span>
+<span class="nc" id="L121">			frame.setSize(new Dimension(d.width + 80, d.height + 200));</span>
+			
+			// initialize once bounds are computed, otherwise have problems redrawing extra regions.
+<span class="nc bnc" id="L124" title="All 2 branches missed.">			if (!((Container)getGameContainer()).initialize(activeGame)) {</span>
+<span class="nc" id="L125">				return false;</span>
+			}
+			
+			// start the game.
+<span class="nc" id="L129">			timerPanel.start(gameTime);</span>
+<span class="nc" id="L130">			return true;</span>
+<span class="nc" id="L131">		} catch (Exception e) {</span>
+<span class="nc" id="L132">			e.printStackTrace();</span>
+<span class="nc" id="L133">			return false;</span>
+		}
+	}
+
+	/**
+	 * Returns the actual GUI element within which the game plays.
+	 */
+	@Override
+	public java.awt.Component getGameContainer() {
+<span class="nc bnc" id="L142" title="All 2 branches missed.">		if (solitaireContainer == null) {</span>
+<span class="nc" id="L143">			solitaireContainer = new Container();</span>
+<span class="nc" id="L144">			solitaireContainer.setUpdateStatus(this);</span>
+<span class="nc" id="L145">			solitaireContainer.setName(&quot;Container&quot;);</span>
+<span class="nc" id="L146">			solitaireContainer.setBackground(new java.awt.Color(0,138,0));</span>
+<span class="nc" id="L147">			solitaireContainer.setSize(764, 512);</span>
+	
+			// wire up mouse listeners (both motion and regular). All mouse events
+			// are first sent to the container, and then to the game itself.
+<span class="nc" id="L151">			solitaireContainer.addMouseListener (new MouseListener() {</span>
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {
+<span class="nc" id="L155">					solitaireContainer.processMouseEvent(e);</span>
+<span class="nc" id="L156">				}</span>
+				
+				
+				@Override
+				public void mousePressed(MouseEvent e) {
+<span class="nc" id="L161">					solitaireContainer.processMouseEvent(e);</span>
+<span class="nc" id="L162">				}</span>
+				
+				@Override
+				public void mouseExited(MouseEvent e) {
+<span class="nc" id="L166">					solitaireContainer.processMouseEvent(e);</span>
+<span class="nc" id="L167">				}</span>
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {
+<span class="nc" id="L171">					solitaireContainer.processMouseEvent(e);</span>
+<span class="nc" id="L172">				}</span>
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+<span class="nc" id="L176">					solitaireContainer.processMouseEvent(e);</span>
+<span class="nc" id="L177">				}</span>
+			});
+			
+<span class="nc" id="L180">			solitaireContainer.addMouseMotionListener (new MouseMotionListener() {</span>
+				
+				@Override
+				public void mouseMoved(MouseEvent e) {
+<span class="nc" id="L184">					solitaireContainer.processMouseEvent(e);</span>
+					
+<span class="nc" id="L186">				}</span>
+				
+				@Override
+				public void mouseDragged(MouseEvent e) {
+<span class="nc" id="L190">					solitaireContainer.processMouseEvent(e);</span>
+<span class="nc" id="L191">				}</span>
+			});
+		}
+		
+<span class="nc" id="L195">		return solitaireContainer;</span>
+	}
+
+	/**
+	 * Returns the actual GUI controls for the game.
+	 * 
+	 * Timer/New Hand/Player Ranking.
+	 */
+	@Override
+	public JPanel getGameControls() {
+<span class="nc bnc" id="L205" title="All 2 branches missed.">		if (controlPanel == null) {</span>
+<span class="nc" id="L206">			controlPanel = new JPanel();</span>
+				
+<span class="nc" id="L208">			GroupLayout layout = new GroupLayout(controlPanel);</span>
+<span class="nc" id="L209">			controlPanel.setLayout(layout);</span>
+<span class="nc" id="L210">			layout.setAutoCreateGaps(true);</span>
+<span class="nc" id="L211">			layout.setAutoCreateContainerGaps(true);</span>
+			
+<span class="nc" id="L213">			timerPanel = new TimerPanel();</span>
+<span class="nc" id="L214">			timerPanel.setMaximumSize(new Dimension (100, 80));</span>
+<span class="nc" id="L215">			playerRanking = getPlayerRanking();</span>
+<span class="nc" id="L216">			newHandButton = new JButton (&quot;New Hand&quot;);</span>
+<span class="nc" id="L217">			newHandButton.addActionListener (new ActionListener() {</span>
+	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L221">					((Container)getGameContainer()).forceNextHand();</span>
+<span class="nc" id="L222">				}</span>
+				
+			});
+			
+<span class="nc" id="L226">			timerPanel.setMaster(new TimerUpdate() {</span>
+
+<span class="nc" id="L228">				int pastScore = -1;</span>
+				
+				@Override
+				public void minorTick() {
+					// do nothing
+<span class="nc bnc" id="L233" title="All 2 branches missed.">					if (accumulatedScore+partialScore == pastScore) { return; }</span>
+<span class="nc" id="L234">					pastScore = getScore();</span>
+					
+<span class="nc" id="L236">					callback.update(frame.getTableNumber(), pastScore,</span>
+<span class="nc" id="L237">							&quot;numWins=&quot; + numWins + &quot;,numNewHands=&quot; + numNewHands,</span>
+<span class="nc" id="L238">							false);</span>
+<span class="nc" id="L239">				}</span>
+
+				@Override
+				public void timerExpired() {
+					// turn off the action in the game.
+<span class="nc" id="L244">					((Container)getGameContainer()).setActive(false);</span>
+<span class="nc" id="L245">					newHandButton.setEnabled(false);</span>
+					
+<span class="nc" id="L247">					callback.update(frame.getTableNumber(), accumulatedScore+partialScore,</span>
+<span class="nc" id="L248">							&quot;numWins=&quot; + numWins + &quot;,numNewHands=&quot; + numNewHands,</span>
+<span class="nc" id="L249">							true);</span>
+<span class="nc" id="L250">				}</span>
+				
+			});
+			
+<span class="nc" id="L254">			timerPanel.setMaximumSize(new Dimension(120, 85));</span>
+
+<span class="nc" id="L256">			layout.setHorizontalGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L257">					.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L258">							.addComponent(timerPanel)</span>
+<span class="nc" id="L259">							.addComponent(newHandButton))</span>
+<span class="nc" id="L260">					.addComponent(playerRanking)</span>
+					);
+			
+<span class="nc" id="L263">			layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L264">					.addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L265">							.addComponent(timerPanel)</span>
+<span class="nc" id="L266">							.addComponent(newHandButton))</span>
+<span class="nc" id="L267">					.addComponent(playerRanking)</span>
+							);
+							
+		}
+		
+<span class="nc" id="L272">		return controlPanel;</span>
+	}
+
+	/**
+	 * Return the player ranking object.
+	 *  
+	 * @return
+	 */
+	public PlayerJPanel getPlayerRanking() {
+<span class="nc bnc" id="L281" title="All 2 branches missed.">		if (playerRanking == null) {</span>
+<span class="nc" id="L282">			playerRanking =	new PlayerJPanel();</span>
+		}
+		
+<span class="nc" id="L285">		return playerRanking;</span>
+	}
+	
+	public void incrementNumNewHands() {
+<span class="nc" id="L289">		numNewHands++;</span>
+		
+		// make sure to set highwater mark.
+<span class="nc" id="L292">		accumulatedScore += partialScore;</span>
+<span class="nc" id="L293">		partialScore = 0;</span>
+<span class="nc" id="L294">	}</span>
+
+	public void incrementNumWins() {
+<span class="nc" id="L297">		numWins++;</span>
+		
+<span class="nc" id="L299">		accumulatedScore += partialScore;</span>
+<span class="nc" id="L300">		partialScore = 0;</span>
+<span class="nc" id="L301">	}</span>
+
+	@Override
+	public void updateScore(int score) {
+<span class="nc" id="L305">		this.partialScore = score;</span>
+			
+<span class="nc" id="L307">		getPlayerRanking().updatePlayerInfo(fullName(player), numWins, accumulatedScore + partialScore);</span>
+<span class="nc" id="L308">	}</span>
+
+	@Override
+	public void initialize() {
+		// NOP method will be removed in future release.
+<span class="nc" id="L313">	}</span>
+
+	@Override
+	public void stop() {
+<span class="nc" id="L317">		timerPanel.stop();</span>
+<span class="nc" id="L318">	}</span>
+	
+	/**
+	 * We need to update player rankings. First let superclass handle its
+	 * updates and then we take over.
+	 */
+	@Override
+	public void setPlayers(ArrayList&lt;String&gt; order, Properties playerIDs) {
+<span class="nc" id="L326">		super.setPlayers(order, playerIDs);</span>
+		
+<span class="nc bnc" id="L328" title="All 2 branches missed.">		for (Object key : playerIDs.keySet()) {</span>
+<span class="nc" id="L329">			String k = (String) key;</span>
+			
+<span class="nc" id="L331">			String fullName = fullName(k);</span>
+<span class="nc" id="L332">			getPlayerRanking().addUser(fullName);</span>
+<span class="nc" id="L333">			getPlayerRanking().updatePlayerInfo(fullName, 0, 0);</span>
+		}
+<span class="nc" id="L335">	}</span>
+
+	/**
+	 * When receiving GameResponse from server, this extracts all
+	 * relevant information and updates local player ranking table
+	 * appropriately.
+	 * &lt;p&gt;
+	 * In solitaire, updatedGame properties are of the form:
+	 * 
+	 * &quot;numWins=3,numNewHands=2&quot;
+	 * 
+	 * Extract the numWins from the game property.
+	 */
+	@Override
+	public boolean updateScores(Properties updatedScores, Properties updatedGame) {
+<span class="nc bnc" id="L350" title="All 2 branches missed.">		for (Object key : updatedScores.keySet()) {</span>
+<span class="nc" id="L351">			String k = (String) key;</span>
+			
+<span class="nc" id="L353">			String fullName = fullName(k);</span>
+			
+<span class="nc" id="L355">			int score = 0;</span>
+<span class="nc" id="L356">			String str = updatedScores.getProperty(k);</span>
+			try {
+<span class="nc" id="L358">				score = Integer.valueOf(str);</span>
+<span class="nc" id="L359">			} catch (Exception e) {</span>
+<span class="nc" id="L360">				System.err.println(&quot;Unable to update score for player &quot; + fullName + &quot;: score is not a string:&quot; + str);</span>
+			}
+			
+<span class="nc" id="L363">			int numHandsWon = 0;</span>
+<span class="nc" id="L364">			String game = (String) updatedGame.getProperty(k);</span>
+<span class="nc bnc" id="L365" title="All 2 branches missed.">			if (game != null) {</span>
+				try {
+<span class="nc" id="L367">					StringTokenizer st = new StringTokenizer(game,&quot;,&quot;);</span>
+<span class="nc bnc" id="L368" title="All 2 branches missed.">					while (st.hasMoreTokens()) {</span>
+<span class="nc" id="L369">						String pair = st.nextToken();</span>
+<span class="nc" id="L370">						int idx = pair.indexOf('=');</span>
+<span class="nc" id="L371">						String name = pair.substring(0, idx);</span>
+<span class="nc" id="L372">						String val = pair.substring(idx+1);</span>
+						
+<span class="nc bnc" id="L374" title="All 2 branches missed.">						if (name.equals (&quot;numWins&quot;)) {</span>
+<span class="nc" id="L375">							numHandsWon = Integer.valueOf(val);</span>
+<span class="nc" id="L376">							break;</span>
+						}
+					}
+<span class="nc" id="L379">				} catch (Exception e) {</span>
+<span class="nc" id="L380">					System.err.println(&quot;Unable to update game for player &quot; + fullName + &quot;: game info is:&quot; + game);</span>
+				}
+			}
+			
+			// all the above done is to make this work.
+<span class="nc" id="L385">			getPlayerRanking().updatePlayerInfo(fullName, numHandsWon, score);</span>
+		}
+		
+<span class="nc" id="L388">		return true;</span>
+	}
+	
+	@Override
+	public boolean activateTurn(String playerID) {
+<span class="nc" id="L393">		System.out.println(&quot;ignoring activateTurn in soltaire game&quot;);</span>
+<span class="nc" id="L394">		return false;</span>
+	}
+
+	@Override
+	public boolean makeTurn(String playerID, String moveString) {
+<span class="nc" id="L399">		System.out.println(&quot;Not expecting to make turn in solitaire-based games&quot;);</span>
+<span class="nc" id="L400">		return false;</span>
+	}
+
+	@Override
+	public boolean skipTurn(String playerID) {
+<span class="nc" id="L405">		System.out.println(&quot;Not expecting to make turn in solitaire-based games&quot;);</span>
+<span class="nc" id="L406">		return false;</span>
+	}
+
+	/**
+	 * Because we override, we have to take care to invoke our
+	 * parent's method because it manages player info.
+	 */
+	@Override
+	public boolean requestLeave(String playerID) {
+<span class="nc" id="L415">		boolean rc = getPlayerRanking().disablePlayer(fullName(playerID));</span>
+<span class="nc" id="L416">		rc = rc &amp; super.requestLeave(playerID);</span>
+		
+<span class="nc" id="L418">		return rc;</span>
+	}
+
+	/**
+	 * A player's score is based on secure points (accumulated score)
+	 * plus their partial score for the current game. Whenever the player
+	 * secures a new game, the partialscore points are locked in. until then
+	 * they can be reduced by player undo.
+	 *  
+	 * Part utility method, part helper method for testing.
+	 * @return   current score of the game, based on accumulatedScore and partialScore.
+	 */
+	public int getScore() {
+<span class="nc" id="L431">		return accumulatedScore + partialScore;</span>
+	}
+
+	/** Helper method for testing. */
+	public Solitaire getActiveGame() {
+<span class="nc" id="L436">		return activeGame;</span>
+	}
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

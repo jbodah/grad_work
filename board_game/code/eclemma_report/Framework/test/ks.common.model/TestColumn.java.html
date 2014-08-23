@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestColumn.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.common.model</a> &gt; <span class="el_source">TestColumn.java</span></div><h1>TestColumn.java</h1><pre class="source lang-java linenums">package ks.common.model;
+
+import junit.framework.TestCase;
+
+// nothing much to test
+<span class="nc" id="L6">public class TestColumn extends TestCase {</span>
+
+	
+	public void testConstruction() {
+<span class="nc" id="L10">		Stack st = new Stack();</span>
+<span class="nc" id="L11">		st.add (new Card (2, Card.HEARTS));</span>
+		
+<span class="nc" id="L13">		Column c = new Column(st);</span>
+<span class="nc" id="L14">		assertFalse (c.empty());</span>
+<span class="nc" id="L15">		assertEquals (1, c.count());</span>
+<span class="nc" id="L16">	}</span>
+	
+	public void testConstructionTwo() {
+<span class="nc" id="L19">		Stack st = new Stack();</span>
+<span class="nc" id="L20">		st.add (new Card (2, Card.HEARTS));</span>
+		
+<span class="nc" id="L22">		Column c = new Column(st, &quot;sample&quot;);</span>
+<span class="nc" id="L23">		assertFalse (c.empty());</span>
+<span class="nc" id="L24">		assertEquals (1, c.count());</span>
+<span class="nc" id="L25">	}</span>
+	
+	public void testToString() {
+<span class="nc" id="L28">		Column c = new Column(&quot;sample&quot;);</span>
+<span class="nc" id="L29">		assertEquals (&quot;[Column:sample:&lt;empty&gt;]&quot;, c.toString());</span>
+<span class="nc" id="L30">		c.add (new Card (2, Card.HEARTS));</span>
+<span class="nc" id="L31">		assertEquals (&quot;[Column:sample:2H]&quot;, c.toString());</span>
+<span class="nc" id="L32">		c.add (new Card (3, Card.HEARTS));</span>
+<span class="nc" id="L33">		assertEquals (&quot;[Column:sample:2H,3H]&quot;, c.toString());</span>
+<span class="nc" id="L34">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

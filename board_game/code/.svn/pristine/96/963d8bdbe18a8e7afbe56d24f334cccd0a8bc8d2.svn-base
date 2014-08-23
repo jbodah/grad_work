@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>WSTablesPanel.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.boundaries</a> &gt; <span class="el_source">WSTablesPanel.java</span></div><h1>WSTablesPanel.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package wordstealclient.boundaries;</span>
+
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import arch.WSClientArchitecture;
+
+import wordstealclient.controllers.correlated_requests.JoinRequestController;
+import wordstealclient.entities.Table;
+import wordstealclient.entities.Table.TABLE_STATE;
+
+public class WSTablesPanel extends JPanel {
+
+	protected Table mTable;
+	protected int  serial;
+	protected JLabel id, state, playerCount;
+	private float[] rgbDefault, rgbPublic, rgbPrivate, rgbIngame, rgbByInvitation;
+	
+	public WSTablesPanel(Table table)
+	{
+<span class="fc" id="L26">		super();</span>
+<span class="fc" id="L27">		mTable = table;</span>
+<span class="fc" id="L28">		this.addMouseListener(new MouseAdapter(){</span>
+			public void mouseClicked(MouseEvent e){
+<span class="nc bnc" id="L30" title="All 2 branches missed.">				if (e.getClickCount() == 2){</span>
+<span class="nc" id="L31">					new JoinRequestController(WSClientArchitecture.getLobby()).process(serial);</span>
+<span class="nc" id="L32">					System.out.println(&quot; Table selected - &quot; + id.getText());</span>
+				}
+<span class="nc" id="L34">			}     </span>
+		});
+		
+<span class="fc" id="L37">		setColorScheme();</span>
+<span class="fc" id="L38">		this.setLayout(new GridLayout(3, 1, 2, 0));</span>
+<span class="fc" id="L39">		this.setBackground(getTableColor(table.getTableState()));</span>
+		
+<span class="fc" id="L41">		serial = table.getTableID();</span>
+<span class="fc" id="L42">		id = new JLabel(&quot;Table: &quot; + table.getTableID());</span>
+<span class="fc" id="L43">		state = new JLabel(&quot;State: &quot; + table.getTableState());</span>
+<span class="fc" id="L44">		playerCount = new JLabel(&quot;Players: &quot; + table.getNumberOfPlayers() + &quot;/4&quot;);</span>
+		
+<span class="fc" id="L46">		add(id);</span>
+<span class="fc" id="L47">		add(state);</span>
+<span class="fc" id="L48">		add(playerCount);</span>
+<span class="fc" id="L49">	}</span>
+	
+	private void setColorScheme()
+	{
+<span class="fc" id="L53">		rgbDefault = Color.RGBtoHSB(200, 200, 200, null); 			// gray</span>
+<span class="fc" id="L54">		rgbPublic = Color.RGBtoHSB(147, 185, 241, null);  			// blue</span>
+<span class="fc" id="L55">		rgbPrivate = Color.RGBtoHSB(255, 167, 34, null);  			// orange</span>
+<span class="fc" id="L56">		rgbIngame = Color.RGBtoHSB(48, 238, 88, null);    			// green</span>
+<span class="fc" id="L57">		rgbByInvitation = Color.RGBtoHSB(204, 147, 241, null);    	// purple</span>
+<span class="fc" id="L58">	}</span>
+	
+	private Color getTableColor(TABLE_STATE state)
+	{
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if (state == TABLE_STATE.PUBLIC) {return Color.getHSBColor(rgbPublic[0], rgbPublic[1], rgbPublic[2]);}</span>
+<span class="fc bfc" id="L63" title="All 2 branches covered.">		else if (state == TABLE_STATE.PRIVATE) {return Color.getHSBColor(rgbPrivate[0], rgbPrivate[1], rgbPrivate[2]);}</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		else if (state == TABLE_STATE.INGAME) {return Color.getHSBColor(rgbIngame[0], rgbIngame[1], rgbIngame[2]);}</span>
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">		else if (state == TABLE_STATE.BYINVITATION) {return Color.getHSBColor(rgbByInvitation[0], rgbByInvitation[1], rgbByInvitation[2]);}</span>
+<span class="nc" id="L66">		else {return Color.getHSBColor(rgbDefault[0], rgbDefault[1], rgbDefault[2]);}</span>
+	}
+	
+	public void update(Table table)
+	{
+<span class="nc" id="L71">		serial = table.getTableID();</span>
+<span class="nc" id="L72">		id.setText(&quot;Alias: &quot; + table.getTableID());</span>
+<span class="nc" id="L73">		state.setText(&quot;Rating: &quot; + table.getTableState());</span>
+<span class="nc" id="L74">		playerCount.setText(&quot;Wins: &quot; + table.getPlayers().length);</span>
+<span class="nc" id="L75">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

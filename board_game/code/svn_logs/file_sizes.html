@@ -1,0 +1,297 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>StatSVN - File Sizes and File Counts</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="Generator" content="StatSVN 0.7.0"/>
+<link rel="stylesheet" href="objectlab-statcvs.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="http://bit.ly/javascript-api.js?version=latest&#38;login=statsvn&#38;apiKey=R_2c362b417d0517c27876cbaca1bb68cc"></script>
+<script type="text/javascript" charset="utf-8">
+   // wait until page is loaded to call API
+   var redir_url;
+   var short_url;
+   BitlyCB.myShortenCallback = function(data) {
+      // this is how to get a result of shortening a single url
+      var result;
+      short_url=null;
+      for (var r in data.results) {
+         result = data.results[r];
+         result['longUrl'] = r;
+         short_url = result['shortUrl'];
+         break;
+      }
+      if (short_url==null) // bit.ly failed
+      document.location=redir_url;
+      else
+      redirToTwitter();
+   };
+   function shortenTweet(url) {
+      if (short_url == null || redir_url!=url) {
+      redir_url = url;
+      BitlyClient.shorten(document.location, 'BitlyCB.myShortenCallback');
+      }
+      else
+      redirToTwitter();
+      return false;
+   }
+   function redirToTwitter() { 
+      // replace {0} which is visible as %7B0} in the link
+      document.location = redir_url.replace('%7B0}', short_url);
+   }
+</script>
+  </head>
+
+<body>
+
+<h1>File Sizes and File Counts</h1>
+<div id="parentlink">&#171; <a href="index.html">Development Statistics for /WordstealClient</a></div>
+<dl class="attributes">
+    <dt>Total Files:</dt>
+    <dd>123</dd>
+    <dt>Average File Size:</dt>
+    <dd>51.2 lines</dd>
+    <dt>Average Revisions Per File:</dt>
+    <dd>4.0</dd>
+</dl>
+<p class="chart"><img src="file_count.png" alt="File Count" width="800" height="500" /></p><p class="chart"><img src="file_size.png" alt="Average File Size" width="800" height="500" /></p>
+<div class="section">
+<h2>File Types</h2>
+  <table  rules="groups" summary="File Extensions">
+    <colgroup align="left"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Files</th>
+        <th>LOC</th>
+        <th>LOC per file</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th>Totals</th>
+        <td>123 (100.0%)</td>
+        <td>6297 (100.0%)</td>
+        <td>51.1</td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr  class="odd">
+        <th>*.java</th>
+        <td>77 (62.6%)</td>
+        <td>6269 (99.6%)</td>
+        <td>81.4</td>
+      </tr>
+      <tr  class="even">
+        <th>Others</th>
+        <td>2 (1.6%)</td>
+        <td>28 (0.4%)</td>
+        <td>14.0</td>
+      </tr>
+      <tr  class="odd">
+        <th>Non-Code Files</th>
+        <td>44 (35.8%)</td>
+        <td>0 (0.0%)</td>
+        <td>0.0</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="section">
+<h2>Largest Files</h2>
+  <table  rules="groups" summary="The largest files in the repository">
+    <colgroup align="left"/>
+    <colgroup align="right"/>
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Lines of Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/boundaries/WSTablePanel.java</th>
+        <td>366</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/arch/MyLobbyInitialization.java</th>
+        <td>338</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/entities/Table.java</th>
+        <td>287</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> external/test/TestData.java</th>
+        <td>225</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/entities/Player.java</th>
+        <td>211</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/entities/TableTest.java</th>
+        <td>206</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</th>
+        <td>167</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</th>
+        <td>165</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/arch/WSClientArchitecture.java</th>
+        <td>141</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/boundaries/WSInviteFrame.java</th>
+        <td>140</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/ChatResponseHandlerTest.java</th>
+        <td>134</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/requests/ContextRequestControllerTests.java</th>
+        <td>133</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</th>
+        <td>133</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/TableEmptyHandlerTest.java</th>
+        <td>133</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/GameResponseHandlerTest.java</th>
+        <td>132</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/entities/PlayerTest.java</th>
+        <td>126</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/entities/Room.java</th>
+        <td>112</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/requests/TablesRequestControllerTest.java</th>
+        <td>111</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/requests/PlayersRequestControllerTest.java</th>
+        <td>108</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/util/GUIHelper.java</th>
+        <td>106</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="section">
+<h2>Files With Most Revisions</h2>
+  <table  rules="groups" summary="The files with most revisions">
+    <colgroup align="left"/>
+    <colgroup align="right"/>
+    <thead>
+      <tr>
+        <th>File</th>
+        <th>Revisions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/entities/Table.java</th>
+        <td>23</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/arch/MyLobbyInitialization.java</th>
+        <td>17</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/entities/Player.java</th>
+        <td>17</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/arch/WSClientArchitecture.java</th>
+        <td>17</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file-deleted.png" width="15" height="13" alt="File removed from repo" title="File removed from repo"/> src/wordstealclient/util/TestData.java</th>
+        <td>16</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file-deleted.png" width="15" height="13" alt="File removed from repo" title="File removed from repo"/> src/wordstealclient/controllers/requests/PlayersRequestController.java</th>
+        <td>14</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/entities/Room.java</th>
+        <td>14</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/util/GUIUpdater.java</th>
+        <td>14</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/controllers/xml_handlers/TableResponseHandler.java</th>
+        <td>13</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/boundaries/WSTablePanel.java</th>
+        <td>11</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/boundaries/TableManagerGUI.java</th>
+        <td>10</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/entities/RoomTest.java</th>
+        <td>10</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/entities/TableTest.java</th>
+        <td>9</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/entities/PlayerTest.java</th>
+        <td>9</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/boundaries/UserManagerGUI.java</th>
+        <td>9</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/boundaries/WSTablesPanel.java</th>
+        <td>9</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> src/wordstealclient/controllers/RoomControllerChainLink.java</th>
+        <td>9</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/TableResponseHandlerTest.java</th>
+        <td>8</td>
+      </tr>
+      <tr  class="odd">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/JoinTableResponseHandlerTest.java</th>
+        <td>7</td>
+      </tr>
+      <tr  class="even">
+        <th><img src="file.png" width="15" height="13" alt="file in repo" title="file in repo"/> test/wordstealclient/controllers/xml_handlers/PlayerResponseHandlerTest.java</th>
+        <td>7</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div><div id="generatedby">Generated by <a href="http://www.statsvn.org">StatSVN</a> 0.7.0</div>
+</body>
+</html>

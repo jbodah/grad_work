@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestStack.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.common.model</a> &gt; <span class="el_source">TestStack.java</span></div><h1>TestStack.java</h1><pre class="source lang-java linenums">package ks.common.model;
+
+import junit.framework.TestCase;
+
+<span class="nc" id="L5">public class TestStack extends TestCase {</span>
+
+	public void testBasic () {
+<span class="nc" id="L8">		Stack st = new Stack();</span>
+		
+<span class="nc" id="L10">		assertTrue (st.empty());</span>
+<span class="nc" id="L11">		assertEquals (0, st.count());</span>
+		
+		// can't get from empty stack.
+<span class="nc bnc" id="L14" title="All 2 branches missed.">		assertTrue (st.get() == null);</span>
+		
+<span class="nc" id="L16">		Card c = new Card (2, Card.HEARTS);</span>
+<span class="nc" id="L17">		st.add(c);</span>
+<span class="nc" id="L18">		assertEquals (1, st.count());</span>
+<span class="nc" id="L19">		assertFalse (st.empty());</span>
+<span class="nc" id="L20">		assertEquals (c, st.peek());</span>
+<span class="nc" id="L21">		assertEquals (c, st.get());</span>
+<span class="nc" id="L22">		assertTrue (st.empty());</span>
+<span class="nc" id="L23">	}</span>
+	
+	public void testDescending() {
+<span class="nc" id="L26">		Stack st = new Stack();</span>
+<span class="nc" id="L27">		assertTrue (st.descending());</span>
+<span class="nc" id="L28">		Card c3 = new Card (7, Card.HEARTS);</span>
+<span class="nc" id="L29">		Card c2 = new Card (6, Card.HEARTS);</span>
+<span class="nc" id="L30">		Card c1 = new Card (5, Card.HEARTS);</span>
+<span class="nc" id="L31">		Card cBad = new Card (10, Card.DIAMONDS);</span>
+<span class="nc" id="L32">		Card cBadDesc = new Card (9, Card.DIAMONDS);</span>
+		
+<span class="nc" id="L34">		st.add(c3);</span>
+<span class="nc" id="L35">		assertTrue (st.descending());</span>
+<span class="nc" id="L36">		st.add(c2);</span>
+<span class="nc" id="L37">		assertTrue (st.descending());</span>
+<span class="nc" id="L38">		st.add(c1);</span>
+<span class="nc" id="L39">		assertTrue (st.descending());</span>
+		
+<span class="nc" id="L41">		assertEquals (3, st.count());</span>
+		
+<span class="nc" id="L43">		st.add(cBad);</span>
+<span class="nc" id="L44">		assertFalse (st.descending());</span>
+		
+		// however... bottom three are descending
+<span class="nc" id="L47">		assertTrue (st.descending(0,st.count()-1));</span>
+		
+<span class="nc" id="L49">		st.add(cBadDesc);</span>
+<span class="nc" id="L50">		assertFalse (st.descending());</span>
+		
+		// however... top most two cards are descending
+<span class="nc" id="L53">		assertTrue (st.descending(3,5));</span>
+		
+		// all same color
+<span class="nc" id="L56">		assertTrue (st.sameColor());</span>
+<span class="nc" id="L57">	}</span>
+	
+	public void testAscending() {
+<span class="nc" id="L60">		Stack st = new Stack();</span>
+<span class="nc" id="L61">		assertTrue (st.ascending());</span>
+<span class="nc" id="L62">		Card c3 = new Card (2, Card.HEARTS);</span>
+<span class="nc" id="L63">		Card c2 = new Card (3, Card.HEARTS);</span>
+<span class="nc" id="L64">		Card c1 = new Card (4, Card.HEARTS);</span>
+<span class="nc" id="L65">		Card cBad = new Card (10, Card.SPADES);</span>
+<span class="nc" id="L66">		Card cBadDesc = new Card (11, Card.SPADES);</span>
+		
+<span class="nc" id="L68">		st.add(c3);</span>
+<span class="nc" id="L69">		assertTrue (st.ascending());</span>
+<span class="nc" id="L70">		st.add(c2);</span>
+<span class="nc" id="L71">		assertTrue (st.ascending());</span>
+<span class="nc" id="L72">		st.add(c1);</span>
+<span class="nc" id="L73">		assertTrue (st.ascending());</span>
+		
+<span class="nc" id="L75">		assertEquals (3, st.count());</span>
+		
+<span class="nc" id="L77">		st.add(cBad);</span>
+<span class="nc" id="L78">		assertFalse (st.ascending());</span>
+		
+		// however... bottom three are ascending and same color
+<span class="nc" id="L81">		assertTrue (st.ascending(0,st.count()-1));</span>
+<span class="nc" id="L82">		assertTrue (st.sameColor(0,st.count()-1));</span>
+		
+<span class="nc" id="L84">		st.add(cBadDesc);</span>
+<span class="nc" id="L85">		assertFalse (st.ascending());</span>
+		
+		// however... top most two cards are ascending
+<span class="nc" id="L88">		assertTrue (st.ascending(3,5));</span>
+	
+		
+		// same color
+<span class="nc" id="L92">		assertTrue (st.sameColor(3,5));</span>
+<span class="nc" id="L93">	}</span>
+	
+	public void testRank() {
+<span class="nc" id="L96">		Stack st = new Stack();</span>
+<span class="nc" id="L97">		assertTrue (st.sameRank());</span>
+		try {
+<span class="nc" id="L99">			st.rank();</span>
+<span class="nc" id="L100">			fail (&quot;Can't return rank on empty stack.&quot;);</span>
+<span class="nc" id="L101">		} catch (Exception e) {</span>
+			// success
+		}
+<span class="nc" id="L104">		Card c3 = new Card (7, Card.HEARTS);</span>
+<span class="nc" id="L105">		Card c2 = new Card (6, Card.HEARTS);</span>
+		
+<span class="nc" id="L107">		st.add(c3);</span>
+<span class="nc" id="L108">		assertEquals (7, st.rank());</span>
+<span class="nc" id="L109">		assertTrue (st.sameRank());</span>
+<span class="nc" id="L110">		st.add(c2);</span>
+<span class="nc" id="L111">		assertEquals (6, st.rank());</span>
+		
+<span class="nc" id="L113">		assertFalse (st.sameRank());</span>
+<span class="nc" id="L114">		st.get(); // remove top card [6] and add another 7</span>
+<span class="nc" id="L115">		st.add(new Card (7, Card.DIAMONDS));</span>
+<span class="nc" id="L116">		assertTrue (st.sameRank());</span>
+<span class="nc" id="L117">	}</span>
+	
+	public void testSuit() {
+<span class="nc" id="L120">		Stack st = new Stack();</span>
+<span class="nc" id="L121">		assertTrue (st.sameSuit());</span>
+		try {
+<span class="nc" id="L123">			st.suit();</span>
+<span class="nc" id="L124">			fail (&quot;Can't return rank on empty stack.&quot;);</span>
+<span class="nc" id="L125">		} catch (Exception e) {</span>
+			// success
+		}
+<span class="nc" id="L128">		Card c3 = new Card (7, Card.HEARTS);</span>
+<span class="nc" id="L129">		Card c2 = new Card (6, Card.HEARTS);</span>
+<span class="nc" id="L130">		Card cBadDesc = new Card (9, Card.DIAMONDS);</span>
+		
+<span class="nc" id="L132">		st.add(c3);</span>
+<span class="nc" id="L133">		assertEquals (Card.HEARTS, st.suit());</span>
+<span class="nc" id="L134">		assertTrue (st.sameSuit());</span>
+<span class="nc" id="L135">		st.add(c2);</span>
+<span class="nc" id="L136">		assertEquals (Card.HEARTS, st.suit());</span>
+		
+<span class="nc" id="L138">		assertTrue (st.sameSuit());</span>
+<span class="nc" id="L139">		st.add (cBadDesc);</span>
+<span class="nc" id="L140">		assertFalse (st.sameSuit());</span>
+<span class="nc" id="L141">	}</span>
+	
+	public void testAlternatingColors() {
+<span class="nc" id="L144">		Stack st = new Stack();</span>
+<span class="nc" id="L145">		assertTrue (st.alternatingColors());</span>
+		
+<span class="nc" id="L147">		Card c3 = new Card (7, Card.HEARTS);</span>
+<span class="nc" id="L148">		Card c2 = new Card (6, Card.SPADES);</span>
+<span class="nc" id="L149">		Card cBad = new Card (10, Card.DIAMONDS);</span>
+<span class="nc" id="L150">		Card cBadDesc = new Card (9, Card.CLUBS);</span>
+		
+<span class="nc" id="L152">		st.add(c3);</span>
+<span class="nc" id="L153">		assertTrue (st.alternatingColors());</span>
+<span class="nc" id="L154">		st.add(c2);</span>
+<span class="nc" id="L155">		assertTrue (st.alternatingColors());</span>
+<span class="nc" id="L156">		st.add(cBadDesc);</span>
+<span class="nc" id="L157">		assertFalse (st.alternatingColors());</span>
+<span class="nc" id="L158">		st.add(cBad);</span>
+<span class="nc" id="L159">		assertFalse (st.alternatingColors());</span>
+		
+<span class="nc" id="L161">		assertTrue (st.alternatingColors(3,4));</span>
+<span class="nc" id="L162">	}</span>
+	
+	public void testSelectedStatus() {
+<span class="nc" id="L165">		Stack st = new Stack();</span>
+		
+<span class="nc" id="L167">		Stack s = st.getSelected();</span>
+<span class="nc" id="L168">		assertEquals (0, s.count());</span>
+		
+		// can't select more than we have
+<span class="nc" id="L171">		assertFalse (s.select());</span>
+<span class="nc" id="L172">		assertFalse (s.select(10));</span>
+		
+<span class="nc" id="L174">		Card c3 = new Card (2, Card.HEARTS);</span>
+<span class="nc" id="L175">		Card c2 = new Card (3, Card.HEARTS);</span>
+<span class="nc" id="L176">		Card c1 = new Card (4, Card.HEARTS);</span>
+<span class="nc" id="L177">		Card cBad = new Card (10, Card.SPADES);</span>
+<span class="nc" id="L178">		Card cBadDesc = new Card (11, Card.SPADES);</span>
+		
+<span class="nc" id="L180">		st.add(c3);</span>
+<span class="nc" id="L181">		st.add(c2);</span>
+<span class="nc" id="L182">		st.add(c1);</span>
+<span class="nc" id="L183">		st.add(cBad);</span>
+<span class="nc" id="L184">		st.add(cBadDesc);</span>
+		
+<span class="nc" id="L186">		assertEquals (0, st.getNumSelectedCards());</span>
+		
+		// now select
+<span class="nc" id="L189">		assertTrue (st.select());</span>
+<span class="nc" id="L190">		assertEquals (1, st.getNumSelectedCards());</span>
+		
+<span class="nc" id="L192">		s = st.getSelected();</span>
+<span class="nc" id="L193">		assertEquals (1, s.count());</span>
+<span class="nc" id="L194">		assertEquals (4, st.count());</span>
+<span class="nc" id="L195">		assertEquals (new Card (11, Card.SPADES), s.peek());</span>
+		
+		// when multiple cards are selected, we must make sure that the 
+		// retrieved 'selected stack' is formed in proper order.
+		// stack now has 4 cards
+<span class="nc" id="L200">		st.select(3);</span>
+<span class="nc" id="L201">		s = st.getSelected();</span>
+<span class="nc" id="L202">		assertEquals (3, s.count());</span>
+<span class="nc" id="L203">		assertEquals (new Card (3, Card.HEARTS), s.peek(0));  // bottom card</span>
+<span class="nc" id="L204">		assertEquals (new Card (4, Card.HEARTS), s.peek(1));  // bottom card</span>
+<span class="nc" id="L205">		assertEquals (new Card (10, Card.SPADES), s.peek(2));  // bottom card</span>
+		
+		// none of these cards are selected anymore.
+<span class="nc" id="L208">		assertEquals (0, s.getNumSelectedCards());</span>
+		
+<span class="nc" id="L210">		st.select(1);  // last one</span>
+<span class="nc" id="L211">		s = st.getSelected();</span>
+<span class="nc" id="L212">		assertTrue (st.empty());</span>
+<span class="nc" id="L213">		assertEquals (1, s.count());</span>
+		
+<span class="nc" id="L215">		s.select(1);</span>
+<span class="nc" id="L216">		s.deselect();</span>
+<span class="nc" id="L217">		assertEquals (0, s.getNumSelectedCards());</span>
+<span class="nc" id="L218">	}</span>
+	
+	public void testPushAndManipulation() {
+<span class="nc" id="L221">		Stack st = new Stack();</span>
+<span class="nc" id="L222">		st.removeAll();</span>
+<span class="nc" id="L223">		assertTrue (st.empty());</span>
+		
+<span class="nc" id="L225">		st.add(new Card (2, Card.HEARTS));</span>
+<span class="nc" id="L226">		st.add(new Card (4, Card.HEARTS));</span>
+		
+<span class="nc" id="L228">		Stack st2 = new Stack();</span>
+		
+		
+		// base case
+<span class="nc" id="L232">		st.push(st2);</span>
+<span class="nc" id="L233">		assertEquals (2, st.count());</span>
+		
+<span class="nc" id="L235">		st.push(null);</span>
+<span class="nc" id="L236">		assertEquals (2, st.count());</span>
+		
+		// construct stack.
+<span class="nc" id="L239">		st2.add(new Card (2, Card.SPADES));</span>
+<span class="nc" id="L240">		st2.add(new Card (4, Card.SPADES));</span>
+		
+		
+		// put these cards on top
+<span class="nc" id="L244">		st.push(st2);</span>
+<span class="nc" id="L245">		assertEquals (4, st.count());</span>
+		
+<span class="nc" id="L247">		assertEquals (new Card (4, Card.SPADES), st.peek());</span>
+		
+<span class="nc" id="L249">		st.removeAll();</span>
+<span class="nc" id="L250">		assertTrue (st.empty());</span>
+<span class="nc" id="L251">	}</span>
+	
+	// deal with large stacks
+	public void testLargeStacks() {
+<span class="nc" id="L255">		Stack st = new Stack();</span>
+<span class="nc" id="L256">		Card c = new Card (2, Card.HEARTS);</span>
+<span class="nc bnc" id="L257" title="All 2 branches missed.">		for (int i = 0; i &lt; 50; i++) {</span>
+<span class="nc" id="L258">			st.add(c);</span>
+		}
+		
+<span class="nc" id="L261">		assertEquals (50, st.count());</span>
+<span class="nc" id="L262">	}</span>
+	
+	public void testToString() {
+<span class="nc" id="L265">		Stack st = new Stack();</span>
+<span class="nc" id="L266">		assertEquals (&quot;[Stack:&lt;empty&gt;]&quot;, st.toString());</span>
+<span class="nc" id="L267">		st.add (new Card (2, Card.HEARTS));</span>
+<span class="nc" id="L268">		assertEquals (&quot;[Stack:2H]&quot;, st.toString());</span>
+<span class="nc" id="L269">		st.add (new Card (3, Card.HEARTS));</span>
+<span class="nc" id="L270">		assertEquals (&quot;[Stack:2H,3H]&quot;, st.toString());</span>
+<span class="nc" id="L271">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

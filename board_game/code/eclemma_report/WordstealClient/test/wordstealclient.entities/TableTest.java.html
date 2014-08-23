@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TableTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.entities</a> &gt; <span class="el_source">TableTest.java</span></div><h1>TableTest.java</h1><pre class="source lang-java linenums">package wordstealclient.entities;
+
+import static org.junit.Assert.*;
+
+import org.junit.*;
+import static wordstealclient.entities.Table.MAX_PLAYERS;
+
+
+/**
+ * @author jbodah
+ */
+<span class="fc" id="L12">public class TableTest {</span>
+	private Table table ;
+	
+	@Before
+	public void setUp() {
+<span class="fc" id="L17">		table = new Table() ;</span>
+<span class="fc" id="L18">	}</span>
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L22">		table = null ;</span>
+<span class="fc" id="L23">	}</span>
+	
+	@Test
+	public void testSuite() {
+<span class="fc" id="L27">		testAddPlayer() ;</span>
+<span class="fc" id="L28">		testIsFull(true) ;</span>
+<span class="fc" id="L29">		testRemovePlayerAt() ;</span>
+<span class="fc" id="L30">		testIsFull(false) ;</span>
+<span class="fc" id="L31">		testGetNumberOfPlayers() ;</span>
+<span class="fc" id="L32">		testGettersSetters();</span>
+<span class="fc" id="L33">		testGetPlayer() ;</span>
+<span class="fc" id="L34">		testGetModerator() ;</span>
+<span class="fc" id="L35">		testRemovePlayer() ;</span>
+<span class="fc" id="L36">		testInsertPlayerAndSetModerator() ;</span>
+<span class="fc" id="L37">		testClear();</span>
+<span class="fc" id="L38">	}</span>
+	
+	private void testAddPlayer() {
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		for( int i = 0 ; i &lt; MAX_PLAYERS ; i++ ) {</span>
+<span class="fc" id="L42">			Player player = new Player() ;</span>
+<span class="fc" id="L43">			assertTrue(table.addPlayer(player)) ;</span>
+		}
+<span class="fc" id="L45">		Player player = new Player() ;</span>
+<span class="fc" id="L46">		assertFalse(table.addPlayer(player)) ;</span>
+<span class="fc" id="L47">	}</span>
+	
+	private void testIsFull(boolean bool) {
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		if( bool )</span>
+<span class="fc" id="L51">			assertTrue(table.isFull());</span>
+		else
+<span class="fc" id="L53">			assertFalse(table.isFull());</span>
+<span class="fc" id="L54">	}</span>
+	
+	private void testRemovePlayerAt() {
+		// Remove from back
+<span class="fc" id="L58">		Player expectedPlayer = table.players[3] ;</span>
+<span class="fc" id="L59">		Player removedPlayer = table.removePlayerAt(3) ;</span>
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">		assertTrue( removedPlayer == expectedPlayer ) ;</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">		assertTrue( table.players[3] == null ) ;</span>
+		
+		// Remove from front
+<span class="fc" id="L64">		expectedPlayer = table.players[1];</span>
+<span class="fc" id="L65">		removedPlayer = table.removePlayerAt(1) ;</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">		assertTrue( removedPlayer == expectedPlayer ) ;</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">		assertTrue( table.players[3] == null ) ;</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">		assertTrue( table.players[2] == null ) ;</span>
+<span class="fc" id="L69">		assertEquals( table.removePlayerAt(5), null ) ;</span>
+<span class="fc" id="L70">	}</span>
+	
+	private void testGetNumberOfPlayers() {
+		// Reinitialize
+<span class="fc" id="L74">		table = null ;</span>
+<span class="fc" id="L75">		table = new Table() ;</span>
+<span class="fc" id="L76">		assertEquals( table.getNumberOfPlayers(), 0 ) ;</span>
+		
+		// Add players
+<span class="fc bfc" id="L79" title="All 2 branches covered.">		for(int i = 0 ; i &lt; MAX_PLAYERS ; i++) {</span>
+<span class="fc" id="L80">			table.addPlayer(new Player()) ;</span>
+<span class="fc" id="L81">			assertEquals( table.getNumberOfPlayers(), i + 1 ) ;</span>
+		}
+		
+		// Add more than max
+<span class="fc" id="L85">		table.addPlayer(new Player()) ;</span>
+<span class="fc" id="L86">		assertEquals( table.getNumberOfPlayers(), MAX_PLAYERS ) ;</span>
+		
+		// Remove players
+<span class="fc bfc" id="L89" title="All 2 branches covered.">		for(int i = 0 ; i &lt; MAX_PLAYERS ; i++) {</span>
+<span class="fc" id="L90">			table.removePlayerAt(0) ;</span>
+<span class="fc" id="L91">			assertEquals( table.getNumberOfPlayers(), MAX_PLAYERS - ( i + 1 )) ;</span>
+		}
+		
+		// Remove more players than min
+<span class="fc" id="L95">		table.removePlayerAt(0) ;</span>
+<span class="fc" id="L96">		assertEquals( table.getNumberOfPlayers(), 0 ) ;</span>
+<span class="fc" id="L97">	}</span>
+	
+	private void testGettersSetters() {
+<span class="fc" id="L100">		table.setSeed( 500 ) ;</span>
+<span class="fc" id="L101">		assertEquals( table.getSeed(), 500 ) ;</span>
+		
+<span class="fc" id="L103">		table.setType(&quot;type&quot;) ;</span>
+<span class="fc" id="L104">		assertEquals( table.getType(), &quot;type&quot; ) ;</span>
+		
+<span class="fc" id="L106">		table.setGame(&quot;game&quot;) ;</span>
+<span class="fc" id="L107">		assertEquals( table.getGame(), &quot;game&quot; ) ;</span>
+
+<span class="fc" id="L109">		table.setOptions(&quot;options&quot;) ;</span>
+<span class="fc" id="L110">		assertEquals( table.getOptions(), &quot;options&quot; ) ;</span>
+<span class="fc" id="L111">	}</span>
+	
+	private void testGetPlayer() {
+		// Initialize full table
+<span class="fc" id="L115">		table = null ;</span>
+<span class="fc" id="L116">		table = new Table() ;</span>
+		
+<span class="fc" id="L118">		Player player1 = new Player() ;</span>
+<span class="fc" id="L119">		player1.setLogin(1) ;</span>
+<span class="fc" id="L120">		table.addPlayer(player1) ;</span>
+		
+<span class="fc" id="L122">		Player player2 = new Player() ;</span>
+<span class="fc" id="L123">		player2.setLogin(2) ;</span>
+<span class="fc" id="L124">		table.addPlayer(player2) ;</span>
+		
+<span class="fc" id="L126">		Player player3 = new Player() ;</span>
+<span class="fc" id="L127">		player3.setLogin(3) ;</span>
+<span class="fc" id="L128">		table.addPlayer(player3) ;</span>
+		
+<span class="fc" id="L130">		Player player4 = new Player() ;</span>
+<span class="fc" id="L131">		player4.setLogin(4) ;</span>
+<span class="fc" id="L132">		table.addPlayer(player4) ;</span>
+		
+<span class="fc" id="L134">		assertEquals( player2, table.getPlayer(2)) ;</span>
+<span class="fc" id="L135">		assertEquals( null, table.getPlayer(5)) ;</span>
+<span class="fc" id="L136">	}</span>
+	
+	private void testGetModerator() {
+<span class="fc" id="L139">		table = null ;</span>
+<span class="fc" id="L140">		table = new Table() ;</span>
+<span class="fc" id="L141">		assertEquals(null, table.getModerator()) ;</span>
+		
+<span class="fc" id="L143">		Player playerA = new Player() ;</span>
+<span class="fc" id="L144">		table.addPlayer(playerA) ;</span>
+<span class="fc" id="L145">		assertEquals(playerA, table.getModerator()) ;</span>
+		
+<span class="fc" id="L147">		Player playerB = new Player() ;</span>
+<span class="fc" id="L148">		table.addPlayer(playerB) ;</span>
+<span class="fc" id="L149">		assertEquals(playerA, table.getModerator()) ;</span>
+		
+<span class="fc" id="L151">		table.removePlayerAt(0) ;</span>
+<span class="fc" id="L152">		assertEquals(playerB, table.getModerator()) ;		</span>
+<span class="fc" id="L153">	}</span>
+	
+	private void testRemovePlayer() {
+<span class="fc" id="L156">		table = null ;</span>
+<span class="fc" id="L157">		table = new Table() ;</span>
+		
+<span class="fc" id="L159">		Player playerA = new Player() ;</span>
+<span class="fc" id="L160">		playerA.setLogin(50) ;</span>
+<span class="fc" id="L161">		table.addPlayer(playerA) ;</span>
+<span class="fc" id="L162">		assertEquals(table.removePlayer(50), playerA) ;</span>
+<span class="fc" id="L163">		assertEquals(table.removePlayer(50), null) ;</span>
+<span class="fc" id="L164">	}</span>
+	
+	private void testInsertPlayerAndSetModerator() {
+<span class="fc" id="L167">		table = null ;</span>
+<span class="fc" id="L168">		table = new Table() ;</span>
+		
+<span class="fc" id="L170">		Player playerA = new Player() ;</span>
+<span class="fc" id="L171">		Player playerB = new Player() ;</span>
+<span class="fc" id="L172">		Player playerC = new Player() ;</span>
+<span class="fc" id="L173">		Player playerD = new Player() ;</span>
+<span class="fc" id="L174">		Player playerE = new Player() ;</span>
+<span class="fc" id="L175">		playerA.setLogin(1) ;</span>
+<span class="fc" id="L176">		playerB.setLogin(2) ;</span>
+<span class="fc" id="L177">		playerC.setLogin(3) ;</span>
+<span class="fc" id="L178">		playerD.setLogin(4) ;</span>
+<span class="fc" id="L179">		playerE.setLogin(5) ;</span>
+		
+		// insertPlayer
+		// Keep inserting and checking until full table
+<span class="fc" id="L183">		assertTrue(table.insertPlayer(playerA)) ;</span>
+<span class="fc" id="L184">		assertEquals(table.getModerator(), playerA) ;</span>
+<span class="fc" id="L185">		assertTrue(table.insertPlayer(playerB)) ;</span>
+<span class="fc" id="L186">		assertEquals(table.getModerator(), playerB) ;</span>
+<span class="fc" id="L187">		assertTrue(table.insertPlayer(playerC)) ;</span>
+<span class="fc" id="L188">		assertEquals(table.getModerator(), playerC) ;</span>
+<span class="fc" id="L189">		assertTrue(table.insertPlayer(playerD)) ;</span>
+<span class="fc" id="L190">		assertEquals(table.getModerator(), playerD) ;</span>
+		
+		// Table is full, so we should escape insert and return previous state
+<span class="fc" id="L193">		assertFalse(table.insertPlayer(playerE)) ;</span>
+<span class="fc" id="L194">		assertEquals(table.getModerator(), playerD) ;</span>
+		
+		// setModerator
+<span class="fc" id="L197">		assertEquals(table.setModerator(playerB.getLogin()), playerB) ;</span>
+<span class="fc" id="L198">		assertEquals(table.setModerator(playerE.getLogin()), null) ; </span>
+<span class="fc" id="L199">	}</span>
+	
+	private void testClear() {
+<span class="fc" id="L202">		table.addPlayer(new Player());</span>
+<span class="fc" id="L203">		table.clear() ;</span>
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">		assertTrue( table.getNumberOfPlayers() == 0 ) ;</span>
+<span class="fc" id="L205">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

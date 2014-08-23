@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>CommunicationAgent.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.framework.common.network</a> &gt; <span class="el_source">CommunicationAgent.java</span></div><h1>CommunicationAgent.java</h1><pre class="source lang-java linenums">/*
+ * Protocol communication.
+ */
+package ks.framework.common.network;
+
+import ks.framework.interfaces.ICommunicator;
+
+import java.io.*;
+
+/**
+ * Maintains Input and Output streams, and knows how 
+ * to writeObject to the Output and readObject from Input, on 
+ * demand.
+ * &lt;p&gt;
+ * @author George Heineman (heineman@cs.wpi.edu)
+ */
+public class CommunicationAgent implements ICommunicator {
+	/** input. */
+	InputStream in;
+	
+	/** output. */
+	OutputStream out;
+	
+	/** Semaphore objects for reading and writing. */
+<span class="nc" id="L25">	Object readSemaphore = new Object();</span>
+<span class="nc" id="L26">	Object writeSemaphore = new Object();</span>
+	
+	/**
+	 * Agent to manage communication where writing an object
+	 * to OutputStream while reading from InputStream.
+	 * 
+	 * @param in
+	 * @param out
+	 */
+<span class="nc" id="L35">	public CommunicationAgent (InputStream in, OutputStream out) {</span>
+<span class="nc" id="L36">		this.in = in;</span>
+<span class="nc" id="L37">		this.out = out;</span>
+<span class="nc" id="L38">	}</span>
+	
+	/**
+	 * Shutdown communication agent.
+	 */
+	public void close () {
+		try {
+<span class="nc bnc" id="L45" title="All 2 branches missed.">			if (in != null) {</span>
+<span class="nc" id="L46">				in.close();</span>
+<span class="nc" id="L47">				in = null;</span>
+			}
+<span class="nc bnc" id="L49" title="All 2 branches missed.">			if (out != null) {</span>
+<span class="nc" id="L50">				out.close();</span>
+<span class="nc" id="L51">				out = null;</span>
+			}
+<span class="nc" id="L53">		} catch (IOException ioe) {</span>
+<span class="nc" id="L54">			ioe.printStackTrace();</span>
+		}
+<span class="nc" id="L56">	}</span>
+	
+	/**
+	 * Blocks for an object to be read. 
+	 * 
+	 * Note that the very fact of opening an ObjectInputStream
+	 * actually forces a read of the stream header; this is
+	 * why we need to cleanly encapsulate it here.
+	 * 
+	 * @return  Object read or null if an exception occurred.
+	 */
+	public Object readObject () {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">		if (in == null) return null;</span>
+		
+		// make sure that only one thread is reading at a time.
+<span class="nc" id="L71">		synchronized (readSemaphore) {</span>
+<span class="nc" id="L72">			ObjectInputStream ois = null;</span>
+<span class="nc" id="L73">			Object retValue = null;</span>
+			try {
+<span class="nc" id="L75">				ois = new ObjectInputStream (in);</span>
+<span class="nc" id="L76">				retValue = ois.readObject();</span>
+<span class="nc" id="L77">			} catch (EOFException ee) {</span>
+<span class="nc" id="L78">				System.err.println (&quot;Client lost connection with server.&quot;);</span>
+<span class="nc" id="L79">				throw new RuntimeException (&quot;Client lost connection with server.&quot;);</span>
+<span class="nc" id="L80">			} catch (IOException ioe) {</span>
+<span class="nc" id="L81">				System.err.println (&quot;Client lost connection with server.&quot;);</span>
+<span class="nc" id="L82">				throw new RuntimeException (&quot;Client lost connection with server.&quot;);</span>
+<span class="nc" id="L83">			} catch (ClassNotFoundException cnfe) {</span>
+<span class="nc" id="L84">				cnfe.printStackTrace();</span>
+<span class="nc" id="L85">				throw new RuntimeException (&quot;Client lost connection with server.&quot;);</span>
+			}
+
+			// close this one down.
+			try {
+<span class="nc bnc" id="L90" title="All 2 branches missed.">				if (retValue == null) {</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">					if (ois != null) {</span>
+<span class="nc" id="L92">						ois.close();</span>
+					}
+				}
+<span class="nc" id="L95">			} catch (IOException ioe) {</span>
+				// nothing to say...
+			}
+			
+<span class="nc" id="L99">			return retValue;</span>
+		}
+	}
+	
+	/**
+	 * Writes an object to the OutputStream.
+	 * 
+	 * Note that the very fact of opening an ObjectOutputStream
+	 * actually forces a write of a stream header; this is
+	 * why we need to cleanly encapsulate it here.
+	 * 
+	 * @param o     Object to be written.
+	 */
+	public boolean writeObject (Object o) {
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (out == null) return false;</span>
+		
+		// make sure that only one thread is writing at a time.
+<span class="nc" id="L116">		synchronized (writeSemaphore) {</span>
+<span class="nc" id="L117">			ObjectOutputStream oos = null;</span>
+<span class="nc" id="L118">			boolean retValue = true;</span>
+			try {
+<span class="nc" id="L120">				oos = new ObjectOutputStream (out);</span>
+<span class="nc" id="L121">				oos.writeObject(o);</span>
+<span class="nc" id="L122">				oos.flush();</span>
+<span class="nc" id="L123">			} catch (IOException ioe) {</span>
+				// nothing to do!
+<span class="nc" id="L125">				retValue = false;</span>
+			}
+			
+			try {
+<span class="nc bnc" id="L129" title="All 2 branches missed.">				if (!retValue) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">					if (oos != null) {</span>
+<span class="nc" id="L131">						oos.close();</span>
+					}
+				}
+<span class="nc" id="L134">			} catch (IOException e) {</span>
+				// nothing to do.
+			}
+<span class="nc" id="L137">			return retValue;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

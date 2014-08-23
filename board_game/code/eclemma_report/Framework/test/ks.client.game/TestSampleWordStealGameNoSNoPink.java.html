@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestSampleWordStealGameNoSNoPink.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">TestSampleWordStealGameNoSNoPink.java</span></div><h1>TestSampleWordStealGameNoSNoPink.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import java.util.ArrayList;
+import java.util.Properties;
+
+import com.sun.org.apache.xpath.internal.axes.SelfIteratorNoPredicate;
+
+import wordsteal.boundaries.main.MainJPanel;
+import wordsteal.entities.Board;
+import wordsteal.entities.Cell;
+import wordsteal.entities.Game;
+import wordsteal.entities.Rack;
+import wordsteal.entities.RackTileLocation;
+import wordsteal.entities.Tile;
+import wordsteal.entities.TileMovement;
+import wordsteal.interfaces.IWordstealApp;
+import wordsteal.util.BoardLocation;
+
+import junit.framework.TestCase;
+import ks.client.game.wordsteal.SkipSelfTurnController;
+import ks.client.game.wordsteal.SubmitWordController;
+import ks.client.game.wordsteal.WordstealGameInformation;
+
+<span class="nc" id="L24">public class TestSampleWordStealGameNoSNoPink extends TestCase {</span>
+
+	GameManager gm;
+	
+<span class="nc" id="L28">	int tableID = 13;</span>
+<span class="nc" id="L29">	String me = &quot;982&quot;;</span>
+	Properties options;
+	Properties gameOptions;
+	Properties playerIDs;
+	SampleInterface sample;
+	
+<span class="nc" id="L35">	String player1 = &quot;1124&quot;;</span>
+<span class="nc" id="L36">	String player2 = &quot;997&quot;;</span>
+	
+	/** My info. */
+	WordstealGameInformation info;
+	
+	/** internal info. */
+	Game game;
+	
+	// create the wordsteal game/app
+	protected void setUp() {
+<span class="nc" id="L46">		gm = GameManager.instance();</span>
+<span class="nc" id="L47">		Properties options = new Properties();</span>
+		// default ones from message
+<span class="nc" id="L49">		options.setProperty(&quot;seed&quot;, &quot;1234&quot;);</span>
+<span class="nc" id="L50">		options.setProperty(&quot;game&quot;, &quot;wordsteal.Wordsteal&quot;);</span>
+	
+<span class="nc" id="L52">		sample = new SampleInterface();</span>
+		
+		// game specific ones for wordsteal variations. note
+		// that the pointsToWin of 4 means any word played of
+		// four or more letters will win the game.
+<span class="nc" id="L57">		Properties gameOptions = new Properties();</span>
+<span class="nc" id="L58">		gameOptions.setProperty(&quot;noS&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L59">		gameOptions.setProperty(&quot;pink&quot;, &quot;false&quot;);</span>
+<span class="nc" id="L60">		gameOptions.setProperty(&quot;turnTime&quot;, &quot;80&quot;);</span>
+		
+		// make score low enough that we can actually win a game, but
+		// high enough that we can try it out
+<span class="nc" id="L64">		gameOptions.setProperty(&quot;pointsToWin&quot;, &quot;10&quot;);</span>
+		
+		// player ids and real names (example where one has no real name)
+<span class="nc" id="L67">		Properties players = new Properties();</span>
+<span class="nc" id="L68">		players.setProperty(me,  &quot;George Heineman&quot;);</span>
+<span class="nc" id="L69">		players.setProperty(player1, &quot;Paul Simon&quot;);</span>
+<span class="nc" id="L70">		players.setProperty(player2,  &quot;&quot;);</span>
+		
+		// note that for the purpose of this demonstration, I am assuming
+		// that I am the moderator. This need not be the case. Indeed, 
+		// getting this bit of logic right will be a partnership between
+		// myself and all other groups.
+		
+		// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L78">		ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L79">		order.add(&quot;982&quot;);</span>
+<span class="nc" id="L80">		order.add(player1);</span>
+<span class="nc" id="L81">		order.add(player2);</span>
+		
+		// request creation of game window. Will start in locked mode.
+<span class="nc" id="L84">		assertTrue (gm.createGameWindow(tableID, me, options, gameOptions, order, players, sample));</span>
+		
+		// extract constructed info.
+<span class="nc" id="L87">		info = (WordstealGameInformation) gm.frame.getGameInformation();</span>
+<span class="nc" id="L88">		MainJPanel mjp = (MainJPanel) info.getGameContainer();</span>
+<span class="nc" id="L89">		game = mjp.getGame();</span>
+<span class="nc" id="L90">	}</span>
+	
+	protected void tearDown() {
+<span class="nc" id="L93">		gm.frame.setVisible(false);</span>
+<span class="nc" id="L94">		gm.frame.dispose();</span>
+<span class="nc" id="L95">	}</span>
+	
+	/**
+	 * Test a sample game.
+	 * 
+	 * Using seed '1234' 
+	 */
+	public void testSample() {
+		
+		// me (0) starts as moderator
+<span class="nc" id="L105">		gm.activateTurn(me); </span>
+<span class="nc" id="L106">		assertEquals (3, info.players.size());</span>
+		//assertEquals (0, game.getCurrentPlayer()); 
+
+		// me: manually skip turn
+<span class="nc" id="L110">		new SkipSelfTurnController((IWordstealApp) info.getGameContainer()).process((WordstealGameInformation)gm.frame.info, sample);</span>
+		
+		// assert message retrieved ONLY for our turn.
+<span class="nc" id="L113">		String s = sample.dequeue();</span>
+<span class="nc" id="L114">		assertTrue (sample.isSkip(s));</span>
+		
+		// we have advanced 
+		//assertEquals (1, game.getCurrentPlayer()); 
+		
+		// player1: place initial SHOE
+<span class="nc" id="L120">		assertTrue (gm.makeTurn(player1, &quot;(6/8)=E,(6/7)=O,(6/6)=H&quot;));</span>
+		
+		// player 2 turn
+<span class="nc" id="L123">		place(&quot;S&quot;, new BoardLocation(6, 9));</span>
+<span class="nc" id="L124">		place(&quot;A&quot;, new BoardLocation(5, 9));</span>
+<span class="nc" id="L125">		place(&quot;H&quot;, new BoardLocation(7, 9));</span>
+		
+		// now issue move. This should fail because of noS
+<span class="nc" id="L128">		assertFalse (new SubmitWordController((IWordstealApp) info.getGameContainer()).process(info, sample));</span>
+		
+		// player1: the above has advanced turn as well as reset timer
+		//assertEquals (2, game.getCurrentPlayer());
+<span class="nc" id="L132">		assertTrue (gm.makeTurn(player1, &quot;(6/5)=S,(5/5)=A,(7/5)=H&quot;));</span>
+		
+		// me: back to original player. We manually activate just as would be done
+		// in live version. Note that because we use makeTurn there is no subsequent
+		// turn message emitted.
+		//assertEquals (0, game.getCurrentPlayer());
+<span class="nc" id="L138">		gm.activateTurn(me); </span>
+<span class="nc" id="L139">		gm.makeTurn(me, &quot;(5/8)=I,(4/8)=L&quot;);</span>
+		
+		// player1: now player1 turn
+		//assertEquals (1, game.getCurrentPlayer());
+
+		// player1: Instead, let's interrupt and state that player2 
+<span class="nc" id="L145">		gm.requestLeave(player2);</span>
+		
+		// player1: this doesn't affect total number of people on the game.
+<span class="nc" id="L148">		assertEquals (2, info.players.size());</span>
+		
+		// player1: player2 is now inactive
+<span class="nc" id="L151">		assertTrue (game.isInactive(2));</span>
+		
+		// player1: skip turn
+<span class="nc" id="L154">		assertTrue(gm.skipTurn(player1));</span>
+		
+		// now moved on over to me (skipping now defunct player2).
+		//assertEquals (0, game.getCurrentPlayer());
+<span class="nc" id="L158">		gm.activateTurn(me); </span>
+
+		// this makes a bunch of simply invalid moves
+
+<span class="nc" id="L162">		place(&quot;U&quot;, new BoardLocation(6, 10));</span>
+<span class="nc" id="L163">		place(&quot;O&quot;, new BoardLocation(7, 10));</span>
+<span class="nc" id="L164">		place(&quot;A&quot;, new BoardLocation(8, 10));</span>
+		
+		// now issue move. This should fail because of noS
+<span class="nc" id="L167">		assertFalse (new SubmitWordController((IWordstealApp) info.getGameContainer()).process(info, sample));</span>
+<span class="nc" id="L168">	}</span>
+
+	private void place(String letter, BoardLocation location) {
+<span class="nc" id="L171">		Board b = game.getBoard();</span>
+<span class="nc" id="L172">		Rack r = game.getRack();</span>
+<span class="nc" id="L173">		ArrayList&lt;Tile&gt; tiles = r.getTiles();</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">		for (Tile t : tiles) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">			if (t.letter.equals(letter)) {</span>
+				
+<span class="nc" id="L177">				Cell cell = b.getCell(location);</span>
+<span class="nc" id="L178">				cell.setTile(t);</span>
+					
+<span class="nc" id="L180">				RackTileLocation rackLocation = new RackTileLocation(r.getTiles().indexOf(t), r);</span>
+<span class="nc" id="L181">				TileMovement movement = new TileMovement(rackLocation, rackLocation);</span>
+				
+<span class="nc" id="L183">				game.getUndoManager().pushMovement(movement);</span>
+<span class="nc" id="L184">				r.removeTile(t);</span>
+<span class="nc" id="L185">				break;</span>
+			}
+		}
+<span class="nc" id="L188">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestRegisterButtonController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.lobby</a> &gt; <span class="el_source">TestRegisterButtonController.java</span></div><h1>TestRegisterButtonController.java</h1><pre class="source lang-java linenums">package ks.client.lobby;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.w3c.dom.Document;
+
+import arch.MyLobbyInitialization;
+import junit.framework.TestCase;
+import ks.client.controllers.DisconnectController;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.client.ipc.Client;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.server.ipc.Server;
+
+/** Validate controller works as expected. */
+<span class="nc" id="L22">public class TestRegisterButtonController extends TestCase {</span>
+
+	ILobbyInitialize init;
+	ConnectFrame cf;
+	Server server;
+	JPanel tempUserManagerGUI;
+	JPanel tempTableManagerGUI;
+	
+	protected void setUp() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L33">			assertTrue (Configure.configure());</span>
+			
+			// validate a simple tables
+<span class="nc" id="L36">			String s = Message.requestHeader() + &quot;&lt;tables/&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L37">			Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">			assertTrue (d != null);</span>
+			
+<span class="nc" id="L40">		} catch (Exception e) {</span>
+<span class="nc" id="L41">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+		
+		// standard 7878
+<span class="nc" id="L45">		server = new Server();</span>
+<span class="nc" id="L46">		server.activate();</span>
+		
+		// create mock-User manager now outside. You should replace with 
+		// the appropriate class construction on your end.
+<span class="nc" id="L50">		 tempUserManagerGUI = new JPanel();</span>
+<span class="nc" id="L51">		JLabel jLabel = new JLabel();</span>
+<span class="nc" id="L52">		jLabel.setText(&quot;UMGUI To Be Inserted&quot;);</span>
+<span class="nc" id="L53">		tempUserManagerGUI.setLayout(new FlowLayout());</span>
+<span class="nc" id="L54">		tempUserManagerGUI.add(jLabel, null);</span>
+		
+		// create mock-Table manager now outside. You should replace with 
+		// the appropriate class construction on your end.
+<span class="nc" id="L58">		 tempTableManagerGUI = new JPanel();</span>
+<span class="nc" id="L59">		JLabel jLabel1 = new JLabel();</span>
+<span class="nc" id="L60">		jLabel1.setText(&quot;TMGUI To Be Inserted&quot;);</span>
+<span class="nc" id="L61">		tempTableManagerGUI.setLayout(new FlowLayout());</span>
+<span class="nc" id="L62">		tempTableManagerGUI.add(jLabel1, null);</span>
+				
+		// initialization callback. Client-side groups can pass in 
+		// an object that provides this interface into the ConnectFrame
+		// constructor and it will be called at the proper time.
+<span class="nc" id="L67">		init = new MyLobbyInitialization(tempTableManagerGUI, tempUserManagerGUI);</span>
+<span class="nc" id="L68">		cf = new ConnectFrame(init);</span>
+<span class="nc" id="L69">	}</span>
+	
+	protected void tearDown() {
+<span class="nc" id="L72">		server.deactivate();</span>
+<span class="nc" id="L73">	}</span>
+	
+	// helper function to sleep for a second.
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="nc" id="L79">			Thread.sleep(1000);</span>
+<span class="nc" id="L80">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="nc" id="L83">	}</span>
+	
+	// this test cases assumes that the default server can launch
+	// cleanly. Note that if you have left a server running by mistake
+	// then this test case will fail.
+	public void testProcess() {
+<span class="nc" id="L89">		String password = &quot;xxyyzz&quot;;</span>
+<span class="nc" id="L90">		cf.getRegisterPassText().setText(password);</span>
+<span class="nc" id="L91">		cf.getRegisterConfirmPassText().setText(password);</span>
+	
+<span class="nc" id="L93">		ILobby lobby = new RegisterButtonController(cf).process(init);</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		assertTrue (lobby != null);</span>
+		
+<span class="nc" id="L96">		waitASecond();</span>
+		
+		// make sure our GUIs are in place
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		assertTrue (tempTableManagerGUI == lobby.getTableManagerGUI());</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">		assertTrue (tempUserManagerGUI == lobby.getUserManagerGUI());</span>
+		
+		// who are we?
+<span class="nc" id="L103">		String who = lobby.getContext().getUser();</span>
+<span class="nc" id="L104">		System.out.println(&quot;registered &quot; + who);</span>
+		
+		//validate password is the hashed version.
+<span class="nc" id="L107">		String hash = Client.sha1(password);</span>
+<span class="nc" id="L108">		assertEquals (hash, lobby.getContext().getPassword());</span>
+		
+		// validate server has someone
+<span class="nc" id="L111">		Communicator c = server.getCommunicator();</span>
+<span class="nc" id="L112">		assertTrue (c.isOnline(who));</span>
+		
+		// request log out from client.
+<span class="nc" id="L115">		new DisconnectController(lobby).process(lobby.getContext());</span>
+		
+<span class="nc" id="L117">		waitASecond();</span>
+<span class="nc" id="L118">		assertFalse (c.isOnline(who));</span>
+		
+<span class="nc" id="L120">		((LobbyFrame) lobby).setVisible(false);</span>
+<span class="nc" id="L121">		((LobbyFrame) lobby).dispose();</span>
+<span class="nc" id="L122">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

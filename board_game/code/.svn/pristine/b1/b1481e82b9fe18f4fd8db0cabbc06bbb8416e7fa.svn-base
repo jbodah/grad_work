@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>UserContext.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client</a> &gt; <span class="el_source">UserContext.java</span></div><h1>UserContext.java</h1><pre class="source lang-java linenums">package ks.client;
+
+import ks.client.ipc.Client;
+import ks.server.ipc.Server;
+
+/**
+ * Records information about the user and machine to which the KombatGames
+ * is being connected.
+ * &lt;p&gt;
+ * This class also stores a reference to the actual {@link Client} object which
+ * manages the communication with the server. This enables us to have multiple
+ * client connection objects, which will help during testing.
+ * &lt;p&gt;
+ * This class will contain references to the key Managers on the client which will
+ * enable two things. First, it will make it possible to rapidly find the appropriate
+ * manager from within a controller. Second, it will do so in such a way that allows
+ * us during testing to start up multiple clients so we can test our code. That is,
+ * instead of using a Singleton Design pattern (where in the same test case all clients
+ * would otherwise be sharing the same manager) we can ensure that each individually
+ * connected client will have its own set of managers. 
+ * 
+ * @author George Heineman
+ */
+public class UserContext {
+
+	/** Machine. */
+<span class="fc" id="L27">	String host = &quot;localhost&quot;;</span>
+	
+	/** Port. */
+<span class="fc" id="L30">	int port = Server.defaultPort;</span>
+	
+	/** User info. */
+	String user;
+	
+	/** User password. */
+	String pass;
+	
+	/** Client object which manages all communication with remote server. */
+	Client client;
+	
+	/** Whether this context was initiated anew by a brand new user. */
+<span class="fc" id="L42">	boolean selfRegister = false;</span>
+	
+	/** The IconManager for this client connection. */
+	//final IconManager iconManager;
+	
+<span class="fc" id="L47">	public UserContext() { </span>
+		
+		// extend as necessary with other managers.
+		//this.iconManager = new IconManager();
+<span class="fc" id="L51">	}</span>
+	
+<span class="fc" id="L53">	public String getUser() { return user; }</span>
+<span class="fc" id="L54">	public void setUser(String u) { user = u; }</span>
+	
+<span class="fc" id="L56">	public String getPassword() { return pass; }</span>
+<span class="fc" id="L57">	public void setPassword(String p) { pass = p; }</span>
+	
+<span class="fc" id="L59">	public String getHost() { return host; }</span>
+<span class="nc" id="L60">	public void setHost (String h) { host = h; }</span>
+	
+<span class="fc" id="L62">	public int getPort () { return port; }</span>
+<span class="fc" id="L63">	public void setPort (int p) { port = p; }</span>
+	
+<span class="fc" id="L65">	public Client getClient() { return client; }</span>
+<span class="fc" id="L66">	public void setClient (Client c) { client = c; }</span>
+	
+<span class="fc" id="L68">	public boolean getSelfRegister() { return selfRegister; }</span>
+<span class="fc" id="L69">	public void setSelfRegister(boolean b) { selfRegister = b; }</span>
+	
+	// Extend as necessary to retrieve managers.
+	//public IconManager getIconManager() { return iconManager; }
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

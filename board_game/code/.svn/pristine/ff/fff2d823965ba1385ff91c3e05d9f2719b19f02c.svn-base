@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Message.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.framework.common</a> &gt; <span class="el_source">Message.java</span></div><h1>Message.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package ks.framework.common;</span>
+
+import java.io.IOException;
+import java.io.StringReader;
+import java.net.URL;
+import java.util.UUID;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.sax.SAXSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
+import ks.framework.debug.Debug;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+/**
+ * Wrapper class for an XML Document that conforms to a schema 
+ * document configured at run-time.
+ * &lt;p&gt;
+ * The configuration is allowed only once and must be done before
+ * any messages are constructed. 
+ * &lt;p&gt;
+ * The full set of commands, requests and adminCommands can be 
+ * found at http://www.wpi.edu/~heineman/xml.
+ * &lt;p&gt;
+ * One could envision writing a series of subclasses, each representing
+ * the different types of messages, requests and adminCommands. For now,
+ * however, I am taking the lightweight approach and expecting that
+ * the user of this class will be able to do the requisite XML
+ * parsing to retrieve the desired information.
+ * &lt;p&gt;
+ * Every Message is from a specific user and is intended to be sent
+ * to a specific user. 
+ * &lt;p&gt;
+ * If the message is to be broadcast, then it can be so marked. 
+ * &lt;p&gt;
+ * A Message is serializable to ensure transport over the network.
+ * 
+ * @author George Heineman
+ */
+<span class="fc" id="L51">public class Message implements java.io.Serializable {</span>
+	/**
+	 * Serialization ID for consistency through upgrades.
+	 */
+	private static final long serialVersionUID = 3759474912651841363L;
+
+	/**
+	 * Message protocol versioning scheme.
+	 */
+<span class="fc" id="L60">	private static String protocolVersion = &quot;1.0&quot;;</span>
+	
+	/** Tag used to validate the XML fragment. From ks.xsd schema. */
+	public static final String xsiString = &quot;xsi:noNamespaceSchemaLocation&quot;;
+	
+	/** Valid schema definition. */
+<span class="fc" id="L66">	private static String xsdNameString = null;</span>
+	
+	/** URL for this schema. */
+<span class="fc" id="L69">	private static URL xsdURL = null;</span>
+	
+	/** Parent URL for this schema (as a string). */
+<span class="fc" id="L72">	private static String xsdParent = null;</span>
+	
+	/** Version tag name. */
+	public static final String versionTAG = &quot;version&quot;;
+	
+	/** ID tag name. */
+	public static final String idTAG = &quot;id&quot;;
+	
+	/** Success tag name. */
+	public static final String successTAG = &quot;success&quot;;
+	
+	/** Reason tag name. */
+	public static final String reasonTAG = &quot;reason&quot;;
+	
+	/** 
+	 * Singleton Schema to be used for all message processing.
+	 * &lt;p&gt;
+	 * Lazy evaluation. Only created when needed. */
+	private static Schema schema; 
+	
+	/** Validator for XML documents. Constructed as needed. */
+<span class="fc" id="L93">	private static Validator validator = null;</span>
+	
+	/** Determine whether initialization must be performed (in lazy evaluation). */
+<span class="fc" id="L96">	private static boolean initialized = false;</span>
+	
+	/** Builder to use when constructing Message objects. */
+<span class="fc" id="L99">	private static DocumentBuilder builder = null;</span>
+	
+	/** Type of this message. */
+	public final MessageType type;
+	
+	/** Contents of this message. */
+	final Node contents;
+	
+	/** Name of this command, request of adminCommand. */
+	public final String name; 
+	
+	/** Version or protocol being spoken by message. */
+	public final String version;
+	
+	/** If no version, then value defaults to this one. */
+<span class="fc" id="L114">	public final String versionUnknown = &quot;0.0&quot;;</span>
+	
+	/** If no id, then ID value defaults to this one. */
+<span class="fc" id="L117">	public final String idUnknown = &quot;0&quot;;</span>
+	
+	/** Standard fragment trailer. */
+	public static final String fragTrailer = &quot;&lt;/message&gt;&quot;;
+
+	/** Standard fragment header (can be determined once xsd* variables are set. */
+	public static String fragHeader;
+
+	
+	/** 
+	 * ID of message. While not unique globally, may be used within client
+	 * to correlate a request with a command. 
+	 */
+	public final String id;
+	
+	/** Success of message, if a response. */
+	public final boolean success;
+	
+	/** Reason, if response. */
+	public final String reason;
+	
+	/** Is this a broadcast message? */
+<span class="fc" id="L139">	boolean broadcast = false;</span>
+	
+	/** The originator of the message. */
+<span class="fc" id="L142">	String originator = null; </span>
+	
+	/** The recipient of the message. */
+<span class="fc" id="L145">	String recipient = null;</span>
+	
+	/** 
+	 * Configure Message class to know of XSD schema definition file.
+	 * &lt;p&gt;
+	 * Note that URL should have at least a '/' in its path, but
+	 * this should be acceptable.
+	 * 
+	 * If called multiple times, an {@link IllegalStateException} is raised.
+	 * 
+	 * @param name    name of xsd file
+	 * @param xsd     URL to the xsd file 
+	 */
+	public static void configure (String name, URL xsd) throws IllegalStateException {
+<span class="fc bfc" id="L159" title="All 2 branches covered.">		if (xsdURL != null) {</span>
+<span class="pc bpc" id="L160" title="1 of 2 branches missed.">			if (xsdURL.equals(xsd)) {</span>
+				// already done. Note that above equals method is COSTLY!
+<span class="fc" id="L162">				return;</span>
+			}
+<span class="nc" id="L164">			throw new IllegalStateException(&quot;Message already configured to use:&quot; + xsdURL);</span>
+		}
+		
+<span class="fc" id="L167">		xsdNameString = name;</span>
+<span class="fc" id="L168">		String s = xsd.getPath();</span>
+<span class="fc" id="L169">		int idx = s.lastIndexOf('/');  // go back one level</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">		if (idx == -1) { idx = s.length(); }</span>
+<span class="fc" id="L171">		xsdParent = s.substring(0,idx);</span>
+<span class="fc" id="L172">		xsdURL = xsd;</span>
+		
+<span class="fc" id="L174">		setFragmentHeader();</span>
+<span class="fc" id="L175">	}</span>
+	
+	// helper method to enable testing to work properly by unconfiguring
+	// what once was configured.
+	public static void unconfigure() {
+<span class="fc" id="L180">		xsdNameString = null;</span>
+<span class="fc" id="L181">		xsdURL = null;</span>
+<span class="fc" id="L182">		xsdParent = null;</span>
+<span class="fc" id="L183">		setFragmentHeader();</span>
+<span class="fc" id="L184">	}</span>
+	
+	
+	private static void setFragmentHeader() {
+<span class="fc" id="L188">		 fragHeader = new String(</span>
+<span class="fc" id="L189">					&quot;&lt;?xml version=\&quot;&quot; + protocolVersion + &quot;\&quot; encoding=\&quot;UTF-8\&quot;?&gt;\n&quot; +</span>
+<span class="fc" id="L190">					&quot;&lt;message xmlns:xsi=\&quot;http://www.w3.org/2001/XMLSchema-instance\&quot; \n&quot; +</span>
+<span class="fc" id="L191">					&quot;xsi:schemaLocation='&quot; + xsdParent + &quot; \n&quot; + xsdURL + &quot;'\n&quot; +</span>
+<span class="fc" id="L192">		            &quot;xsi:noNamespaceSchemaLocation='&quot; + xsdNameString + &quot;'&gt;&quot;);	</span>
+<span class="fc" id="L193">	}</span>
+	
+	/** Helper enumerated type to keep track of the types of messages. */
+<span class="fc" id="L196">	public enum MessageType {</span>
+<span class="fc" id="L197">		Unknown(&quot;Unknown&quot;),</span>
+<span class="fc" id="L198">		Request(&quot;Request&quot;),</span>
+<span class="fc" id="L199">		Response(&quot;Response&quot;);</span>
+		
+		/** Record string information of the type, for toString(). */
+		private String type;
+		
+		/** Record the type. */
+<span class="fc" id="L205">		private MessageType (String type) {</span>
+<span class="fc" id="L206">			this.type = type;</span>
+<span class="fc" id="L207">		}</span>
+		
+		/** Helper method to output String representation of type. */
+		public String toString () {
+<span class="fc" id="L211">			return type;</span>
+		}
+		
+		/** Method to easily compare against constants or other strings. */
+		public boolean same (Object o) {
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">            if (o == null) { return false; }</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if (o instanceof MessageType) {</span>
+<span class="nc bnc" id="L218" title="All 2 branches missed.">                return this == ((MessageType) o);</span>
+            }
+
+            // compare strings?
+<span class="fc" id="L222">            return (this.toString().equalsIgnoreCase(o.toString()));</span>
+        }
+	}
+	
+	private static Schema compileSchema(URL schema) throws SAXException {
+		//Get the SchemaFactory instance which understands W3C XML Schema language
+<span class="fc" id="L228">		SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);</span>
+		
+<span class="fc" id="L230">		return sf.newSchema(schema);</span>
+	}
+
+	private static boolean initialize() {
+		try {
+			// parse schema first, see compileSchema function to see how Schema object is obtained.
+<span class="fc" id="L236">			schema = compileSchema(xsdURL);</span>
+	
+			// this &quot;Schema&quot; object is used to create &quot;Validator&quot; which
+			// can be used to validate instance document against the schema
+			// or set of schemas &quot;Schema&quot; object represents.
+<span class="fc" id="L241">			validator = schema.newValidator();</span>
+			
+			// set ErrorHandle on this validator
+<span class="fc" id="L244">			validator.setErrorHandler(new MyErrorHandler());</span>
+
+            // now show how to access its information
+<span class="fc" id="L247">            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();</span>
+<span class="fc" id="L248">            builder = factory.newDocumentBuilder();</span>
+           
+<span class="fc" id="L250">			initialized = true;</span>
+<span class="nc" id="L251">		} catch (Exception e) {</span>
+<span class="nc" id="L252">			initialized = false;</span>
+		}
+		
+<span class="fc" id="L255">		return initialized;</span>
+	}
+	
+	/**
+	 * If the contents node has an Element child, this fetches the first Node
+	 * object and returns it.
+	 * 
+	 * The first child is the actual command, request or admin-command
+	 * 
+	 * @return  Node which represents command, request or admin-command.
+	 */
+	public Node contentsChild() {
+		
+<span class="nc" id="L268">        NodeList children = contents.getChildNodes();</span>
+<span class="nc bnc" id="L269" title="All 2 branches missed.">        for (int i = 0; i &lt; children.getLength(); i++) {</span>
+<span class="nc" id="L270">            Node n = children.item(i);</span>
+
+<span class="nc bnc" id="L272" title="All 2 branches missed.">            if (n.getNodeType() == Node.ELEMENT_NODE) {</span>
+<span class="nc" id="L273">            	return n;</span>
+            }
+        }
+        
+<span class="nc" id="L277">        return null;</span>
+	}
+	
+	/**
+	 * Return Document object that contains the Message as scanned.
+	 * &lt;p&gt;
+	 * Make method synchronized since parse() is not thread safe.
+	 * Thus we ensure serialized access to the parsing routines.
+	 * 
+	 * @param    contents   the XML fragment to be encapsulated within a Message. 
+	 * @return   Document object representing the Message or null if an error
+	 *           occurs; also dump stack trace on error.
+	 */
+	public static synchronized Document construct (String contents) {
+<span class="fc" id="L291">		Debug.println (&quot;constructing:&quot; + contents);</span>
+		
+<span class="fc bfc" id="L293" title="All 2 branches covered.">		if (!initialized) { </span>
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">			if (!initialize()) { return null; }</span>
+		}
+		
+		// HACK: TODO: FIX HERE
+		
+		try {
+<span class="fc" id="L300">			StringBuilder combined = new StringBuilder(fragHeader);</span>
+<span class="fc" id="L301">			combined.append(contents).append(fragTrailer);</span>
+<span class="fc" id="L302">			InputSource is = new InputSource (new StringReader (combined.toString()));</span>
+			
+			// validate
+<span class="fc" id="L305">			validator.validate (new SAXSource (is));</span>
+			
+			// now reopen and parse
+<span class="fc" id="L308">			is = new InputSource (new StringReader (combined.toString()));</span>
+<span class="fc" id="L309">			return builder.parse(is);</span>
+<span class="nc" id="L310">		} catch (SAXException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L312">			e.printStackTrace();</span>
+<span class="nc" id="L313">		} catch (IOException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L315">			e.printStackTrace();</span>
+		}
+		
+<span class="nc" id="L318">		return null;</span>
+	}
+	
+	/**
+	 * Validates on construction.
+	 * 
+	 * @param doc
+	 * @exception if doc isn't an XML fragment from the ks.xsd schema
+	 */
+<span class="fc" id="L327">	public Message (Document doc)  {</span>
+		try {
+<span class="fc" id="L329">			Element msg = doc.getDocumentElement();</span>
+<span class="fc" id="L330">	        NamedNodeMap nnm = msg.getAttributes();</span>
+	        
+<span class="fc" id="L332">	        Node xsi = nnm.getNamedItem(xsiString);</span>
+	
+	        // must be ks.xsd
+<span class="fc" id="L335">	        String s = xsi.getNodeValue();</span>
+<span class="pc bpc" id="L336" title="2 of 4 branches missed.">	        if (s == null || !s.equals (xsdNameString)) {</span>
+<span class="nc" id="L337">	        	throw new RuntimeException (&quot;Message received XML fragment (&quot; + s + &quot;) not validated by&quot; + xsdNameString);</span>
+	        }
+	        
+            // since we have done some work, record the type of message
+<span class="fc" id="L341">            MessageType t = MessageType.Unknown;</span>
+<span class="fc" id="L342">            Node c = null;</span>
+<span class="fc" id="L343">            NodeList children = msg.getChildNodes();</span>
+<span class="fc bfc" id="L344" title="All 2 branches covered.">            for (int i = 0; i &lt; children.getLength(); i++) {</span>
+<span class="fc" id="L345">                Node n = children.item(i);</span>
+
+<span class="fc" id="L347">                String name = n.getNodeName();</span>
+<span class="fc bfc" id="L348" title="All 2 branches covered.">                 if (MessageType.Request.same(name)) {</span>
+<span class="fc" id="L349">                    t = MessageType.Request;</span>
+<span class="fc" id="L350">                    c = n;</span>
+<span class="pc bpc" id="L351" title="1 of 2 branches missed.">                } else if (MessageType.Response.same(name)) {</span>
+<span class="fc" id="L352">                	t = MessageType.Response;</span>
+<span class="fc" id="L353">                	c = n;</span>
+                }
+            }
+
+<span class="pc bpc" id="L357" title="1 of 2 branches missed.">            if (t == MessageType.Unknown) {</span>
+<span class="nc" id="L358">                throw new RuntimeException (&quot;Message is still of unknown type somehow.&quot;);</span>
+            }
+	        
+            // get version and ID for message
+<span class="fc" id="L362">            NamedNodeMap nnmc = c.getAttributes();</span>
+<span class="fc" id="L363">            Node nv = nnmc.getNamedItem(versionTAG);</span>
+<span class="pc bpc" id="L364" title="1 of 2 branches missed.">            if (nv != null) {</span>
+<span class="fc" id="L365">            	this.version = nv.getNodeValue();</span>
+            } else {
+<span class="nc" id="L367">            	this.version = versionUnknown;</span>
+            }
+<span class="fc" id="L369">            Node ni = nnmc.getNamedItem(idTAG);</span>
+<span class="pc bpc" id="L370" title="1 of 2 branches missed.">            if (ni != null) {</span>
+<span class="fc" id="L371">            	this.id = ni.getNodeValue();</span>
+            } else {
+<span class="nc" id="L373">            	this.id = idUnknown;</span>
+            }
+            
+<span class="fc" id="L376">            Node ns = nnmc.getNamedItem(successTAG);</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">            if (ns != null) {</span>
+<span class="fc" id="L378">            	this.success = Boolean.valueOf(ns.getNodeValue());</span>
+            } else {
+<span class="fc" id="L380">            	this.success = true; // default to this </span>
+            }
+            
+<span class="fc" id="L383">            Node nr = nnmc.getNamedItem(reasonTAG);</span>
+<span class="pc bpc" id="L384" title="1 of 2 branches missed.">            if (nr != null) {</span>
+<span class="nc" id="L385">            	this.reason = nr.getNodeValue();</span>
+            } else {
+<span class="fc" id="L387">            	this.reason = &quot;&quot;;</span>
+            }
+            
+	        // Finally! Retrieve the name of the enclosed content type.
+<span class="fc" id="L391">	        children = c.getChildNodes();</span>
+<span class="fc" id="L392">	        String name = null;</span>
+<span class="fc" id="L393">	        Node n = null;</span>
+<span class="pc bpc" id="L394" title="1 of 2 branches missed.">	        for (int i = 0; i &lt; children.getLength(); i++) {</span>
+<span class="fc" id="L395">	        	n = children.item(i);</span>
+	        	
+	        	// found it! There shall be only one
+<span class="fc bfc" id="L398" title="All 2 branches covered.">	        	if (n.getNodeType() == Node.ELEMENT_NODE) {</span>
+<span class="fc" id="L399">	        		name = n.getNodeName();</span>
+<span class="fc" id="L400">	        		break;</span>
+	        	}
+	        }
+	        
+	        // set all final fields.
+<span class="fc" id="L405">	        this.type = t;</span>
+<span class="fc" id="L406">	        this.name = name;</span>
+<span class="fc" id="L407">	        this.contents = n;</span>
+<span class="nc" id="L408">		} catch (Exception e) {</span>
+<span class="nc" id="L409">			e.printStackTrace();</span>
+<span class="nc" id="L410">			throw new RuntimeException (&quot;Message received XML fragment not validated by &quot; + xsdNameString);</span>
+		}
+<span class="fc" id="L412">	}</span>
+	
+	/** Return the contents of this message. */
+	public Node contents() {
+<span class="fc" id="L416">		return contents;</span>
+	}
+	
+	/** Return the name of command, request or adminCommand. */
+	public String getName() {
+<span class="fc" id="L421">		return name;</span>
+	}
+	
+	/**
+	 * Is this a request message?
+	 */
+	public boolean isRequest() { 
+<span class="nc bnc" id="L428" title="All 2 branches missed.">		return (type == MessageType.Request);</span>
+	}
+	
+	/**
+	 * Is this a response message?
+	 */
+	public boolean isResponse() { 
+<span class="nc bnc" id="L435" title="All 2 branches missed.">		return (type == MessageType.Response);</span>
+	}
+	
+	/**
+	 * Is this a response successful.
+	 * 
+	 * Note: if this message is not a response at all, false is returned so please
+	 * call {@link #isResponse()} first if you are unsure.
+	 */
+	public boolean getResponseSuccess() {
+<span class="nc bnc" id="L445" title="All 2 branches missed.">		if (type != MessageType.Response) {</span>
+<span class="nc" id="L446">			System.err.println(&quot;Invalid attempt to call getResponseSuccess on a non-response&quot;);</span>
+<span class="nc" id="L447">			return false;</span>
+		}
+		
+<span class="nc" id="L450">		return (success);</span>
+	}
+	
+	/** Determine the originator of the message. */
+	public void setOriginator (String name) {
+<span class="nc" id="L455">		this.originator = name;</span>
+<span class="nc" id="L456">	}</span>
+	
+	/** Retrieve the originator of the message. */
+	public String getOriginator () {
+<span class="nc" id="L460">		return originator;</span>
+	}
+	
+	/**
+	 * Determine the intended recipient of the message.
+	 * &lt;p&gt;
+	 * If one wishes a message to be broadcast, use the 
+	 * setBroadcast() message.
+	 */
+	public void setRecipient (String name) {
+<span class="nc" id="L470">		recipient = name;</span>
+<span class="nc" id="L471">		broadcast = false;</span>
+<span class="nc" id="L472">	}</span>
+	
+	/**
+	 * Assign the message to be broadcast.
+	 * &lt;p&gt;
+	 * If one wishes a message to be sent to a single recipient, use
+	 * the setRecipient(String) method. This method has no impact on
+	 * the recipient field.
+	 */
+	public void setBroadcast() {
+<span class="nc" id="L482">		broadcast = true;</span>
+<span class="nc" id="L483">	}</span>
+	
+	/** Is this message to be broadcast? */
+	public boolean isBroadcast() {
+<span class="nc" id="L487">		return broadcast;</span>
+	}
+
+	
+	/** Return the recipient (or null if a broadcast message). */
+	public String getRecipient() {
+<span class="nc" id="L493">		return recipient;</span>
+	}
+	
+	public String toString () {
+<span class="fc" id="L497">		return &quot;Message[&quot; + type + &quot;] &quot; + name;</span>
+	}
+
+	/**
+	 * Helper method to retrieve the string value associated with the 
+	 * given attribute. If the attribute does not exist, then null is 
+	 * returned.
+	 * 
+	 * @param string   desired attribute to retrieve
+	 */
+	public String getAttribute(String string) {
+<span class="nc" id="L508">		 NamedNodeMap atts = contents.getAttributes();</span>
+<span class="nc" id="L509">		 Node att = atts.getNamedItem(string);</span>
+<span class="nc bnc" id="L510" title="All 2 branches missed.">		 if (att == null) { return null; }</span>
+		 
+<span class="nc" id="L512">		 return att.getNodeValue();</span>
+	}
+
+	/** 
+	 * Generate response header with unique message id.
+	 * 
+	 */
+	public static String responseHeader(boolean success) {
+<span class="fc" id="L520">		String id = UUID.randomUUID().toString();</span>
+<span class="fc" id="L521">		return responseHeader (success, id);</span>
+	}
+	
+	/** 
+	 * Generate response header using given is as the message id.
+	 * 
+	 * @param success  true for successful response; false otherwise.
+	 * @param id    message to which this response is generated.
+	 */
+	public static String responseHeader(boolean success, String id) {
+<span class="fc" id="L531">		return &quot;&lt;response version='&quot; + protocolVersion + &quot;' id='&quot; + id + &quot;' success='&quot; + success + &quot;'&gt;&quot;;</span>
+	}
+
+	/** 
+	 * Generate response header using given is as the message id and specific reason.
+	 * 
+	 * @param success  true for successful response; false otherwise.
+	 * @param id       message to which this response is generated.
+	 * @param reason   failure (or success) reason to include with the message
+	 */
+	public static String responseHeader(boolean success, String id, String reason) {
+<span class="nc" id="L542">		return &quot;&lt;response version='&quot; + protocolVersion + &quot;' id='&quot; + id + &quot;' success='&quot; + success + &quot;' reason='&quot; + reason + &quot;'&gt;&quot;;</span>
+	}
+	
+	/**
+	 * Generate request header with unique message id.
+	 */
+	public static String requestHeader() {
+<span class="fc" id="L549">		String id = UUID.randomUUID().toString();</span>
+<span class="fc" id="L550">		return &quot;&lt;request version='&quot; + protocolVersion + &quot;' id='&quot; + id + &quot;'&gt;&quot;;</span>
+		
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

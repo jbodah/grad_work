@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestDeck.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.common.model</a> &gt; <span class="el_source">TestDeck.java</span></div><h1>TestDeck.java</h1><pre class="source lang-java linenums">package ks.common.model;
+
+import junit.framework.TestCase;
+
+// nothing much to test since logic is internalized.
+<span class="nc" id="L6">public class TestDeck extends TestCase {</span>
+
+	public void testConstruct() {
+<span class="nc" id="L9">		Deck d = new Deck(&quot;sample&quot;);</span>
+<span class="nc" id="L10">		d.create(97);</span>
+		
+<span class="nc" id="L12">		Deck d2 = new Deck(&quot;sample&quot;);</span>
+<span class="nc" id="L13">		d2.create(97);</span>
+		
+		// assert all cards are the same
+<span class="nc bnc" id="L16" title="All 2 branches missed.">		while (!d.empty()) {</span>
+<span class="nc" id="L17">			Card c = d.get();</span>
+<span class="nc" id="L18">			Card c2 = d2.get();</span>
+			
+<span class="nc" id="L20">			assertEquals (c, c2);</span>
+		}
+		
+<span class="nc" id="L23">		assertTrue (d2.empty());</span>
+<span class="nc" id="L24">	}</span>
+	
+	// however, there are two special deals: -1 (OrderByRank) and -2 (OrderBySuit)
+	public void testSpecial() {
+<span class="nc" id="L28">		Deck d = new Deck(&quot;sample&quot;);</span>
+<span class="nc" id="L29">		d.create(-1);</span>
+<span class="nc" id="L30">		assertEquals (52, d.count());</span>
+		
+		// get four and all same rank
+<span class="nc bnc" id="L33" title="All 2 branches missed.">		while (!d.empty()) {</span>
+<span class="nc" id="L34">			Card []cards = { d.get(), d.get(), d.get(), d.get() };</span>
+			
+<span class="nc bnc" id="L36" title="All 2 branches missed.">			for (int i=  1; i &lt; cards.length; i++) {</span>
+<span class="nc" id="L37">				assertTrue (cards[0].sameRank(cards[i]));</span>
+			}
+		}
+		
+<span class="nc" id="L41">		d = new Deck(&quot;sample&quot;);</span>
+<span class="nc" id="L42">		d.create(-2);</span>
+<span class="nc" id="L43">		assertEquals (52, d.count());</span>
+		
+		// get four and all same suit
+<span class="nc bnc" id="L46" title="All 2 branches missed.">		while (!d.empty()) {</span>
+<span class="nc" id="L47">			Card []cards = { d.get(), d.get(), d.get(), d.get(), d.get(), d.get(), d.get(), d.get(), d.get(), d.get(), d.get(), d.get(), d.get() };</span>
+			
+<span class="nc bnc" id="L49" title="All 2 branches missed.">			for (int i=  1; i &lt; cards.length; i++) {</span>
+<span class="nc" id="L50">				assertTrue (cards[0].sameSuit(cards[i]));</span>
+			}
+		}
+<span class="nc" id="L53">	}</span>
+	
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

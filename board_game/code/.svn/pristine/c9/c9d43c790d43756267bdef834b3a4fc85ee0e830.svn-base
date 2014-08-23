@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestSampleWordStealGame.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.game</a> &gt; <span class="el_source">TestSampleWordStealGame.java</span></div><h1>TestSampleWordStealGame.java</h1><pre class="source lang-java linenums">package ks.client.game;
+
+import java.util.ArrayList;
+import java.util.Properties;
+
+import wordsteal.boundaries.main.MainJPanel;
+import wordsteal.entities.Game;
+import wordsteal.interfaces.IWordstealApp;
+
+import junit.framework.TestCase;
+import ks.client.game.wordsteal.SkipSelfTurnController;
+import ks.client.game.wordsteal.WordstealGameInformation;
+
+<span class="nc" id="L14">public class TestSampleWordStealGame extends TestCase {</span>
+
+	GameManager gm;
+	
+<span class="nc" id="L18">	int tableID = 13;</span>
+<span class="nc" id="L19">	String me = &quot;982&quot;;</span>
+	Properties options;
+	Properties gameOptions;
+	Properties playerIDs;
+	SampleInterface sample;
+	
+<span class="nc" id="L25">	String player1 = &quot;1124&quot;;</span>
+<span class="nc" id="L26">	String player2 = &quot;997&quot;;</span>
+	
+	/** My info. */
+	WordstealGameInformation info;
+	
+	/** internal info. */
+	Game game;
+	
+	// create the wordsteal game/app
+	protected void setUp() {
+<span class="nc" id="L36">		gm = GameManager.instance();</span>
+<span class="nc" id="L37">		Properties options = new Properties();</span>
+		// default ones from message
+<span class="nc" id="L39">		options.setProperty(&quot;seed&quot;, &quot;1234&quot;);</span>
+<span class="nc" id="L40">		options.setProperty(&quot;game&quot;, &quot;wordsteal.Wordsteal&quot;);</span>
+	
+<span class="nc" id="L42">		sample = new SampleInterface();</span>
+		
+		// game specific ones for wordsteal variations. note
+		// that the pointsToWin of 4 means any word played of
+		// four or more letters will win the game.
+<span class="nc" id="L47">		Properties gameOptions = new Properties();</span>
+<span class="nc" id="L48">		gameOptions.setProperty(&quot;noS&quot;, &quot;false&quot;);</span>
+<span class="nc" id="L49">		gameOptions.setProperty(&quot;pink&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L50">		gameOptions.setProperty(&quot;turnTime&quot;, &quot;80&quot;);</span>
+		
+		// make score low enough that we can actually win a game, but
+		// high enough that we can try it out
+<span class="nc" id="L54">		gameOptions.setProperty(&quot;pointsToWin&quot;, &quot;10&quot;);</span>
+		
+		// player ids and real names (example where one has no real name)
+<span class="nc" id="L57">		Properties players = new Properties();</span>
+<span class="nc" id="L58">		players.setProperty(me,  &quot;George Heineman&quot;);</span>
+<span class="nc" id="L59">		players.setProperty(player1, &quot;Paul Simon&quot;);</span>
+<span class="nc" id="L60">		players.setProperty(player2,  &quot;&quot;);</span>
+		
+		// note that for the purpose of this demonstration, I am assuming
+		// that I am the moderator. This need not be the case. Indeed, 
+		// getting this bit of logic right will be a partnership between
+		// myself and all other groups.
+		
+		// forgot that Properties has no guaranteed ordering.
+<span class="nc" id="L68">		ArrayList&lt;String&gt; order = new ArrayList&lt;String&gt;();</span>
+<span class="nc" id="L69">		order.add(&quot;982&quot;);</span>
+<span class="nc" id="L70">		order.add(player1);</span>
+<span class="nc" id="L71">		order.add(player2);</span>
+		
+		// request creation of game window. Will start in locked mode.
+<span class="nc" id="L74">		assertTrue (gm.createGameWindow(tableID, me, options, gameOptions, order, players, sample));</span>
+		
+		// extract constructed info.
+<span class="nc" id="L77">		info = (WordstealGameInformation) gm.frame.getGameInformation();</span>
+<span class="nc" id="L78">		MainJPanel mjp = (MainJPanel) info.getGameContainer();</span>
+<span class="nc" id="L79">		game = mjp.getGame();</span>
+<span class="nc" id="L80">	}</span>
+	
+	protected void tearDown() {
+<span class="nc" id="L83">		gm.frame.setVisible(false);</span>
+<span class="nc" id="L84">		gm.frame.dispose();</span>
+<span class="nc" id="L85">	}</span>
+	
+	/**
+	 * Test a sample game.
+	 * 
+	 * Using seed '1234' 
+	 */
+	public void testSample() {
+		
+		// me (0) starts as moderator
+<span class="nc" id="L95">		gm.activateTurn(me); </span>
+<span class="nc" id="L96">		assertEquals (3, info.players.size());</span>
+		//assertEquals (0, game.getCurrentPlayer()); 
+
+		// me: manually skip turn
+<span class="nc" id="L100">		new SkipSelfTurnController((IWordstealApp) info.getGameContainer()).process((WordstealGameInformation)gm.frame.info, sample);</span>
+		
+		// assert message retrieved ONLY for our turn.
+<span class="nc" id="L103">		String s = sample.dequeue();</span>
+<span class="nc" id="L104">		assertTrue (sample.isSkip(s));</span>
+		
+		// we have advanced 
+		//assertEquals (1, game.getCurrentPlayer()); 
+		
+		// player1: place initial SHOE
+<span class="nc" id="L110">		assertTrue (gm.makeTurn(player1, &quot;(6/9)=E,(6/8)=O,(6/7)=H,(6/6)=S&quot;));</span>
+		
+		// player2: the above has advanced turn as well as reset timer
+		//assertEquals (2, game.getCurrentPlayer());
+<span class="nc" id="L114">		assertTrue (gm.makeTurn(player2, &quot;(5/5)=L,(5/7)=E,(5/6)=I&quot;));</span>
+		
+		// me: back to original player. We manually activate just as would be done
+		// in live version. Note that because we use makeTurn there is no subsequent
+		// turn message emitted.
+		//assertEquals (0, game.getCurrentPlayer());
+<span class="nc" id="L120">		gm.activateTurn(me); </span>
+<span class="nc" id="L121">		gm.makeTurn(me, &quot;(5/8)=N,(7/8)=R,(8/8)=T,(9/8)=H&quot;);</span>
+		
+		// player1: now player1 turn
+		//assertEquals (1, game.getCurrentPlayer());
+
+		// player1: Instead, let's interrupt and state that player2 
+<span class="nc" id="L127">		gm.requestLeave(player2);</span>
+		
+		// player size has dropped.
+<span class="nc" id="L130">		assertEquals (2, info.players.size());</span>
+		
+		// player1: player2 is now inactive
+<span class="nc" id="L133">		assertTrue (game.isInactive(2));</span>
+		
+		// player1: makes move
+<span class="nc" id="L136">		gm.makeTurn(player1, &quot;(6/10)=S,(7/10)=P,(8/10)=I,(9/10)=C,(10/10)=E&quot;);</span>
+		
+		// now moved on over to me (skipping now defunct player2).
+		//assertEquals (0, game.getCurrentPlayer());
+<span class="nc" id="L140">		gm.activateTurn(me); </span>
+<span class="nc" id="L141">		gm.makeTurn(me, &quot;(7/11)=E,(7/12)=A&quot;);</span>
+	
+		// play a PINK square and watch board erase.
+<span class="nc" id="L144">		gm.makeTurn(player1, &quot;(5/12)=O,(6/12)=V&quot;);</span>
+		
+<span class="nc" id="L146">		gm.activateTurn(me); </span>
+<span class="nc" id="L147">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

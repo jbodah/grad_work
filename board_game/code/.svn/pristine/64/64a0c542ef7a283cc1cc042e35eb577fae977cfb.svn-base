@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestConfigure.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.framework.common</a> &gt; <span class="el_source">TestConfigure.java</span></div><h1>TestConfigure.java</h1><pre class="source lang-java linenums">package ks.framework.common;
+
+import org.w3c.dom.Document;
+
+import junit.framework.TestCase;
+
+<span class="nc" id="L7">public class TestConfigure extends TestCase {</span>
+	
+	// guarantee local configuration works
+	public void testLocal() {
+<span class="nc" id="L11">		Message.unconfigure();</span>
+<span class="nc" id="L12">		assertTrue (Configure.configureLocal(&quot;ks.xsd&quot;));</span>
+<span class="nc" id="L13">	}</span>
+	
+	// guarantee local configuration works
+	public void testBadLocal() {
+<span class="nc" id="L17">		Message.unconfigure();</span>
+<span class="nc" id="L18">		assertFalse (Configure.configureLocal(&quot;ks-MISSING-MISSING.xsd&quot;));</span>
+<span class="nc" id="L19">	}</span>
+	
+	// guarantee URL configuration works
+	public void testInternet() {
+<span class="nc" id="L23">		Message.unconfigure();</span>
+<span class="nc" id="L24">		assertTrue (Configure.configure());</span>
+<span class="nc" id="L25">	}</span>
+	
+	// guarantee URL configuration works
+	public void testBadInternet() {
+<span class="nc" id="L29">		Message.unconfigure();</span>
+<span class="nc" id="L30">		assertFalse (Configure.configureURL(&quot;garbage HTTP&quot;));</span>
+		
+		// valid URL but not a schema definition file. Can't detect on configure. Must 
+		// wait for application
+<span class="nc" id="L34">		Message.unconfigure();</span>
+<span class="nc" id="L35">		assertTrue (Configure.configureURL(&quot;http://www.wpi.edu/~heineman/xml/bad.html&quot;));</span>
+		
+		// note: this defaults to auto-load the local file, so no clear way
+		// to test this is a valid or invalid schema. I can live with that.
+		
+<span class="nc" id="L40">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,10 @@
+* <math.h> libraries
+* 600x600, used center 300x300 (1 of 4)
+* Given 8-bit image => 256 intensity values, A = 255
+* Didn't try for colored. To get colored, just shift values from gaussian into right part of array (no reason to calculate gaussian 3 times)
+* kept values as floats until end where I converted to ints. may have caused some rounding errors (might be able to detect in image, didn't test), but image looked pretty good
+
+* ignored boundaries (only used pixels with 3x3 neighborhood). could've padded, etc
+* bubblesort since n small and it's easy to implement
+* new_image = median of sorted values = A[4]
+

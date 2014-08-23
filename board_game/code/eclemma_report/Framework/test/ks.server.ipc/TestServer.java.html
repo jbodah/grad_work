@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestServer.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.server.ipc</a> &gt; <span class="el_source">TestServer.java</span></div><h1>TestServer.java</h1><pre class="source lang-java linenums">package ks.server.ipc;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+
+
+import junit.framework.TestCase;
+import ks.LocalClientProcessor;
+import ks.client.UserContext;
+import ks.client.ipc.Client;
+import ks.client.lobby.LobbyFrame;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+
+/**
+ *
+ */
+<span class="nc" id="L20">public class TestServer extends TestCase {</span>
+
+	// host
+	public static final String localhost = &quot;localhost&quot;;
+	
+	// sample credentials
+	public static final String user = &quot;114234&quot;;
+	public static final String password = &quot;password&quot;;
+	
+	int specialPort;
+	
+	protected void setUp() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L34">			Message.unconfigure();</span>
+<span class="nc" id="L35">			assertTrue (Configure.configure());</span>
+			
+			// validate a simple chat
+<span class="nc" id="L38">			String s = Message.requestHeader() + &quot;&lt;chat&gt;&lt;text&gt;Here is the message&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L39">			Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">			assertTrue (d != null);</span>
+			
+			// random port
+<span class="nc" id="L43">			specialPort = (int)(8000 + Math.random()*1000);</span>
+			
+<span class="nc" id="L45">		} catch (Exception e) {</span>
+<span class="nc" id="L46">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+<span class="nc" id="L48">	}</span>
+
+	
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="nc" id="L54">			Thread.sleep(1000);</span>
+<span class="nc" id="L55">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="nc" id="L58">	}</span>
+	
+	public void testServer() {
+<span class="nc" id="L61">		Server s = new Server(specialPort);</span>
+<span class="nc" id="L62">		assertTrue (s.activate());</span>
+		
+<span class="nc" id="L64">		waitASecond();</span>
+		
+		// create client to connect
+<span class="nc" id="L67">		Client c = new Client();</span>
+		
+		// client must rely on processor
+<span class="nc" id="L70">		UserContext context = new UserContext();  // by default, localhost</span>
+<span class="nc" id="L71">		LobbyFrame lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L72">		LocalClientProcessor lcp = new LocalClientProcessor(lobby);</span>
+<span class="nc" id="L73">		c.setProcessor(lcp);</span>
+		
+		// initiate connection
+<span class="nc" id="L76">		c.connect(localhost, specialPort, user, password, false);</span>
+<span class="nc" id="L77">		waitASecond();</span>
+		
+<span class="nc" id="L79">		assertTrue (lcp.isConnected());</span>
+<span class="nc" id="L80">		Message m = lcp.dequeue();</span>
+		
+		// first message is an 'ack' for the login
+<span class="nc" id="L83">		System.out.println(&quot;received:&quot; + m.contents().getTextContent());</span>
+<span class="nc" id="L84">		assertEquals (&quot;loginResponse&quot;, m.getName());</span>
+		
+		// have client send a chat output
+<span class="nc" id="L87">		String cmd = Message.requestHeader() + &quot;&lt;chat&gt;&quot;;</span>
+<span class="nc" id="L88">		String ch = &quot;Testing CHAT&quot;;</span>
+<span class="nc" id="L89">		cmd += &quot;&lt;text&gt;&quot; + ch + &quot;&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L90">		Document d = Message.construct(cmd);</span>
+<span class="nc" id="L91">		m = new Message(d);</span>
+<span class="nc" id="L92">		c.sendToServer(m);</span>
+		
+<span class="nc" id="L94">		waitASecond();</span>
+		
+		// validate chat 'output' received by client.
+<span class="nc" id="L97">		Message m2 = lcp.dequeue();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		assertTrue (m2 != null);</span>
+<span class="nc" id="L99">		assertEquals (&quot;output&quot;, m2.getName());</span>
+		
+<span class="nc" id="L101">		assertTrue (c.disconnect());</span>
+		
+		// must wait to enable connection to cleanly close down before we
+		// shut off the server. Specifically? LogoutController gets dying
+		// client response, and we must have a live server for this to happen.
+		// Note the hack. Revel in it!
+<span class="nc" id="L107">		waitASecond();</span>
+		
+<span class="nc" id="L109">		s.deactivate();</span>
+	
+<span class="nc" id="L111">		lobby.setVisible(false);</span>
+<span class="nc" id="L112">		lobby.dispose();</span>
+<span class="nc" id="L113">	}	</span>
+	
+	public void testSelfRegistratingServer() {
+<span class="nc" id="L116">		Server s = new Server(specialPort);</span>
+<span class="nc" id="L117">		assertTrue (s.activate());</span>
+		
+<span class="nc" id="L119">		waitASecond();</span>
+		
+		// create client to connect
+<span class="nc" id="L122">		Client c = new Client();</span>
+		
+		// client must rely on processor
+<span class="nc" id="L125">		UserContext context = new UserContext();  // by default, localhost</span>
+<span class="nc" id="L126">		LobbyFrame lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L127">		LocalClientProcessor lcp = new LocalClientProcessor(lobby);</span>
+<span class="nc" id="L128">		c.setProcessor(lcp);</span>
+		
+<span class="nc" id="L130">		c.connect(localhost, specialPort, user, password, true);</span>
+<span class="nc" id="L131">		waitASecond();</span>
+		
+<span class="nc" id="L133">		assertTrue (lcp.isConnected());</span>
+<span class="nc" id="L134">		Message m = lcp.dequeue();</span>
+		
+		// first message is an 'loginResponse' for the login
+<span class="nc" id="L137">		assertEquals (&quot;loginResponse&quot;, m.getName());</span>
+		
+		// get generated user
+<span class="nc" id="L140">		Node resp = m.contents();</span>
+<span class="nc" id="L141">		NamedNodeMap map = resp.getAttributes();</span>
+<span class="nc" id="L142">		Node pNode = map.getNamedItem(&quot;player&quot;);</span>
+<span class="nc" id="L143">		String who = pNode.getNodeValue();</span>
+		
+<span class="nc" id="L145">		Communicator com = s.getCommunicator();</span>
+<span class="nc" id="L146">		assertTrue (&quot;checking user:&quot; + who, com.isOnline(who));</span>
+		
+		// have client send a chat output
+<span class="nc" id="L149">		String cmd = Message.requestHeader() + &quot;&lt;chat&gt;&quot;;</span>
+<span class="nc" id="L150">		String ch = &quot;Testing CHAT&quot;;</span>
+<span class="nc" id="L151">		cmd += &quot;&lt;text&gt;&quot; + ch + &quot;&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L152">		Document d = Message.construct(cmd);</span>
+<span class="nc" id="L153">		m = new Message(d);</span>
+<span class="nc" id="L154">		c.sendToServer(m);</span>
+		
+<span class="nc" id="L156">		waitASecond();</span>
+		
+		// validate chat 'output' received by client.
+<span class="nc" id="L159">		Message m2 = lcp.dequeue();</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">		assertTrue (m2 != null);</span>
+<span class="nc" id="L161">		assertEquals (&quot;output&quot;, m2.getName());</span>
+		
+		// have client LOGOUT
+<span class="nc" id="L164">		cmd = Message.requestHeader() + &quot;&lt;logout/&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L165">		d = Message.construct(cmd);</span>
+<span class="nc" id="L166">		m = new Message(d);</span>
+<span class="nc" id="L167">		c.sendToServer(m);</span>
+
+		// must wait to enable connection to cleanly close down before we
+		// shut off the server. Specifically? LogoutController gets dying
+		// client response, and we must have a live server for this to happen.
+		// Note the hack. Revel in it!
+<span class="nc" id="L173">		waitASecond();</span>
+		
+<span class="nc" id="L175">		assertFalse (com.isOnline(user));</span>
+		
+<span class="nc" id="L177">		s.deactivate();</span>
+	
+<span class="nc" id="L179">		lobby.setVisible(false);</span>
+<span class="nc" id="L180">		lobby.dispose();</span>
+
+<span class="nc" id="L182">	}	</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

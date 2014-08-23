@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ManagerGUITest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.boundaries</a> &gt; <span class="el_source">ManagerGUITest.java</span></div><h1>ManagerGUITest.java</h1><pre class="source lang-java linenums">package wordstealclient.boundaries;
+
+import static org.junit.Assert.*;
+
+import java.util.Hashtable;
+
+import javax.swing.JPanel;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import test.TestData;
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Table;
+
+<span class="fc" id="L17">public class ManagerGUITest {</span>
+	
+	@Before
+	public void setUp() {
+	
+<span class="fc" id="L22">	}</span>
+	
+	@After
+	public void tearDown() {
+		
+<span class="fc" id="L27">	}</span>
+
+	@Test
+	public void testUserManagerGUI()
+	{
+<span class="fc" id="L32">		Hashtable&lt;Integer, Player&gt; players = TestData.getUsers();</span>
+<span class="fc" id="L33">		assertNotNull(UserManagerGUI.create(players.values()));</span>
+		
+<span class="fc" id="L35">	}</span>
+	
+	@Test
+	public void testTableManagerGUI()
+	{
+<span class="fc" id="L40">		Table[] tables = TestData.getTables();</span>
+<span class="fc" id="L41">		assertNotNull(TableManagerGUI.create(tables));</span>
+		
+<span class="fc" id="L43">		Player p = new Player(123, &quot;Bob&quot;, 234, 345, 456);</span>
+<span class="fc" id="L44">		tables[0].addPlayer(p);</span>
+<span class="fc" id="L45">		assertNotNull(TableManagerGUI.create(tables[0]));</span>
+<span class="fc" id="L46">	}</span>
+	
+	@Test
+	public void testInvitePanel()
+	{
+<span class="fc" id="L51">		Hashtable&lt;Integer, Player&gt; players = TestData.getUsers();</span>
+<span class="fc" id="L52">		assertNotNull(new WSInviteFrame(players.values()));</span>
+<span class="fc" id="L53">	}</span>
+	
+	@Test
+	public void testUserPanel()
+	{
+<span class="fc" id="L58">		Hashtable&lt;Integer, Player&gt; players = TestData.getUsers();</span>
+<span class="fc" id="L59">		WSUserPanel up = new WSUserPanel(players.get(0));</span>
+<span class="fc" id="L60">		up.update(players.get(1));</span>
+<span class="fc" id="L61">		assertNotNull(up);</span>
+		
+<span class="fc" id="L63">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

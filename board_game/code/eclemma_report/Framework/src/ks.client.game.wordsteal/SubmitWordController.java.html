@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SubmitWordController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game.wordsteal</a> &gt; <span class="el_source">SubmitWordController.java</span></div><h1>SubmitWordController.java</h1><pre class="source lang-java linenums">package ks.client.game.wordsteal;
+
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Properties;
+
+import ks.client.interfaces.IGameInterface;
+
+import wordsteal.entities.Board;
+import wordsteal.entities.Cell;
+import wordsteal.entities.CellColor;
+import wordsteal.entities.GameState;
+import wordsteal.entities.ReqTilesPerTurn;
+import wordsteal.entities.Tile;
+import wordsteal.interfaces.IWordstealApp;
+import wordsteal.util.BoardLocation;
+
+
+/**
+ * Submit Word Controller is launched by mainframe when the submit button is pressed
+ * this controller retrieves the tiles placed on the board and validates them.  It then
+ * updates the appropriate entities and passes on the turn to the next player.
+ * 
+ * @author Dan
+ */
+public class SubmitWordController extends CommonMoveController {
+	
+	/** 
+	 * Construct controller
+	 * @param mainFrame MainFrame allows ability to set and retrieve entity information
+	 */
+	public SubmitWordController(IWordstealApp mainFrame) {
+<span class="nc" id="L35">		super(mainFrame);</span>
+<span class="nc" id="L36">	}</span>
+	
+	/**
+	 * Assumes that the tiles have already been &quot;dragged&quot; onto the board and 
+	 * now we are only awaiting the request to this controller.
+	 * 
+	 * @param callback 
+	 */
+	public boolean process(WordstealGameInformation info, IGameInterface callback){		
+<span class="nc" id="L45">		this.callback = callback;</span>
+<span class="nc" id="L46">		boolean rc = true;</span>
+		
+		// Holds the list of word strings created on the board
+<span class="nc" id="L49">		ArrayList&lt;String&gt; words = new ArrayList&lt;String&gt;();</span>
+		// Holds the list of cells where new words are located
+<span class="nc" id="L51">		ArrayList&lt;ArrayList&lt;Cell&gt;&gt; wordCells = new ArrayList&lt;ArrayList&lt;Cell&gt;&gt;(); </span>
+    	// Holds the cells containing tiles played this turn
+<span class="nc" id="L53">    	Hashtable&lt;BoardLocation, Cell&gt; playedTileCells = this.mf.getGame().getBoard().getNewTiles();</span>
+    	
+		// Check if no tiles were played this turn
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		if (playedTileCells.size() == 0) {</span>
+			
+<span class="nc" id="L58">			rc = failTurn(&quot;No tiles have been placed!&quot;);</span>
+			
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		} else if(playedTileCells.size() &lt; 2) {</span>
+			
+<span class="nc" id="L62">			rc = failTurn(&quot;You must place at least 2 tiles!&quot;);</span>
+			
+<span class="nc bnc" id="L64" title="All 2 branches missed.">		} else if (this.mf.getGame().isFirstTurn() &amp;&amp;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">				   !isTilesOnColorCell(playedTileCells, CellColor.Green)){</span>
+			
+<span class="nc" id="L67">			rc = failTurn(&quot;You must place the first word on the green square!&quot;);</span>
+			
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		} else if (playedTileCells.size() != 2 &amp;&amp; </span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">				   this.mf.getGame().getReqTilesPerTurn() == ReqTilesPerTurn.Two) {</span>
+			
+<span class="nc" id="L72">			rc = failTurn(&quot;You must place exactly 2 tiles!&quot;);</span>
+			
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		} else if (playedTileCells.size() != 3 &amp;&amp; </span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">				   this.mf.getGame().getReqTilesPerTurn() == ReqTilesPerTurn.Three) {</span>
+			
+<span class="nc" id="L77">			rc = failTurn(&quot;You must place exactly 3 tiles!&quot;);</span>
+			
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		} else if(!this.mf.getGame().isFirstTurn() &amp;&amp;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">				  !isTilesTouchingExistingWord(playedTileCells)) {</span>
+			
+<span class="nc" id="L82">			rc = failTurn(&quot;You must place a word adjacent to one on the board!&quot;);</span>
+			
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		} else if(!isTilesStraight(playedTileCells)) {</span>
+			
+<span class="nc" id="L86">			rc = failTurn(&quot;Tiles must be placed in a straight line!&quot;);</span>
+			
+<span class="nc bnc" id="L88" title="All 2 branches missed.">		} else if(!isTilesContiguous(playedTileCells)) {</span>
+			
+<span class="nc" id="L90">			rc = failTurn(&quot;Tiles must contiguous!&quot;);</span>
+			
+<span class="nc bnc" id="L92" title="All 2 branches missed.">		} else if(isTilesOnColorCell(playedTileCells, CellColor.Pink) &amp;&amp; </span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">				   this.mf.getGame().isNoPinkEnabled()) {</span>
+			
+<span class="nc" id="L95">			rc = failTurn(&quot;You cannot place on pink cells!&quot;);</span>
+			
+		} else {
+<span class="nc" id="L98">			Board board = mf.getGame().getBoard();</span>
+<span class="nc" id="L99">			wordCells = board.extractAdjacentWordCells(playedTileCells);</span>
+<span class="nc" id="L100">			words = board.formWordsFromCells(wordCells);</span>
+			
+			String invalidWords;
+			
+<span class="nc bnc" id="L104" title="All 2 branches missed.">			if (this.mf.getGame().isNoSEnabled() &amp;&amp;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">				isViolatingNoS(wordCells)) {</span>
+<span class="nc" id="L106">				rc = failTurn(&quot;No S: You cannot extend a word by just adding S&quot;);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">			} else if(!(invalidWords = findInvalidWords(words)).isEmpty()) {</span>
+<span class="nc" id="L108">				rc = failTurn(&quot;Invalid word: &quot; + invalidWords);</span>
+			} else {
+				
+				// Validation is complete, go to finishSubmitWord to perform exit actions
+<span class="nc" id="L112">				String playerID = info.getCurrentUser();</span>
+<span class="nc" id="L113">				boolean complete = finishSubmitWord(info.fullName(playerID), words, wordCells, playedTileCells);</span>
+				
+				// in both cases, send off the info
+<span class="nc" id="L116">				Properties  playerScores = WordstealGameInformation.extractScores(this.mf.getGame().getPlayers());</span>
+				
+				// form move from playedTileCells
+<span class="nc" id="L119">				StringBuilder move = new StringBuilder();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">				for (BoardLocation bl : playedTileCells.keySet()) {</span>
+<span class="nc" id="L121">					Cell c = playedTileCells.get(bl);</span>
+<span class="nc" id="L122">					Tile t = c.getTile();</span>
+<span class="nc" id="L123">					boolean addSeparator = true;</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">					if (move.length() == 0) {</span>
+<span class="nc" id="L125">						addSeparator = false;</span>
+					} 
+<span class="nc bnc" id="L127" title="All 2 branches missed.">					if (addSeparator) { move.append(','); }</span>
+					//move.append(bl.toString());
+<span class="nc" id="L129">					move.append(&quot;(&quot;).append(bl.row).append(&quot;/&quot;).append(bl.col).append(&quot;)&quot;);</span>
+<span class="nc" id="L130">					move.append(&quot;=&quot;);</span>
+<span class="nc" id="L131">					move.append(t.letter);</span>
+				}
+				
+<span class="nc" id="L134">				callback.turn(mf.getTableNumber(), playerScores, move.toString(), complete);</span>
+			}
+		}
+
+		// bad move auto skips player...
+<span class="nc bnc" id="L139" title="All 2 branches missed.">		if (!rc) {</span>
+<span class="nc" id="L140">			callback.skip(mf.getTableNumber());</span>
+
+			// must remember to lock GUI
+<span class="nc" id="L143">			this.mf.lockUI(true);</span>
+		}
+		
+		// update everything.
+<span class="nc" id="L147">		this.mf.updateGUI();</span>
+
+		// disable buttons.
+<span class="nc" id="L150">		info.enableButtons(false);</span>
+<span class="nc" id="L151">		info.resetTimer();		</span>
+<span class="nc" id="L152">		return rc;</span>
+	}
+	
+
+	/**
+	 * Finds all invalid words in the list
+	 * @param words List of words
+	 * @return Comma separated list of invalid words
+	 */
+	String findInvalidWords(ArrayList&lt;String&gt; words) {
+		
+<span class="nc" id="L163">		String invalidWords = &quot;&quot;;</span>
+		
+<span class="nc bnc" id="L165" title="All 2 branches missed.">		for(Iterator&lt;String&gt; iter = words.iterator(); iter.hasNext();) {</span>
+			
+<span class="nc" id="L167">			String word = iter.next();</span>
+			
+<span class="nc bnc" id="L169" title="All 2 branches missed.">			if(!this.mf.getGame().getDictionary().isValidWord(word.toLowerCase())) {</span>
+				
+<span class="nc" id="L171">				invalidWords += word + &quot;, &quot;;</span>
+			}
+		}
+		
+<span class="nc bnc" id="L175" title="All 2 branches missed.">		if(invalidWords.isEmpty()) {</span>
+			
+<span class="nc" id="L177">			return invalidWords;</span>
+			
+		} else {
+			
+<span class="nc" id="L181">			return invalidWords.substring(0, invalidWords.length() - 2);</span>
+		}
+	}
+	
+	/**
+	 * Ends the turn due to illegal play
+	 * @param status Message to display to users
+	 */
+	boolean failTurn(String status) {
+		
+<span class="nc" id="L191">		this.mf.setStatus(status);</span>
+		
+		//Return tiles to rack
+<span class="nc" id="L194">		this.mf.getGame().returnPlayedTiles();</span>
+		
+		//Update game log
+<span class="nc" id="L197">		GameState gs = new GameState(this.mf.getGame(), status, 0, null);</span>
+<span class="nc" id="L198">		this.mf.getGame().getGameLog().pushGameState(gs);</span>
+		
+		//The player loses their turn since their word
+		//submission failed
+		//this.mf.getGame().nextTurn();
+<span class="nc" id="L203">		this.mf.getGame().setConsecSkips(this.mf.getGame().getConsecSkips() + 1);</span>
+<span class="nc" id="L204">		return false;</span>
+	}
+
+
+	/**
+	 * isTilesTouchingExistingWord verifies that at least one of the newly placed tiles is touching
+	 * a tile on the board that already has an owner
+	 * @param placedTileCells containing the newly placed tiles on the board
+	 * @return Whether the tiles are touching an existing word
+	 */
+	boolean isTilesTouchingExistingWord(Hashtable&lt;BoardLocation, Cell&gt; placedTileCells){
+
+<span class="nc" id="L216">	    Iterator&lt;BoardLocation&gt; itr = placedTileCells.keySet().iterator();	    </span>
+<span class="nc" id="L217">	    Board board = this.mf.getGame().getBoard();</span>
+	    
+	    // Loop through the cells, checking the adjacent cell in each direction to see if
+	    // a tile with an owner is present
+<span class="nc bnc" id="L221" title="All 2 branches missed.">	    while (itr.hasNext()) {</span>
+	    	
+<span class="nc" id="L223">	    	BoardLocation bl = itr.next();</span>
+<span class="nc" id="L224">	    	Cell[] adjacentCells = new Cell[] {</span>
+<span class="nc" id="L225">	    			board.getCell(bl.row, bl.col + 1),</span>
+<span class="nc" id="L226">	    			board.getCell(bl.row, bl.col - 1),</span>
+<span class="nc" id="L227">	    			board.getCell(bl.row + 1, bl.col),</span>
+<span class="nc" id="L228">	    			board.getCell(bl.row - 1, bl.col)</span>
+	    	};
+	    	
+<span class="nc bnc" id="L231" title="All 2 branches missed.">	    	for(int i = 0; i &lt; adjacentCells.length; i++) {</span>
+	    		
+<span class="nc bnc" id="L233" title="All 2 branches missed.">	    		if (adjacentCells[i] != null &amp;&amp;</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">	    			adjacentCells[i].getTile() != null &amp;&amp;</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">	    			adjacentCells[i].getTile().getOwner() != null) {</span>
+	    	    				
+<span class="nc" id="L237">	    	    		return true;</span>
+	    	    }
+	    	}
+	    }
+	    
+<span class="nc" id="L242">	    return false;</span>
+	}
+	
+	/**
+	 * isTilesStraight verifies that the tiles placed on the board have been placed in a straight line either
+	 * vertically or horizontally
+	 * @param placedTileCells Cells containing the tiles placed by the player this turn
+	 * @return Whether the tiles are in a straight line
+	 */
+	boolean isTilesStraight(Hashtable&lt;BoardLocation, Cell&gt; placedTileCells){
+		
+		// We must first check if the first two tile in the newly placed word
+		// are in the same row or in the same column (or neither). After we
+		// have established their direction, we must make sure the remaining
+		// tiles are in the same row/column. LoopState controls what phase
+		// of this algorithm we are in.
+		//
+		// 0 - We have not yet determined if the word is horizontal or vertical
+		// 1 - The word is horizontal, we must check if the tiles are in the same row
+		// 2 - The word is vertical, we must check if the tiles are in the same column
+<span class="nc" id="L262">		int loopState = 0;</span>
+		
+<span class="nc" id="L264">		Iterator&lt;BoardLocation&gt; itr = placedTileCells.keySet().iterator();</span>
+		
+		// Stores the previous tile, as we are checking inductively whether each tile
+		// is in the same row/column as its neighbor
+<span class="nc" id="L268">		BoardLocation previousBoardLocation = itr.next();</span>
+		
+		// Loop through the cells
+<span class="nc bnc" id="L271" title="All 2 branches missed.">		while (itr.hasNext()) {</span>
+    		
+<span class="nc" id="L273">			BoardLocation currentBoardLocation = itr.next();</span>
+			
+			// We have not yet determined if the word is horizontal or vertical
+<span class="nc bnc" id="L276" title="All 2 branches missed.">			if(loopState == 0) {</span>
+				
+				// If the tiles are on the same row, the word is horizontal
+<span class="nc bnc" id="L279" title="All 2 branches missed.">				if(currentBoardLocation.row == previousBoardLocation.row) {</span>
+					// Set state to horizontal
+<span class="nc" id="L281">					loopState = 1;</span>
+					
+<span class="nc bnc" id="L283" title="All 2 branches missed.">				} else if(currentBoardLocation.col == previousBoardLocation.col) {</span>
+					// If the tiles have the same column, set the loop state to vertical
+<span class="nc" id="L285">					loopState = 2;</span>
+					
+				} else {
+					// If the first two tiles share neither, then the word is not straight
+<span class="nc" id="L289">					return false;</span>
+				}
+<span class="nc bnc" id="L291" title="All 2 branches missed.">			} else if(loopState == 1) {</span>
+				// The word is horizontal, so we must check if the next tile is on the same row
+<span class="nc bnc" id="L293" title="All 2 branches missed.">				if(currentBoardLocation.row != previousBoardLocation.row) {</span>
+					
+<span class="nc" id="L295">					return false;</span>
+				}
+<span class="nc bnc" id="L297" title="All 2 branches missed.">			} else if(loopState == 2) {</span>
+				// The word is vertical, so we must check if the next tile is on the same column
+<span class="nc bnc" id="L299" title="All 2 branches missed.">				if(currentBoardLocation.col != previousBoardLocation.col) {</span>
+					
+<span class="nc" id="L301">					return false;</span>
+				}
+			}
+			// Update the previous tile
+<span class="nc" id="L305">			previousBoardLocation = currentBoardLocation;</span>
+		}
+		
+		// If the algorithm fails to find a tile that is out of line, or if the word only
+		// has one tile, return true.
+<span class="nc" id="L310">		return true;</span>
+	}
+	
+	/**
+	 * isTilesContiguous verifies that there are no gaps in the newly placed word, it checks both
+	 * newly placed tiles and current tiles on the board
+	 * @param placedTileCells
+	 * @return Whether or not tiles are contiguous
+	 */
+	boolean isTilesContiguous(Hashtable&lt;BoardLocation, Cell&gt; placedTileCells) {
+		
+		// The algorithm works thusly: an arbitrary cell is selected from the list of cells on
+		// which the player placed tiles this turn (these cells are assumed to be in a straight
+		// line). The algorithm searches the board in each direction from the cell, adding to
+		// tileCount whenever it encounters a tile placed by the player this turn and stopping
+		// whenever it encounters an empty cell or the end of the board. It then compares tileCount
+		// to the number of tiles the player placed this turn. If the player placed a contiguous
+		// word, the algorithm should have been able to reach all of the cells he or she placed a
+		// tile in by searching outward from the arbitrary cell.
+<span class="nc" id="L329">		int tileCount = 0;</span>
+		
+<span class="nc" id="L331">	    Iterator&lt;BoardLocation&gt; itr = placedTileCells.keySet().iterator();</span>
+	    
+	    // Grab an arbitrary cell's location, and add it to the tileCount
+<span class="nc" id="L334">	    BoardLocation bl = itr.next(); </span>
+<span class="nc" id="L335">		tileCount++;</span>
+		
+<span class="nc" id="L337">		Board board = this.mf.getGame().getBoard();</span>
+		
+		// Check in the eastern direction
+<span class="nc bnc" id="L340" title="All 2 branches missed.">		for (int i = bl.col + 1; i &lt; Board.boardStructure.length; i++ ) {</span>
+			
+<span class="nc" id="L342">			Tile tile = board.getCell(bl.row, i).getTile();</span>
+			
+<span class="nc bnc" id="L344" title="All 2 branches missed.">    		if (tile != null) {</span>
+    			
+<span class="nc bnc" id="L346" title="All 2 branches missed.">    			if(tile.getOwner() == null) {</span>
+				
+<span class="nc" id="L348">					tileCount++;</span>
+    			}	
+			} else {
+				
+				break;
+			}	
+		}
+		
+		// Check in the western direction
+<span class="nc bnc" id="L357" title="All 2 branches missed.">		for (int i = bl.col - 1; i &gt;= 0; i-- ) {</span>
+			
+<span class="nc" id="L359">			Tile tile = board.getCell(bl.row, i).getTile();</span>
+			
+<span class="nc bnc" id="L361" title="All 2 branches missed.">    		if (tile != null) {</span>
+    			
+<span class="nc bnc" id="L363" title="All 2 branches missed.">    			if(tile.getOwner() == null) {</span>
+				
+<span class="nc" id="L365">					tileCount++;</span>
+    			}	
+			} else {
+				
+				break;
+			}	
+		}
+		
+		// Check in the southern direction
+<span class="nc bnc" id="L374" title="All 2 branches missed.">		for (int i = bl.row + 1; i &lt; Board.boardStructure.length; i++ ) {</span>
+			
+<span class="nc" id="L376">			Tile tile = board.getCell(i, bl.col).getTile();</span>
+			
+<span class="nc bnc" id="L378" title="All 2 branches missed.">    		if (tile != null) {</span>
+    			
+<span class="nc bnc" id="L380" title="All 2 branches missed.">    			if(tile.getOwner() == null) {</span>
+				
+<span class="nc" id="L382">					tileCount++;</span>
+    			}	
+			} else {
+				
+				break;
+			}	
+		}
+		
+		// Check in the northern direction
+<span class="nc bnc" id="L391" title="All 2 branches missed.">		for (int i = bl.row - 1; i &gt;= 0; i-- ) {</span>
+			
+<span class="nc" id="L393">			Tile tile = board.getCell(i, bl.col).getTile();</span>
+			
+<span class="nc bnc" id="L395" title="All 2 branches missed.">    		if (tile != null) {</span>
+    			
+<span class="nc bnc" id="L397" title="All 2 branches missed.">    			if(tile.getOwner() == null) {</span>
+				
+<span class="nc" id="L399">					tileCount++;</span>
+    			}	
+			} else {
+				
+				break;
+			}	
+		}
+    
+		// Verify all tiles were counted
+<span class="nc bnc" id="L408" title="All 2 branches missed.">    	if (tileCount &lt; placedTileCells.size()){</span>
+    		
+<span class="nc" id="L410">    		return false;</span>
+    		
+    	} else {
+    	
+<span class="nc" id="L414">    		return true;</span>
+    	}
+	}	
+
+
+	/**
+	 * Checks whether or not the play violates the No S rule
+	 * @param wordCells Cells containing potential words
+	 * @return Whether or not the play violates the No S rule
+	 */
+	boolean isViolatingNoS(ArrayList&lt;ArrayList&lt;Cell&gt;&gt; wordCells) {
+		
+		// We loop through each potential word and check if:
+		// 		1. It is greater than 2 letters
+		//		2. Its last tile is an &quot;S&quot;
+		//		3. If so, if it is a tile placed this turn
+		//		4. If so, if the tile before the last was NOT placed this turn
+		//			(otherwise, the player appended more than just &quot;S&quot;)
+<span class="nc" id="L432">		Iterator&lt;ArrayList&lt;Cell&gt;&gt; iter = wordCells.iterator();</span>
+		
+<span class="nc bnc" id="L434" title="All 2 branches missed.">		while(iter.hasNext()) {</span>
+			
+<span class="nc" id="L436">			ArrayList&lt;Cell&gt; word = iter.next();</span>
+			
+			// Word has to be greater than 2 letters (adding &quot;S&quot; to &quot;A&quot; to form &quot;AS&quot; is legal
+<span class="nc bnc" id="L439" title="All 2 branches missed.">			if(word.size() &gt; 2) {</span>
+				
+<span class="nc" id="L441">				Tile lastTile = word.get(word.size() - 1).getTile();</span>
+				
+				// If the last tile is S and newly placed...
+<span class="nc bnc" id="L444" title="All 2 branches missed.">				if(lastTile.letter.equals(&quot;S&quot;) &amp;&amp;</span>
+<span class="nc bnc" id="L445" title="All 2 branches missed.">				   lastTile.getOwner() == null) {</span>
+					
+					// Check if the rest of the word is old
+<span class="nc" id="L448">					boolean isRestOfWordOld = true;</span>
+					
+<span class="nc bnc" id="L450" title="All 2 branches missed.">					for(int i = 0; i &lt; word.size() - 1; i++) {</span>
+					
+<span class="nc bnc" id="L452" title="All 2 branches missed.">						if(word.get(i).getTile().getOwner() == null) {</span>
+							
+<span class="nc" id="L454">							isRestOfWordOld = false;</span>
+<span class="nc" id="L455">							break;</span>
+						}
+					}
+					
+<span class="nc bnc" id="L459" title="All 2 branches missed.">					if(isRestOfWordOld) {</span>
+<span class="nc" id="L460">						return true;</span>
+					}
+				}
+			}
+		}
+		
+<span class="nc" id="L466">		return false;</span>
+	}
+	
+
+
+}
+			
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

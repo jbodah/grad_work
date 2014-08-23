@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ChatRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.uncorrelated_requests</a> &gt; <span class="el_source">ChatRequestController.java</span></div><h1>ChatRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.uncorrelated_requests;
+
+import wordstealclient.entities.Room;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.IProcessLobbyInput;
+import ks.framework.common.Message;
+
+/**
+ * Request: chat&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: ??&lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * 	{@literal &lt;!-- submit public Chat Message. --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;chat&gt;}&lt;br/&gt;
+ *  {@literal &lt;text&gt;Here is where the message goes.&lt;/text&gt;}&lt;br/&gt;
+ *  {@literal &lt;/chat&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @example2
+ * 	{@literal &lt;!-- Submit Private Chat Message. --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;chat&gt;}&lt;br/&gt;
+ * 	{@literal &lt;player-id player=&quot;11345&quot;/&gt;}&lt;br/&gt;
+ *  {@literal &lt;!-- private people --&gt;}&lt;br/&gt;
+ *  {@literal &lt;player-id player=&quot;1983&quot;/&gt;}&lt;br/&gt;
+ *  {@literal &lt;text&gt;Here is where the private message goes.&lt;/text&gt;}&lt;br/&gt;
+ *  {@literal &lt;/chat&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @author jbodah
+ */
+public class ChatRequestController implements IProcessLobbyInput {
+	ILobby lobby ;
+	
+<span class="fc" id="L38">	public ChatRequestController(ILobby lobby) {</span>
+<span class="fc" id="L39">		this.lobby = lobby;</span>
+<span class="fc" id="L40">	}</span>
+	
+	/**
+	 * Create and send request
+	 * @author jbodah
+	 */
+	public void process(String text) {
+		String s ;
+		
+<span class="fc bfc" id="L49" title="All 2 branches covered.">		if( isPrivateMessage(text) ) {</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">			if( isRecipientOnline(text) )</span>
+<span class="nc" id="L51">				s = writePrivateXMLForRequest(text);</span>
+			else {
+<span class="fc" id="L53">				lobby.append(&quot;This player is not online!&quot;);</span>
+<span class="fc" id="L54">				return ;</span>
+			}		
+		}
+		else
+<span class="fc" id="L58">			s = writeXMLForRequest(text);</span>
+<span class="fc" id="L59">		Message m = new Message(Message.construct(s));</span>
+<span class="fc" id="L60">		lobby.getContext().getClient().sendToServer(m);</span>
+<span class="fc" id="L61">		System.out.println(&quot;ChatRequestController.process(): Request sent&quot;);</span>
+<span class="fc" id="L62">	}</span>
+
+	// Make sure recipient is logged on
+	private boolean isRecipientOnline(String text) {
+<span class="fc" id="L66">		int recipientID = Integer.parseInt( text.split(&quot; &quot;)[1] );</span>
+<span class="pc bpc" id="L67" title="1 of 2 branches missed.">		return ( Room.getInstance().getPlayer(recipientID) != null ) ;</span>
+	}
+	 	
+	private String writeXMLForRequest(String text) {
+<span class="fc" id="L71">		String s = Message.requestHeader() +</span>
+<span class="fc" id="L72">				&quot;&lt;chat&gt;&quot; +</span>
+<span class="fc" id="L73">				&quot;&lt;text&gt;&quot; + text + &quot;&lt;/text&gt;&quot; +</span>
+<span class="fc" id="L74">				&quot;&lt;/chat&gt;&quot; + </span>
+<span class="fc" id="L75">				&quot;&lt;/request&gt;&quot; ;</span>
+<span class="fc" id="L76">		return s;</span>
+	}
+
+	private String writePrivateXMLForRequest(String text) {
+<span class="nc" id="L80">		String s = Message.requestHeader() + </span>
+<span class="nc" id="L81">				&quot;&lt;chat&gt;&quot; +</span>
+<span class="nc" id="L82">				&quot;&lt;player-id&gt;&quot; + text.split(&quot; &quot;)[1] + &quot;&lt;/player-id&gt;&quot; +</span>
+				// Offset to ignore &quot;/p PLAYER-ID &quot;
+<span class="nc" id="L84">				&quot;&lt;text&gt;&quot; + text.substring(4 + text.split(&quot; &quot;)[1].length()) + &quot;&lt;/text&gt;&quot; +</span>
+<span class="nc" id="L85">				&quot;&lt;/chat&gt;&quot; +</span>
+<span class="nc" id="L86">				&quot;&lt;/response&gt;&quot; ;</span>
+<span class="nc" id="L87">		return s;</span>
+	}
+	
+	private boolean isPrivateMessage( String text ) {
+<span class="fc" id="L91">		return text.startsWith(&quot;/p &quot;) ;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

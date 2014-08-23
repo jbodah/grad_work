@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ConnectFrame.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.lobby</a> &gt; <span class="el_source">ConnectFrame.java</span></div><h1>ConnectFrame.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package ks.client.lobby;</span>
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.SystemColor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import arch.MyLobbyInitialization;
+
+import ks.client.WindowManager;
+import ks.client.interfaces.ILobbyInitialize;
+
+/**
+ * Splash frame which starts the GUI. User is presented with ability
+ * to connect to the (preconfigured) KombatGames server by either
+ * logging in using existing account information of registering for
+ * a new account.
+ * &lt;p&gt;
+ * Logic delegated to RegisterButtonController and ConnectButtonController.
+ * &lt;p&gt;
+ * Note for the purpose of easily integrating client-side TableManagerGUI
+ * and UserManagerGUI, this class will take these objects in and pass them
+ * along to the lobby as needed. This is not necessarily an ideal situation,
+ * but it allows the work to continue. 
+ * 
+ * @author George Heineman
+ */
+public class ConnectFrame extends JFrame {
+
+	/** Keep Eclipse happy. */
+	private static final long serialVersionUID = 1L;
+
+	/** Panel containing all GUI widgets. */
+	JPanel panel;
+
+	/** Callback routine for lobby initialization. */
+	ILobbyInitialize lobbyInit;
+
+	/** GUI elements for which we have interaction. */
+<span class="fc" id="L53">	JTextField loginUserText = null;</span>
+<span class="fc" id="L54">	JPasswordField loginPassText = null;</span>
+
+<span class="fc" id="L56">	JPasswordField registerPassText = null;</span>
+<span class="fc" id="L57">	JPasswordField registerConfirmPassText = null;</span>
+<span class="fc" id="L58">	JButton registerButton = null;</span>
+<span class="fc" id="L59">	JButton connectButton = null;</span>
+<span class="fc" id="L60">	JTextArea statusA = null;</span>
+
+	/** Helper method to get registration password. */
+<span class="nc" id="L63">	public JPasswordField getRegisterPassText() { return registerPassText; }</span>
+
+	/** Helper method to get confirmation password. */
+<span class="nc" id="L66">	public JPasswordField getRegisterConfirmPassText() { return registerConfirmPassText; }</span>
+
+	/** Helper method to get loginUser text. */
+<span class="nc" id="L69">	public JTextField getLoginUserText() { return loginUserText; }</span>
+
+	/** Helper method to get loginUser text. */
+<span class="nc" id="L72">	public JPasswordField getLoginPassText() { return loginPassText; }</span>
+
+	/** Helper method to get status text area. */
+<span class="nc" id="L75">	public JTextArea getStatus() { return statusA; }</span>
+
+	/**
+	 * Construct and center the ConnectFrame.
+	 * 
+	 * Parameter was added 3/6/2011 to ensure clients could properly initialize with my 
+	 * new code. Please check out {@link MyLobbyInitialization} as an example class that 
+	 * you will need to write with your code.
+	 * 
+	 * @param init 
+	 */
+<span class="fc" id="L86">	public ConnectFrame(ILobbyInitialize init) {</span>
+<span class="fc" id="L87">		lobbyInit = init;</span>
+
+<span class="fc" id="L89">		setSize(480, 180);</span>
+<span class="fc" id="L90">		init();</span>
+
+<span class="fc" id="L92">		WindowManager.centerWindow(this);</span>
+<span class="fc" id="L93">	}</span>
+
+	/**
+	 * Initialize the entities and layout of the GUI.
+	 */
+	private void init() {
+<span class="fc" id="L99">		setTitle(&quot;Connect to KombatGames&quot;);</span>
+<span class="fc" id="L100">		setResizable(false);</span>
+
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">		if (panel == null) {</span>
+
+<span class="fc" id="L104">			JLabel loginTextL = new JLabel(&quot;Login with existing Account&quot;);</span>
+<span class="fc" id="L105">			JLabel loginUserL = new JLabel(&quot;User:&quot;);</span>
+<span class="fc" id="L106">			JLabel loginPassL = new JLabel(&quot;Password:&quot;);</span>
+<span class="fc" id="L107">			loginUserText = getNumericField(); </span>
+<span class="fc" id="L108">			loginPassText = getPasswordField();</span>
+
+			// registration select password.
+<span class="fc" id="L111">			registerPassText = getPasswordField();</span>
+<span class="fc" id="L112">			registerConfirmPassText = getPasswordField();</span>
+<span class="fc" id="L113">			JLabel registerPasswordL = new JLabel(&quot;Password:&quot;); // CHANGED!</span>
+<span class="fc" id="L114">			JLabel registerConfirmPassL = new JLabel(&quot;Confirm:&quot;); // CHANGED!</span>
+
+<span class="fc" id="L116">			connectButton = getConnectButton();</span>
+
+<span class="fc" id="L118">			JLabel registerTextL = new JLabel(&quot;Create new Account&quot;);</span>
+<span class="fc" id="L119">			registerButton = getRegisterButton();</span>
+
+<span class="fc" id="L121">			JPanel orP = new JPanel();</span>
+<span class="fc" id="L122">			orP.setMinimumSize(new Dimension (100, 30));</span>
+<span class="fc" id="L123">			orP.add(new JLabel(&quot;OR&quot;));</span>
+<span class="fc" id="L124">			orP.setOpaque(false); // CHANGED!</span>
+
+			// errors go here
+<span class="fc" id="L127">			statusA = new JTextArea(2, 30);</span>
+<span class="fc" id="L128">			statusA.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));</span>
+<span class="fc" id="L129">			statusA.setBackground(Color.yellow);</span>
+<span class="fc" id="L130">			statusA.setLineWrap(true);</span>
+<span class="fc" id="L131">			statusA.setWrapStyleWord(true);</span>
+<span class="fc" id="L132">			statusA.setEditable(false);</span>
+<span class="fc" id="L133">			statusA.setText(&quot;this is a messa&quot;);</span>
+<span class="fc" id="L134">			statusA.setVisible(false);</span>
+
+<span class="fc" id="L136">			panel = new JPanel();</span>
+<span class="fc" id="L137">			GroupLayout layout = new GroupLayout(panel);</span>
+<span class="fc" id="L138">			panel.setLayout(layout);</span>
+<span class="fc" id="L139">			layout.setAutoCreateGaps(true);</span>
+<span class="fc" id="L140">			layout.setAutoCreateContainerGaps(true);</span>
+
+			// Horizontal first
+<span class="fc" id="L143">			layout.setHorizontalGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L144">					.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L145">							.addComponent(loginTextL)</span>
+<span class="fc" id="L146">							.addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L147">									.addComponent(loginUserL)</span>
+<span class="fc" id="L148">									.addComponent(loginUserText))</span>
+<span class="fc" id="L149">									.addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L150">											.addComponent(loginPassL)</span>
+<span class="fc" id="L151">											.addComponent(loginPassText))</span>
+<span class="fc" id="L152">											.addComponent(connectButton))</span>
+<span class="fc" id="L153">											.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L154">													.addComponent(orP)</span>
+<span class="fc" id="L155">													.addComponent(statusA))</span>
+<span class="fc" id="L156">													.addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)</span>
+<span class="fc" id="L157">															.addComponent(registerTextL)</span>
+<span class="fc" id="L158">															.addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L159">																	.addComponent(registerPasswordL)</span>
+<span class="fc" id="L160">																	.addComponent(registerPassText))</span>
+<span class="fc" id="L161">																	.addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L162">																			.addComponent(registerConfirmPassL)</span>
+<span class="fc" id="L163">																			.addComponent(registerConfirmPassText))</span>
+<span class="fc" id="L164">																			.addComponent(registerButton))</span>
+			);
+
+			// Vertical next.
+<span class="fc" id="L168">			layout.setVerticalGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L169">					.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L170">							.addComponent(loginTextL)</span>
+<span class="fc" id="L171">							.addComponent(registerTextL))</span>
+<span class="fc" id="L172">							.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L173">									.addComponent(loginUserL)</span>
+<span class="fc" id="L174">									.addComponent(loginUserText)</span>
+<span class="fc" id="L175">									.addComponent(registerPasswordL)</span>
+<span class="fc" id="L176">									.addComponent(registerPassText))</span>
+<span class="fc" id="L177">									.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L178">											.addComponent(loginPassL)</span>
+<span class="fc" id="L179">											.addComponent(loginPassText)</span>
+<span class="fc" id="L180">											.addComponent(registerConfirmPassL)</span>
+<span class="fc" id="L181">											.addComponent(registerConfirmPassText))</span>
+<span class="fc" id="L182">											.addComponent(orP)</span>
+<span class="fc" id="L183">											.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L184">													.addComponent(connectButton)</span>
+<span class="fc" id="L185">													.addComponent(statusA)</span>
+<span class="fc" id="L186">													.addComponent(registerButton))</span>
+			);
+
+<span class="fc" id="L189">			panel.setBackground(SystemColor.control);</span>
+		}
+
+<span class="fc" id="L192">		add(panel);</span>
+<span class="fc" id="L193">	}</span>
+
+	/**
+	 * Creates and returns text field of appropriate size.
+	 * 	
+	 * @return java.awt.TextField	
+	 */
+	JTextField getTextField() {
+<span class="nc" id="L201">		JTextField tf = new JTextField(40);</span>
+
+<span class="nc" id="L203">		return tf;</span>
+	}
+
+	/**
+	 * Creates and returns a text field in which only numbers can be typed.
+	 * 
+	 * @return
+	 */
+	JTextField getNumericField() {
+		// this specialized constructor will properly ensure that the 
+		// formatted text field only accepts LONGS from now on out.
+<span class="fc" id="L214">		NumberFormat fi = NumberFormat.getInstance();</span>
+<span class="fc" id="L215">		fi.setParseIntegerOnly(true);</span>
+<span class="fc" id="L216">		fi.setGroupingUsed(false);</span>
+<span class="fc" id="L217">		final JTextField tf = new JFormattedTextField(fi);</span>
+
+		// note that pesky programmers can still type &quot;-&quot; and get it accepted!
+<span class="fc" id="L220">		return tf;</span>
+	}
+
+	/**
+	 * Creates and returns password field of appropriate size.
+	 * 
+	 * @return java.awt.TextField	
+	 */
+	JPasswordField getPasswordField() {
+<span class="fc" id="L229">		JPasswordField pf = new JPasswordField(40);</span>
+
+<span class="fc" id="L231">		return pf;</span>
+	}
+
+	/**
+	 * Prepare Register button and install controller to deal with requests to connect.
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	public JButton getRegisterButton() {
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">		if (registerButton == null) {</span>
+<span class="fc" id="L241">			registerButton = new JButton();</span>
+<span class="fc" id="L242">			registerButton.setText(&quot;Register&quot;);</span>
+
+<span class="fc" id="L244">			registerButton.addActionListener(new ActionListener() {</span>
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L248">					new RegisterButtonController(ConnectFrame.this).process(lobbyInit);</span>
+<span class="nc" id="L249">				}</span>
+
+			});
+		}
+
+<span class="fc" id="L254">		return registerButton;</span>
+	}
+
+	/**
+	 * Prepare Connect button and install controller to deal with requests to connect.
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	public JButton getConnectButton() {
+<span class="pc bpc" id="L263" title="1 of 2 branches missed.">		if (connectButton == null) {</span>
+<span class="fc" id="L264">			connectButton = new JButton();</span>
+<span class="fc" id="L265">			connectButton.setText(&quot;Connect&quot;);</span>
+
+<span class="fc" id="L267">			connectButton.addActionListener(new ActionListener() {</span>
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L271">					new ConnectButtonController(ConnectFrame.this).process(lobbyInit);</span>
+<span class="nc" id="L272">				}</span>
+			});
+		}
+<span class="fc" id="L275">		return connectButton;</span>
+	}
+
+	/** 
+	 * Helper method to set error and show its status. 
+	 */
+	public void setError(String string) {
+<span class="nc" id="L282">		statusA.setText(string);</span>
+<span class="nc" id="L283">		statusA.setVisible(true);</span>
+<span class="nc" id="L284">	}</span>
+
+	/**
+	 * Helper method to clear error.
+	 */
+	public void clearError() {
+<span class="nc" id="L290">		statusA.setText(&quot;&quot;);</span>
+<span class="nc" id="L291">		statusA.setVisible(false);</span>
+<span class="nc" id="L292">	}</span>
+
+	/**
+	 * Extract value and wipe password from the given JPasswordField.
+	 * 
+	 * @param p   password field to extract.
+	 * @return
+	 */
+	String extractPassword(JPasswordField p) {
+<span class="nc" id="L301">		char chars[] = p.getPassword();</span>
+
+		// eliminates from memory safely
+<span class="nc" id="L304">		String password = new String(&quot;&quot;);</span>
+<span class="nc bnc" id="L305" title="All 2 branches missed.">		for (char c : chars) {</span>
+<span class="nc" id="L306">			password = password + c;</span>
+		}
+<span class="nc bnc" id="L308" title="All 2 branches missed.">		for (int i = 0; i &lt; chars.length; i++) {</span>
+<span class="nc" id="L309">			chars[i] = '\0';   // protect.</span>
+		}
+
+<span class="nc" id="L312">		return password;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PlayerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.entities</a> &gt; <span class="el_source">PlayerTest.java</span></div><h1>PlayerTest.java</h1><pre class="source lang-java linenums">package wordstealclient.entities;
+
+import static org.junit.Assert.*;
+
+import org.junit.*;
+
+/**
+ * @author jbodah
+ */
+<span class="fc" id="L10">public class PlayerTest {</span>
+
+	private Player player ;
+	
+	@Before
+	public void setUp() {
+<span class="fc" id="L16">		player = new Player() ;</span>
+<span class="fc" id="L17">	}</span>
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L21">		player = null ;</span>
+<span class="fc" id="L22">	}</span>
+	
+	@Test
+	public void testLogin() {	
+<span class="fc" id="L26">		assertEquals( player.getLogin(), 0 ) ;</span>
+<span class="fc" id="L27">		player.setLogin( 300 ) ;</span>
+<span class="fc" id="L28">		assertEquals( player.getLogin(), 300 ) ;</span>
+<span class="fc" id="L29">	}</span>
+	
+	@Test
+	public void testAlias() {	
+<span class="fc" id="L33">		assertEquals( player.getAlias(), &quot;User 0&quot; ) ;</span>
+<span class="fc" id="L34">		player.setAlias( &quot;testcase&quot; ) ;</span>
+<span class="fc" id="L35">		assertEquals( player.getAlias(), &quot;testcase&quot; ) ;</span>
+<span class="fc" id="L36">	}</span>
+	
+	@Test
+	public void testWSRatings() {	
+<span class="fc" id="L40">		assertEquals( player.getWordstealRating(), 0 ) ;</span>
+<span class="fc" id="L41">		assertEquals( player.getWordstealWins(), 0 ) ;</span>
+<span class="fc" id="L42">		assertEquals( player.getWordstealLosses(), 0 ) ;</span>
+<span class="fc" id="L43">		player.setWordstealRating( 1400 ) ;</span>
+<span class="fc" id="L44">		player.setWordstealWins( 20 ) ;</span>
+<span class="fc" id="L45">		player.setWordstealLosses( 10 ) ;</span>
+<span class="fc" id="L46">		assertEquals( player.getWordstealRating(), 1400 ) ;</span>
+<span class="fc" id="L47">		assertEquals( player.getWordstealWins(), 20 ) ;</span>
+<span class="fc" id="L48">		assertEquals( player.getWordstealLosses(), 10 ) ;</span>
+<span class="fc" id="L49">	}</span>
+	
+	@Test
+	public void testSLRatings() {	
+<span class="fc" id="L53">		assertEquals( player.getSolitaireRating(), 0 ) ;</span>
+<span class="fc" id="L54">		assertEquals( player.getSolitaireWins(), 0 ) ;</span>
+<span class="fc" id="L55">		assertEquals( player.getSolitaireLosses(), 0 ) ;</span>
+<span class="fc" id="L56">		player.setSolitaireRating( 1400 ) ;</span>
+<span class="fc" id="L57">		player.setSolitaireWins( 20 ) ;</span>
+<span class="fc" id="L58">		player.setSolitaireLosses( 10 ) ;</span>
+<span class="fc" id="L59">		assertEquals( player.getSolitaireRating(), 1400 ) ;</span>
+<span class="fc" id="L60">		assertEquals( player.getSolitaireWins(), 20 ) ;</span>
+<span class="fc" id="L61">		assertEquals( player.getSolitaireLosses(), 10 ) ;</span>
+<span class="fc" id="L62">	}</span>
+	
+	@Test
+	public void testSKRatings() {	
+<span class="fc" id="L66">		assertEquals( player.getSudokuRating(), 0 ) ;</span>
+<span class="fc" id="L67">		assertEquals( player.getSudokuWins(), 0 ) ;</span>
+<span class="fc" id="L68">		assertEquals( player.getSudokuLosses(), 0 ) ;</span>
+<span class="fc" id="L69">		player.setSudokuRating( 1400 ) ;</span>
+<span class="fc" id="L70">		player.setSudokuWins( 20 ) ;</span>
+<span class="fc" id="L71">		player.setSudokuLosses( 10 ) ;</span>
+<span class="fc" id="L72">		assertEquals( player.getSudokuRating(), 1400 ) ;</span>
+<span class="fc" id="L73">		assertEquals( player.getSudokuWins(), 20 ) ;</span>
+<span class="fc" id="L74">		assertEquals( player.getSudokuLosses(), 10 ) ;</span>
+<span class="fc" id="L75">	}</span>
+	
+	@Test
+	public void testConstructors() {
+<span class="fc" id="L79">		Player player = new Player( 578, &quot;Some Guy&quot;, 1500, 20, 10) ;</span>
+<span class="fc" id="L80">		assertEquals( player.getLogin(), 578 ) ;</span>
+<span class="fc" id="L81">		assertEquals( player.getAlias(), &quot;Some Guy&quot; ) ;</span>
+<span class="fc" id="L82">		assertEquals( player.getWordstealRating(), 1500 ) ;</span>
+<span class="fc" id="L83">		assertEquals( player.getWordstealWins(), 20 ) ;</span>
+<span class="fc" id="L84">		assertEquals( player.getWordstealLosses(), 10 ) ;</span>
+		
+<span class="fc" id="L86">		Player player2 = new Player( 789, &quot;Superman&quot;,</span>
+<span class="fc" id="L87">									 99999, 99999, 0,</span>
+<span class="fc" id="L88">									 99999, 99999, -1,</span>
+<span class="fc" id="L89">									 99999, 99999, -2) ;</span>
+<span class="fc" id="L90">		assertEquals( player2.getLogin(), 789 ) ;</span>
+<span class="fc" id="L91">		assertEquals( player2.getAlias(), &quot;Superman&quot; ) ;</span>
+<span class="fc" id="L92">		assertEquals( player2.getWordstealRating(), 99999 ) ;</span>
+<span class="fc" id="L93">		assertEquals( player2.getWordstealWins(), 99999 ) ;</span>
+<span class="fc" id="L94">		assertEquals( player2.getWordstealLosses(), 0 ) ;</span>
+<span class="fc" id="L95">		assertEquals( player2.getSolitaireRating(), 99999 ) ;</span>
+<span class="fc" id="L96">		assertEquals( player2.getSolitaireWins(), 99999 ) ;</span>
+<span class="fc" id="L97">		assertEquals( player2.getSolitaireLosses(), -1 ) ;</span>
+<span class="fc" id="L98">		assertEquals( player2.getSudokuRating(), 99999 ) ;</span>
+<span class="fc" id="L99">		assertEquals( player2.getSudokuWins(), 99999 ) ;</span>
+<span class="fc" id="L100">		assertEquals( player2.getSudokuLosses(), -2 ) ;</span>
+<span class="fc" id="L101">	}</span>
+	
+	@Test
+	public void testGetTableID() {
+<span class="fc" id="L105">		Player player = new Player() ;</span>
+<span class="fc" id="L106">		Table table = new Table(50) ;</span>
+<span class="fc" id="L107">		table.addPlayer(player);</span>
+<span class="fc" id="L108">		assertEquals(player.getTableID(), 50) ;</span>
+<span class="fc" id="L109">	}</span>
+	
+	@Test
+	public void testGetSplitPlayerInfo() {
+<span class="fc" id="L113">		Player player = new Player( 789, &quot;Superman&quot;,</span>
+<span class="fc" id="L114">									99999, 99999, 0,</span>
+<span class="fc" id="L115">									99999, 99999, -1,</span>
+<span class="fc" id="L116">									99999, 99999, -2) ;</span>
+<span class="fc" id="L117">		String[] testStrings = player.getSplitPlayerInfo() ;</span>
+<span class="fc" id="L118">		testStrings[0].equals(&quot;99999&quot;);</span>
+<span class="fc" id="L119">		testStrings[1].equals(&quot;99999&quot;);</span>
+<span class="fc" id="L120">		testStrings[2].equals(&quot;0&quot;);</span>
+		
+<span class="fc" id="L122">		String testString = player.getPlayerInfo() ;</span>
+<span class="fc" id="L123">		testString.equals(&quot;Superman - 99999 (99999/0)&quot;);</span>
+		
+<span class="fc" id="L125">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TablesRequestControllerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.requests</a> &gt; <span class="el_source">TablesRequestControllerTest.java</span></div><h1>TablesRequestControllerTest.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.requests;
+
+import ks.client.UserContext;
+import ks.client.interfaces.IController;
+import ks.client.ipc.MockServer;
+import ks.client.lobby.LobbyFrame;
+
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+
+import org.junit.*;
+import org.w3c.dom.Document;
+
+import wordstealclient.controllers.correlated_requests.PlayersRequestController;
+import wordstealclient.controllers.correlated_requests.TablesRequestController;
+import wordstealclient.entities.Table.TABLE_STATE;
+import wordstealclient.util.XMLSchema;
+import static org.junit.Assert.*;
+
+<span class="fc" id="L20">public class TablesRequestControllerTest {</span>
+	
+	public static final String localhost = &quot;localhost&quot;;
+	public static final String user = &quot;123&quot;;
+	public static final String password = &quot;password&quot;;
+	public static final int tableID = 1;
+	public static final int seed = 50;
+	public static final String game = &quot;wordsteal.Wordsteal&quot;;
+<span class="fc" id="L28">	public static final TABLE_STATE state = TABLE_STATE.PUBLIC;</span>
+	UserContext context;
+	LobbyFrame lobby;
+	MockServer mockServer;
+	
+	@Before
+	public void setUp() {
+		try {
+<span class="fc" id="L36">			Message.unconfigure();</span>
+<span class="fc" id="L37">			assertTrue (Configure.configure());</span>
+			
+			// create client to connect
+<span class="fc" id="L40">			context = new UserContext();  </span>
+<span class="fc" id="L41">			lobby = new LobbyFrame (context);</span>
+<span class="fc" id="L42">			lobby.setVisible(true);</span>
+			
+<span class="fc" id="L44">			context.setUser(user);</span>
+<span class="fc" id="L45">			context.setPassword(password);</span>
+<span class="fc" id="L46">			context.setSelfRegister(false);</span>
+			
+<span class="fc" id="L48">			mockServer = new MockServer(lobby);</span>
+<span class="fc" id="L49">			context.setClient(mockServer);</span>
+			
+			
+<span class="nc" id="L52">		} catch (Exception e) {</span>
+<span class="nc" id="L53">			fail (&quot;Unable to perform setup for ConfirmRequestControllerTest&quot;);</span>
+		}		
+<span class="fc" id="L55">	}</span>
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L59">		lobby.dispose();</span>
+<span class="fc" id="L60">		mockServer.disconnect();</span>
+<span class="fc" id="L61">		context = null;</span>
+<span class="fc" id="L62">		mockServer = null;</span>
+<span class="fc" id="L63">	}</span>
+	
+	@Test
+	public void processConfirmRequest()
+	{
+		try {			
+<span class="fc" id="L69">			TablesRequestController trc = new TablesRequestController(lobby);</span>
+<span class="fc" id="L70">			trc.process();</span>
+			
+<span class="fc" id="L72">			Message req = mockServer.firstRoundTripRequest();</span>
+<span class="fc" id="L73">			IController ic = mockServer.firstRoundTripController();</span>
+			
+<span class="fc" id="L75">			assertNotNull(req);	</span>
+			
+			/*
+			 * &lt;response version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot; success=&quot;true&quot;&gt;
+				- &lt;tableResponse&gt;
+				- 	&lt;table id=&quot;13&quot; seed=&quot;12944&quot; type=&quot;public&quot; full=&quot;false&quot; moderator=&quot;1213&quot; game=&quot;WordSteal&quot; options=&quot;turnTime=30,noS=true,maxScore=50&quot;&gt;
+				  		&lt;player-id player=&quot;11&quot; /&gt; 
+				  		&lt;player-id player=&quot;1213&quot; /&gt; 
+				  	&lt;/table&gt;
+				- 	&lt;table id=&quot;17&quot; seed=&quot;11144&quot; type=&quot;private&quot; full=&quot;true&quot; moderator=&quot;18&quot; game=&quot;solitaire/freeCell&quot; options=&quot;undo=true,newHand=true,time=500&quot;&gt;
+				  		&lt;player-id player=&quot;18&quot; /&gt; 
+				  		&lt;player-id player=&quot;17&quot; /&gt; 
+				  	&lt;/table&gt;
+				  &lt;/tableResponse&gt;
+				&lt;/response&gt;
+			 */
+			
+<span class="fc" id="L92">			String s = &quot;&lt;table id=\&quot;&quot; + tableID + &quot;\&quot; seed=\&quot;&quot; + seed + &quot;\&quot; type=\&quot;&quot; + XMLSchema.convertTableState(state) + &quot;\&quot; full=\&quot;false\&quot; moderator=\&quot;1213\&quot; game=\&quot;&quot; + game + &quot;\&quot; options=\&quot;turnTime=30,noS=true,maxScore=50\&quot;&gt;&quot; + </span>
+<span class="fc" id="L93">					  		&quot;&lt;player-id player=\&quot;11\&quot;/&gt;&quot; + </span>
+<span class="fc" id="L94">					  		&quot;&lt;player-id player=\&quot;1213\&quot;/&gt;&quot; +</span>
+<span class="fc" id="L95">					   &quot;&lt;/table&gt;&quot;;</span>
+				
+<span class="fc" id="L97">			String xmlString = Message.responseHeader(true, req.id) + &quot;&lt;tableResponse&gt;&quot; + s + &quot;&lt;/tableResponse&gt;&lt;/response&gt;&quot;;</span>
+<span class="fc" id="L98">			Document d = Message.construct (xmlString);</span>
+<span class="fc" id="L99">			Message resp = new Message(d);</span>
+<span class="fc" id="L100">			trc.process(lobby, null, resp);	</span>
+			
+<span class="fc" id="L102">			req = mockServer.firstRoundTripRequest();</span>
+<span class="fc" id="L103">			ic = mockServer.firstRoundTripController();</span>
+
+<span class="fc" id="L105">			assertNotNull(req);</span>
+<span class="fc" id="L106">			assertNotNull(ic);</span>
+		}
+<span class="nc" id="L108">		catch (Exception e){</span>
+<span class="nc" id="L109">			fail(e.getMessage());</span>
+		}
+<span class="fc" id="L111">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

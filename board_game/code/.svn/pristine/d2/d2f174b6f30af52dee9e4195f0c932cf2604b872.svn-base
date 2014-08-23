@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TablesRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.correlated_requests</a> &gt; <span class="el_source">TablesRequestController.java</span></div><h1>TablesRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.correlated_requests;
+
+import ks.client.interfaces.IController;
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+
+import wordstealclient.controllers.xml_handlers.TableResponseHandler;
+import wordstealclient.util.GUIUpdater;
+
+/**
+ * Request: tables&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: &lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * 	{@literal &lt;!-- Retrieve list of all tables. --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;tables/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @author jbodah
+ */
+public class TablesRequestController implements IController {
+	ILobby lobby ;
+	
+<span class="fc" id="L27">	public TablesRequestController(ILobby lobby) {</span>
+<span class="fc" id="L28">		this.lobby = lobby;</span>
+<span class="fc" id="L29">	}</span>
+	
+	/**
+	 * Create and send request
+	 * @author jbodah
+	 */
+	public void process() {
+<span class="fc" id="L36">		Message m = new Message(Message.construct (writeXMLForRequest()));</span>
+<span class="fc" id="L37">		lobby.getContext().getClient().sendToServer(lobby, m, this);</span>
+<span class="fc" id="L38">		System.out.println(&quot;TablesRequestController.process(): Request sent&quot;);</span>
+<span class="fc" id="L39">	}</span>
+
+	private String writeXMLForRequest() {
+<span class="fc" id="L42">		String s = Message.requestHeader() +</span>
+<span class="fc" id="L43">				new String(	&quot;&lt;tables/&gt;&quot; + </span>
+				&quot;&lt;/request&gt;&quot;);
+<span class="fc" id="L45">		return s;</span>
+	}
+	
+	/**
+	 *  process correlated response (to given request) when received from server
+	 *	@author jbodah
+	 */
+	@Override
+	public void process(ILobby lobby, Message request, Message response) {		
+<span class="fc" id="L54">		System.out.println(&quot;TablesRequestController.process(ILobby, Message, Message): Received &quot; + response + &quot; in response to &quot; + request);</span>
+<span class="fc" id="L55">		TableResponseHandler.parseXML( response ) ;</span>
+<span class="fc" id="L56">		GUIUpdater.updateGUIWithTableOrTables();</span>
+<span class="fc" id="L57">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

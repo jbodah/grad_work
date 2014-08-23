@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Client.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.ipc</a> &gt; <span class="el_source">Client.java</span></div><h1>Client.java</h1><pre class="source lang-java linenums">package ks.client.ipc;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Hashtable;
+import java.util.LinkedList;
+import java.util.Queue;
+
+import ks.client.interfaces.IController;
+import ks.client.interfaces.ILobby;
+import ks.client.processor.ClientProcessor;
+import ks.framework.common.Message;
+import ks.framework.interfaces.IClientProcessor;
+
+/**
+ * Client inter-process communication component.
+ * &lt;p&gt;
+ * Responsible for initiating a connection to the server inter-process
+ * communication component.  This manages both the Talker to the server
+ * and the reader from the server.
+ * &lt;p&gt;
+ * Provides an abstract to client-side code that need to contact the 
+ * server. To connect, call the {@link #connect(String, int, String, String, boolean)}
+ * method; to disconnect, call {@link #disconnect()}. During the connect
+ * invocation, the plaintext password is hashed using {@link #sha1(String)}
+ * logic, according to the standard SHA-1 encryption algorithm. The server
+ * will be responsible for matching passwords accordingly using only the
+ * hashed value. To send a message to the server, simply call 
+ * {@link #sendToServer(Message)} with the desired message and it will be
+ * delivered.
+ * &lt;p&gt;
+ * When messages are received from the server, the {@link #process(Message)}
+ * delegates the processing of these messages to the {@link #processor} entity
+ * that was set via the {@link #setProcessor(IClientProcessor)} invocation.
+ * This client entity then acts as a true middle-man.
+ * 
+ * When the sending client knows that a specific message is to be returned, then the
+ * caller can set up a waiting controller to take over that responsibility. Then
+ * There is a specific match waiting.
+ * 
+ * @author George Heineman
+ */
+<span class="fc" id="L43">public class Client  {</span>
+	/** Talker to communicate via network. */
+	Talker talker;
+
+	/** Reader to process returning Messages. */
+	Reader reader;
+
+	/** Determines if client is connected. */
+<span class="fc" id="L51">	boolean isConnected = false;</span>
+
+	/** Each client knows the ClientProcessor to whom requests are sent. */
+	ClientProcessor processor;
+
+	/* Waiting controllers (key=messageID, value=controller). */
+<span class="fc" id="L57">	Hashtable&lt;String,ControllerTuple&gt; queue = new Hashtable&lt;String,ControllerTuple&gt;();   </span>
+
+	class ControllerTuple {
+		IController  controller;
+		ILobby       lobby;
+		Message      request;
+
+<span class="nc" id="L64">		ControllerTuple (ILobby l, IController c, Message r) {</span>
+<span class="nc" id="L65">			lobby = l;</span>
+<span class="nc" id="L66">			controller = c;</span>
+<span class="nc" id="L67">			request = r;</span>
+<span class="nc" id="L68">		}</span>
+	}
+
+
+	/**
+	 * Method for converting a number from byte to hexadecimal.
+	 * &lt;p&gt;
+	 * @param b	byte to be converted to hex
+	 * @return	String representing hex conversion of give byte
+	 */
+	static String byteToHex(byte b){
+<span class="nc" id="L79">		int holder =(int) b;</span>
+<span class="nc" id="L80">		String x = Integer.toHexString(holder);</span>
+<span class="nc" id="L81">		holder = (Integer.SIZE/4) - (Byte.SIZE/4);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		while(x.length() &lt; 8){</span>
+<span class="nc" id="L83">			x = &quot;0&quot; + x;</span>
+		}
+<span class="nc" id="L85">		return x.substring(holder);</span>
+	}
+
+	/**
+	 * Provided SHA-1 encryption for plain-text passwords.
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String sha1(String text){
+<span class="nc" id="L95">		byte[] toDigest = text.getBytes();</span>
+		MessageDigest sha;
+		try {
+<span class="nc" id="L98">			sha = MessageDigest.getInstance(&quot;SHA-1&quot;);</span>
+<span class="nc" id="L99">		} catch (NoSuchAlgorithmException e) {</span>
+<span class="nc" id="L100">			e.printStackTrace();</span>
+<span class="nc" id="L101">			return text;</span>
+		}
+<span class="nc" id="L103">		sha.update(toDigest);</span>
+<span class="nc" id="L104">		toDigest = sha.digest();</span>
+<span class="nc" id="L105">		String rString = &quot;&quot;;</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">		for (int i = 0; i &lt; toDigest.length; i++){</span>
+<span class="nc" id="L107">			rString = rString + byteToHex(toDigest[i]);</span>
+		}
+<span class="nc" id="L109">		return rString;</span>
+	}
+
+	/** 
+	 * Initiate the connection to the server.
+	 * 
+	 * If selfRegister is set to true then the user/password values are ignored
+	 * and the server simply creates a new account for the user.
+	 * 
+	 * @param hostname    desired target host
+	 * @param port        desired port
+	 * @param user        user wishing to connect
+	 * @param password    hashed password
+	 */
+	public void connect(String hostname, int port, String user, String password, boolean selfRegister) {
+<span class="fc" id="L124">		talker = new Talker (this);</span>
+
+<span class="fc" id="L126">		talker.setvalues(hostname, port, user, password, selfRegister);</span>
+<span class="fc" id="L127">		talker.start();</span>
+<span class="fc" id="L128">	}</span>
+
+	/** Disconnect from the server. */
+	public boolean disconnect() {
+<span class="pc bpc" id="L132" title="1 of 2 branches missed.">		if (talker != null) {</span>
+<span class="fc" id="L133">			talker.disconnect();</span>
+
+<span class="fc" id="L135">			queue.clear();  // eliminate any waiting controllers</span>
+
+<span class="fc" id="L137">			talker = null;</span>
+<span class="fc" id="L138">			return true;</span>
+		}
+
+<span class="nc" id="L141">		return false;</span>
+	}
+
+	/**
+	 * Deliver message to the server using {@link #talker} thread.
+	 * 
+	 * @param m
+	 */
+	public boolean sendToServer(Message m) {
+<span class="nc bnc" id="L150" title="All 2 branches missed.">		if (!isConnected) return false;</span>
+
+<span class="nc" id="L152">		return talker.writeObject(m);</span>
+	}
+
+	/**
+	 * Deliver message to the server using {@link #talker} thread and make sure
+	 * that given controller is told about the return message that matches its id.
+	 * 
+	 * @param m
+	 */
+	public boolean sendToServer(ILobby lobby, Message m, IController c) {
+<span class="pc bpc" id="L162" title="1 of 2 branches missed.">		if (!isConnected) return false;</span>
+
+<span class="nc" id="L164">		boolean success = talker.writeObject(m);</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">		if (success) {</span>
+<span class="nc" id="L166">			queue.put (m.id, new ControllerTuple(lobby, c, m));</span>
+		}
+<span class="nc" id="L168">		return success;</span>
+	}
+
+
+	/** 
+	 * This method is invoked by the Talker once a connection has been
+	 * established (or terminated).
+	 * 
+	 * @param status
+	 */
+	public void connected(boolean status) {
+
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">		if (status) {</span>
+<span class="nc" id="L181">			reader = new Reader (talker.getAgent(), this);</span>
+<span class="nc" id="L182">			reader.start();</span>
+		} else {
+<span class="fc" id="L184">			reader = null;</span>
+		}
+
+		// pass along to processor
+<span class="fc" id="L188">		isConnected = status;</span>
+<span class="fc" id="L189">		processor.connected(status);</span>
+<span class="fc" id="L190">	}</span>
+
+	/**
+	 * This message has been received from the server. It must be
+	 * delegated to the appropriate processor on the client side.
+	 * &lt;P&gt;
+	 * This message is routed to the appropriate {@link IController} if the
+	 * user has registered one via {@link #sendToServer(Message, IController)}.
+	 * The controller that processes the message is based on the id of the
+	 * message being received.
+	 * 
+	 * @param m
+	 */
+	public void process(Message m) {
+		try {
+<span class="fc" id="L205">			synchronized (queue) {</span>
+<span class="fc" id="L206">				ControllerTuple p = queue.remove(m.id);</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">				if (p != null) {</span>
+<span class="nc" id="L208">					p.controller.process(p.lobby, p.request, m);</span>
+				} else {
+<span class="fc" id="L210">					processor.process(m);</span>
+				}
+			}
+<span class="fc" id="L213">		} catch (Exception e) {</span>
+<span class="fc" id="L214">			System.err.println(&quot;Error processing:&quot; + m.toString());</span>
+		}
+<span class="fc" id="L216">	}</span>
+
+	/**
+	 * Set the processor to respond to client messages from server.
+	 * 
+	 * @param p
+	 */
+	public void setProcessor(ClientProcessor p) {
+<span class="fc" id="L224">		this.processor = p;</span>
+<span class="fc" id="L225">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,769 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>StatSVN - Directory src/wordstealclient/entities/</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="Generator" content="StatSVN 0.7.0"/>
+<link rel="stylesheet" href="objectlab-statcvs.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="http://bit.ly/javascript-api.js?version=latest&#38;login=statsvn&#38;apiKey=R_2c362b417d0517c27876cbaca1bb68cc"></script>
+<script type="text/javascript" charset="utf-8">
+   // wait until page is loaded to call API
+   var redir_url;
+   var short_url;
+   BitlyCB.myShortenCallback = function(data) {
+      // this is how to get a result of shortening a single url
+      var result;
+      short_url=null;
+      for (var r in data.results) {
+         result = data.results[r];
+         result['longUrl'] = r;
+         short_url = result['shortUrl'];
+         break;
+      }
+      if (short_url==null) // bit.ly failed
+      document.location=redir_url;
+      else
+      redirToTwitter();
+   };
+   function shortenTweet(url) {
+      if (short_url == null || redir_url!=url) {
+      redir_url = url;
+      BitlyClient.shorten(document.location, 'BitlyCB.myShortenCallback');
+      }
+      else
+      redirToTwitter();
+      return false;
+   }
+   function redirToTwitter() { 
+      // replace {0} which is visible as %7B0} in the link
+      document.location = redir_url.replace('%7B0}', short_url);
+   }
+</script>
+  </head>
+
+<body>
+
+<h1>Directory src/wordstealclient/entities/</h1>
+<div id="parentlink">&#171; <a href="index.html">Development Statistics for /WordstealClient</a></div>
+<dl class="attributes">
+    <dt>Directory Created:</dt>
+    <dd><span class="date">2012-03-20 18:45</span></dd>
+    <dt>Total Files:</dt>
+    <dd>3</dd>
+    <dt>Deleted Files:</dt>
+    <dd>1</dd>
+    <dt>Lines of Code:</dt>
+    <dd>610</dd>
+</dl>
+<p class="dirtree">
+<a href="dir.html">[root]</a>/<a href="dir_src.html">src</a>/<a href="dir_src_wordstealclient.html">wordstealclient</a>/<strong>entities</strong><br/>
+</p>
+
+<div class="section">
+<h2>Lines of Code</h2>
+<p class="chart"><img src="loc_module_src_wordstealclient_entities.png" alt="src/wordstealclient/entities/ Lines of Code" width="800" height="500" /></p></div>
+<div class="section">
+<h2>Developers</h2>
+  <table  rules="groups" summary="All authors and the number of their changes and lines of code in this directory">
+    <colgroup align="left"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <thead>
+      <tr>
+        <th>Author</th>
+        <th>Changes</th>
+        <th>Lines of Code</th>
+        <th>Lines per Change</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th>Totals</th>
+        <td>58 (100.0%)</td>
+        <td>844 (100.0%)</td>
+        <td>14.5</td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr  class="odd">
+        <th><a href="user_jbodah.html" class="author">jbodah</a></th>
+        <td>42 (72.4%)</td>
+        <td>674 (79.9%)</td>
+        <td>16.0</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="user_cbelhumeur.html" class="author">cbelhumeur</a></th>
+        <td>16 (27.6%)</td>
+        <td>170 (20.1%)</td>
+        <td>10.6</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="section">
+<h2>Most Recent Commits</h2>
+<dl class="commitlist">
+  <dt><a name="35"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-28 14:36</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">104</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+README, comments
+    </p>
+    <p class="commitdetails"><strong>15</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+10)</span>,
+        Table.java&#160;<span class="change">(+5)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="34"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-28 14:13</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">103</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Clean up
+    </p>
+    <p class="commitdetails"><strong>0</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="33"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 21:11</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">97</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+More tests!
+    </p>
+    <p class="commitdetails"><strong>10</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+10&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="32"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 19:41</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">95</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+playerslist and invite controller tests
+    </p>
+    <p class="commitdetails"><strong>8</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+8&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="31"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-27 17:27</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">90</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Moving things into external folder
+    </p>
+    <p class="commitdetails"><strong>0</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="30"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-27 17:23</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">89</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+GameResponseHandlerTest, cleaned up unit tests a bit, made an "external" package for code that isn't immediately related to our client
+    </p>
+    <p class="commitdetails"><strong>7</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+7&#160;-3)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="29"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-26 17:56</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">84</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Bunch of crap, forget what I did
+    </p>
+    <p class="commitdetails"><strong>37</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+37&#160;-39)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="28"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-26 17:07</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">83</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Invitations now work if a table is set to by invitation only.
+    </p>
+    <p class="commitdetails"><strong>1</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="27"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-22 17:20</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">80</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+LeaveRequest implemented and working with GUI. Client now tracks EVERY players location (probably unnecessary, but makes out lives easier). There is an issue that 1) Table is redrawn when TableResponses come in 2) No TablesRequest is sent when a player leaves a table. Both of these need to happen to prevent the issue
+    </p>
+    <p class="commitdetails"><strong>14</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+8)</span>,
+        Table.java&#160;<span class="change">(+6)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="26"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-19 20:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">73</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Working JoinRequest
+    </p>
+    <p class="commitdetails"><strong>10</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+10&#160;-6)</span>,
+        Table.java&#160;<span class="change">(-3)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="25"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-19 15:47</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">69</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Funneled accessors for Player into one method
+    </p>
+    <p class="commitdetails"><strong>4</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+4&#160;-4)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="24"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-19 15:28</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">68</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Player.getAlias() returns "User 376" or whatever login they have now
+    </p>
+    <p class="commitdetails"><strong>2</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+2&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="23"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-19 13:22</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">65</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Changed Player.tableID to Player.table, added unit tests, sets to null when Table.removePlayerAt() is called.
+    </p>
+    <p class="commitdetails"><strong>8</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+5&#160;-5)</span>,
+        Table.java&#160;<span class="change">(+3&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="22"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-19 13:14</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">64</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+JoinRequest now expects TableResponse. Players now have a tableID they are associated with.
+    </p>
+    <p class="commitdetails"><strong>11</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+10)</span>,
+        Table.java&#160;<span class="change">(+1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="21"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-17 15:52</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">62</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Invitations and other modifications to the table to support gameplay.
+    </p>
+    <p class="commitdetails"><strong>39</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+39)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="20"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-13 13:06</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">60</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Major updates to in-table GUI, new resources added, new GUI helper added, other modifications.<br />
+Defaults to in-table GUI. This can be modified in the TableManagerGUI file.
+    </p>
+    <p class="commitdetails"><strong>5</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+5&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="19"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-12 15:04</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">56</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Shifted tableID's by one so now they go from 1-100 instead of 0-99. Room.tables[0] is null
+    </p>
+    <p class="commitdetails"><strong>7</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+7&#160;-3)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="18"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-12 14:37</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">55</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+GUI updates, link with requests, etc
+    </p>
+    <p class="commitdetails"><strong>0</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(-6)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="17"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-12 13:38</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">53</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+JoinTable functionality + testing
+    </p>
+    <p class="commitdetails"><strong>2</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+2&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="16"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-11 17:14</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">51</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added the three ChatResponse cases as well as tests
+    </p>
+    <p class="commitdetails"><strong>1</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="15"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-11 12:47</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">46</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+TableEmpty logic and testing, renamed a few controller packages to improve clarity
+    </p>
+    <p class="commitdetails"><strong>12</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+12)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="14"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-11 11:50</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">45</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Testing for TableResponseHandler
+    </p>
+    <p class="commitdetails"><strong>30</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+30&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="13"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-10 20:35</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">44</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Got a controller test working and caught an interesting bug
+    </p>
+    <p class="commitdetails"><strong>5</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+5&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="12"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-10 18:04</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">42</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added a bunch of test cases for entities
+    </p>
+    <p class="commitdetails"><strong>91</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+15)</span>,
+        Room.java&#160;<span class="change">(+34&#160;-5)</span>,
+        Table.java&#160;<span class="change">(+42&#160;-9)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="11"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-10 15:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">41</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+TableRequestController should be working, removed a defunct constructor in Room, added basic methods and tests to Table, commented out some defunct TestData, organized TableTest tests into a suite
+    </p>
+    <p class="commitdetails"><strong>106</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+6&#160;-4)</span>,
+        Table.java&#160;<span class="change">(+100&#160;-22)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="10"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-09 16:48</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">40</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Rerouted response controllers since I just copied/pasted before, reimplemented PlayersRequestController, cleaned up other files a little (minor stuff), added NodeHelper to help with XML parsing
+    </p>
+    <p class="commitdetails"><strong>42</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+3)</span>,
+        Room.java&#160;<span class="change">(+13&#160;-4)</span>,
+        Table.java&#160;<span class="change">(+26&#160;-3)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="9"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-05 16:24</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">34</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added TestData.java<br />
+UI is now tied in with the test data.<br />
+Updated GUI objects.
+    </p>
+    <p class="commitdetails"><strong>25</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+17)</span>,
+        Room.java&#160;<span class="change">(+8&#160;-5)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="8"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-05 15:23</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">32</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Table UI updated.  Tables are now properly generated through the room. Other minor changes.
+    </p>
+    <p class="commitdetails"><strong>10</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+9&#160;-1)</span>,
+        Table.java&#160;<span class="change">(+1)</span>,
+        TableState.java&#160;<span class="del">(del)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="7"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-05 15:01</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">31</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Fixed some tests, deleted one which was completely irrelevant now. Setup the structure for several more.
+    </p>
+    <p class="commitdetails"><strong>5</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+5&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="6"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-05 13:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">27</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Tables UI enabled. Linked user requests with the user UI. Test cases changed. Other UI modifications.
+    </p>
+    <p class="commitdetails"><strong>26</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+12&#160;-4)</span>,
+        TableState.java&#160;<span class="change">(+14&#160;-10)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="5"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-03-31 15:33</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">25</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Initial UI modifications
+    </p>
+    <p class="commitdetails"><strong>46</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+21)</span>,
+        Table.java&#160;<span class="change">(+25)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="4"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-29 17:43</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">23</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+All the code to get players added to the Room after sending a playerRequest
+    </p>
+    <p class="commitdetails"><strong>96</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+78&#160;-25)</span>,
+        Room.java&#160;<span class="change">(+18&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="3"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-27 14:56</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">20</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added a working request/response ("players" request =&gt; "playerInfo" response)
+    </p>
+    <p class="commitdetails"><strong>23</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+12&#160;-9)</span>,
+        Room.java&#160;<span class="change">(+4&#160;-1)</span>,
+        Table.java&#160;<span class="change">(+3)</span>,
+        TableState.java&#160;<span class="change">(+4&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="2"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-26 16:12</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">14</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Copied arch package to our project, changed all Integer to int in Player class, started working on PlayerListRequestController.java
+    </p>
+    <p class="commitdetails"><strong>22</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+17&#160;-17)</span>,
+        Room.java&#160;<span class="change">(+5&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="1"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-20 18:45</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">1</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Basic package structure, Player, Table, Room, TableState all implemented with tests
+    </p>
+    <p class="commitdetails"><strong>124</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="new">(new&#160;67)</span>,
+        Room.java&#160;<span class="new">(new&#160;21)</span>,
+        Table.java&#160;<span class="new">(new&#160;18)</span>,
+        TableState.java&#160;<span class="new">(new&#160;18)</span>
+      </li>
+    </ul>
+  </dd>
+
+</dl>
+
+</div><div id="generatedby">Generated by <a href="http://www.statsvn.org">StatSVN</a> 0.7.0</div>
+</body>
+</html>

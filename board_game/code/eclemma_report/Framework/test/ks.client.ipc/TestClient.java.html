@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestClient.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.ipc</a> &gt; <span class="el_source">TestClient.java</span></div><h1>TestClient.java</h1><pre class="source lang-java linenums">package ks.client.ipc;
+
+import org.w3c.dom.Document;
+
+
+import junit.framework.TestCase;
+import ks.client.UserContext;
+import ks.client.controllers.ConnectController;
+import ks.client.controllers.DisconnectController;
+import ks.client.lobby.LobbyFrame;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+import ks.server.ipc.Server;
+
+/**
+ * 
+ */
+<span class="nc" id="L18">public class TestClient extends TestCase {</span>
+
+	// host
+	public static final String localhost = &quot;localhost&quot;;
+	
+	// sample credentials
+	public static final String user = &quot;11323&quot;;
+	public static final String password = &quot;password&quot;;
+	
+	int specialPort;
+	
+	protected void setUp() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L32">			Message.unconfigure();</span>
+<span class="nc" id="L33">			assertTrue (Configure.configure());</span>
+			
+			// validate a simple tables
+<span class="nc" id="L36">			String s = Message.requestHeader() + &quot;&lt;chat&gt;&lt;text&gt;Here is the message&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L37">			Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">			assertTrue (d != null);</span>
+			
+			// random port
+<span class="nc" id="L41">			specialPort = (int)(8000 + Math.random()*1000);</span>
+			
+<span class="nc" id="L43">		} catch (Exception e) {</span>
+<span class="nc" id="L44">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+<span class="nc" id="L46">	}</span>
+
+	
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="nc" id="L52">			Thread.sleep(1000);</span>
+<span class="nc" id="L53">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="nc" id="L56">	}</span>
+	
+	public void testClient() {
+<span class="nc" id="L59">		Server s = new Server(specialPort);</span>
+<span class="nc" id="L60">		assertTrue (s.activate());</span>
+		
+<span class="nc" id="L62">		waitASecond();</span>
+		
+		// create client to connect
+<span class="nc" id="L65">		UserContext context = new UserContext();  // by default, localhost</span>
+<span class="nc" id="L66">		context.setPort(specialPort);</span>
+<span class="nc" id="L67">		LobbyFrame lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L68">		lobby.setVisible(true);</span>
+		
+<span class="nc" id="L70">		context.setUser(user);</span>
+<span class="nc" id="L71">		context.setPassword(password);</span>
+<span class="nc" id="L72">		context.setSelfRegister(false);</span>
+		
+<span class="nc" id="L74">		assertTrue (new ConnectController(lobby).process(context));</span>
+		
+<span class="nc" id="L76">		waitASecond();</span>
+		
+		//assertTrue (new DisconnectController (lobby.getRoom()).process(context));
+<span class="nc" id="L79">		assertTrue (lobby.tryToDisconnect());</span>
+		
+<span class="nc" id="L81">		waitASecond();</span>
+<span class="nc" id="L82">		s.deactivate();</span>
+	
+<span class="nc" id="L84">		lobby.setVisible(false);</span>
+<span class="nc" id="L85">		lobby.dispose();</span>
+<span class="nc" id="L86">	}	</span>
+	
+	
+	public void testClientManualDisconnect() {
+<span class="nc" id="L90">		Server s = new Server(specialPort);</span>
+<span class="nc" id="L91">		assertTrue (s.activate());</span>
+		
+<span class="nc" id="L93">		waitASecond();</span>
+		
+		// create client to connect
+<span class="nc" id="L96">		UserContext context = new UserContext();  // by default, localhost</span>
+<span class="nc" id="L97">		context.setPort(specialPort);</span>
+<span class="nc" id="L98">		LobbyFrame lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L99">		lobby.setVisible(true);</span>
+		
+<span class="nc" id="L101">		context.setUser(user);</span>
+<span class="nc" id="L102">		context.setPassword(password);</span>
+<span class="nc" id="L103">		context.setSelfRegister(false);</span>
+		
+<span class="nc" id="L105">		new ConnectController(lobby).process(context);</span>
+		
+		// have to wait a bit longer... HACK 
+<span class="nc" id="L108">		waitASecond();</span>
+<span class="nc" id="L109">		waitASecond();</span>
+<span class="nc" id="L110">		waitASecond();</span>
+		
+		// the other way to leave is to manually invoke controller.
+<span class="nc" id="L113">		assertTrue (new DisconnectController (lobby).process(context));</span>
+		
+<span class="nc" id="L115">		waitASecond();</span>
+<span class="nc" id="L116">		s.deactivate();</span>
+
+<span class="nc" id="L118">		lobby.setVisible(false);</span>
+<span class="nc" id="L119">		lobby.dispose();</span>
+<span class="nc" id="L120">	}	</span>
+	
+	public void testClientWithNoServer() {
+		
+		// create client to connect
+<span class="nc" id="L125">		UserContext context = new UserContext();  // by default, localhost</span>
+<span class="nc" id="L126">		LobbyFrame lobby = new LobbyFrame (context);</span>
+<span class="nc" id="L127">		lobby.setVisible(true);</span>
+		
+<span class="nc" id="L129">		context.setUser(user);</span>
+<span class="nc" id="L130">		context.setPort(specialPort); // someplace (hopefully) no server is</span>
+<span class="nc" id="L131">		context.setPassword(password);</span>
+<span class="nc" id="L132">		context.setSelfRegister(false);</span>
+		
+<span class="nc" id="L134">		new ConnectController(lobby).process(context);</span>
+		
+<span class="nc" id="L136">		waitASecond();</span>
+		
+		// client not connected
+<span class="nc" id="L139">		assertFalse (context.getClient().isConnected);</span>
+
+<span class="nc" id="L141">		lobby.setVisible(false);</span>
+<span class="nc" id="L142">		lobby.dispose();</span>
+<span class="nc" id="L143">	}	</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

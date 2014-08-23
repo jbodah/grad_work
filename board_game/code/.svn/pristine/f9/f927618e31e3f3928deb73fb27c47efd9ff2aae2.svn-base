@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestChatController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.server.controllers</a> &gt; <span class="el_source">TestChatController.java</span></div><h1>TestChatController.java</h1><pre class="source lang-java linenums">package ks.server.controllers;
+
+import org.w3c.dom.Document;
+
+import junit.framework.TestCase;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.framework.communicator.SampleOutput;
+
+/**
+ * Here's an example to show how you might go about writing test cases for your
+ * controllers.
+ * &lt;p&gt;
+ * &lt;xs:element name=&quot;chat&quot;&gt;
+ *   &lt;xs:complexType&gt;
+ *     &lt;xs:sequence&gt;
+ *       &lt;xs:element ref=&quot;player-id&quot; minOccurs='0' maxOccurs='unbounded'/&gt;
+ *       &lt;xs:element ref=&quot;text&quot;/&gt;
+ *     &lt;/xs:sequence&gt;
+ *   &lt;/xs:complexType&gt;
+ * &lt;/xs:element&gt;
+ *
+ * @author heineman
+ *
+ */
+<span class="nc" id="L27">public class TestChatController extends TestCase {</span>
+
+	/** Controller under test. */
+	ChatController controller;
+
+	/** Communicator that facilitates server-side communication. */
+	Communicator com;
+
+	/** Three connected people on the system. */
+	SampleOutput original;
+	SampleOutput alice;
+	SampleOutput bob;
+	SampleOutput charlie;
+	
+	/** Ids. */
+<span class="nc" id="L42">	String originalID = &quot;113355&quot;;</span>
+<span class="nc" id="L43">	String aliceID = &quot;12345&quot;;</span>
+<span class="nc" id="L44">	String bobID = &quot;13131&quot;;</span>
+<span class="nc" id="L45">	String charlieID = &quot;873&quot;;</span>
+
+	protected void setUp() {
+<span class="nc" id="L48">		controller = new ChatController();</span>
+<span class="nc" id="L49">		com = new Communicator();</span>
+
+<span class="nc" id="L51">		original = new SampleOutput();</span>
+<span class="nc" id="L52">		alice = new SampleOutput();</span>
+<span class="nc" id="L53">		bob = new SampleOutput();</span>
+<span class="nc" id="L54">		charlie = new SampleOutput();</span>
+<span class="nc" id="L55">		com.connectUser(originalID, original);</span>
+<span class="nc" id="L56">		com.connectUser(aliceID, alice);</span>
+<span class="nc" id="L57">		com.connectUser(bobID, bob);</span>
+<span class="nc" id="L58">		com.connectUser(charlieID, charlie);</span>
+
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L62">			Message.unconfigure();</span>
+<span class="nc" id="L63">			assertTrue (Configure.configure());</span>
+<span class="nc" id="L64">		} catch (Exception e) {</span>
+<span class="nc" id="L65">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+<span class="nc" id="L67">	}</span>
+
+	// one test method per case
+	public void testGlobalChat() {
+<span class="nc" id="L71">		String s = &quot;&lt;request version=\&quot;1.0\&quot; id=\&quot;589a39591271844e3fbe32bbb9281ad9\&quot;&gt;&quot; +</span>
+		&quot;&lt;chat&gt;&lt;text&gt;This is a test&lt;/text&gt;&lt;/chat&gt;&quot; + 
+		&quot;&lt;/request&gt;&quot;;
+<span class="nc" id="L74">		Document d = Message.construct(s);</span>
+<span class="nc" id="L75">		Message m1 = new Message(d);</span>
+<span class="nc" id="L76">		m1.setOriginator(originalID);</span>
+
+<span class="nc" id="L78">		controller.process(com, m1);</span>
+
+		// alice, bob and charlie got something but original did not.
+<span class="nc" id="L81">		assertTrue (alice.hasObject());</span>
+<span class="nc" id="L82">		assertTrue (bob.hasObject());</span>
+<span class="nc" id="L83">		assertTrue (charlie.hasObject());</span>
+<span class="nc" id="L84">		assertFalse (original.hasObject());</span>
+<span class="nc" id="L85">	}</span>
+
+
+	// single chat to alice
+	public void testSinglePrivateChat() {
+<span class="nc" id="L90">		String s = &quot;&lt;request version=\&quot;1.0\&quot; id=\&quot;589a39591271844e3fbe32bbb9281ad9\&quot;&gt;&quot; +</span>
+<span class="nc" id="L91">		&quot;&lt;chat&gt;&lt;player-id player='&quot; + aliceID + &quot;'/&gt;&lt;text&gt;This is a test&lt;/text&gt;&lt;/chat&gt;&quot; + </span>
+<span class="nc" id="L92">		&quot;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L93">		Document d = Message.construct(s);</span>
+<span class="nc" id="L94">		Message m1 = new Message(d);</span>
+<span class="nc" id="L95">		m1.setOriginator(originalID);</span>
+
+<span class="nc" id="L97">		controller.process(com, m1);</span>
+
+		// alice got something but original, bob and charlie did not.
+<span class="nc" id="L100">		assertTrue (alice.hasObject());</span>
+<span class="nc" id="L101">		assertFalse (bob.hasObject());</span>
+<span class="nc" id="L102">		assertFalse (charlie.hasObject());</span>
+<span class="nc" id="L103">		assertFalse (original.hasObject());</span>
+<span class="nc" id="L104">	}</span>
+
+	public void testMultiplePrivateChat() {
+<span class="nc" id="L107">		String s = &quot;&lt;request version=\&quot;1.0\&quot; id=\&quot;589a39591271844e3fbe32bbb9281ad9\&quot;&gt;&quot; +</span>
+		&quot;&lt;chat&gt;&quot; + 
+<span class="nc" id="L109">	  	  &quot;&lt;player-id player='&quot; + aliceID + &quot;'/&gt;&quot; +</span>
+<span class="nc" id="L110">		  &quot;&lt;player-id player='&quot; + bobID + &quot;'/&gt;&quot; +</span>
+<span class="nc" id="L111">		  &quot;&lt;text&gt;This is a test&lt;/text&gt;&lt;/chat&gt;&quot; + </span>
+<span class="nc" id="L112">		&quot;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L113">		Document d = Message.construct(s);</span>
+<span class="nc" id="L114">		Message m1 = new Message(d);</span>
+<span class="nc" id="L115">		m1.setOriginator(originalID);</span>
+
+<span class="nc" id="L117">		controller.process(com, m1);</span>
+
+		// alice and bob got something but original and charlie did not.
+<span class="nc" id="L120">		assertTrue (alice.hasObject());</span>
+<span class="nc" id="L121">		assertTrue (bob.hasObject());</span>
+<span class="nc" id="L122">		assertFalse (charlie.hasObject());</span>
+<span class="nc" id="L123">		assertFalse (original.hasObject());</span>
+<span class="nc" id="L124">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

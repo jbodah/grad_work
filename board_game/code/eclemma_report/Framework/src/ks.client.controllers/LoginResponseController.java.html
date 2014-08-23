@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LoginResponseController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.controllers</a> &gt; <span class="el_source">LoginResponseController.java</span></div><h1>LoginResponseController.java</h1><pre class="source lang-java linenums">package ks.client.controllers;
+
+import ks.client.UserContext;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.IProcessClientMessage;
+import ks.framework.common.Message;
+
+/**
+ * When a client registers for a new account, the userContext must be updated
+ * to record this information. This controller is responsible for that task.
+ * 
+ * Only to be received from the server when actually logging into the server; not for
+ * use when other users actually login.
+ * 
+ * @author George Heineman
+ */
+<span class="nc" id="L17">public class LoginResponseController implements IProcessClientMessage {</span>
+
+	@Override
+	public boolean process(ILobby lobby, Message m) {
+<span class="nc" id="L21">		UserContext context = lobby.getContext();</span>
+<span class="nc bnc" id="L22" title="All 2 branches missed.">		if (!context.getSelfRegister()) { return true; }</span>
+		
+<span class="nc" id="L24">		org.w3c.dom.Node node = m.contents(); </span>
+<span class="nc" id="L25">		org.w3c.dom.NamedNodeMap map = node.getAttributes();</span>
+<span class="nc" id="L26">		org.w3c.dom.Node child = map.getNamedItem(&quot;player&quot;);</span>
+<span class="nc" id="L27">		String registeredUser = child.getNodeValue();</span>
+		
+		// manipulate context to record proper information.
+<span class="nc" id="L30">		context.setUser(registeredUser);</span>
+<span class="nc" id="L31">		context.setSelfRegister(false);</span>
+<span class="nc" id="L32">		return true;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

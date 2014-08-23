@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestSimpleServerConnection.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.server.ipc</a> &gt; <span class="el_source">TestSimpleServerConnection.java</span></div><h1>TestSimpleServerConnection.java</h1><pre class="source lang-java linenums">package ks.server.ipc;
+
+import junit.framework.TestCase;
+import ks.server.ipc.Server;
+
+// show that two servers trying to start with same port
+// will cause second to fail
+<span class="nc" id="L8">public class TestSimpleServerConnection extends TestCase {</span>
+	
+	// helper function to sleep for a second.
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="nc" id="L14">			Thread.sleep(1000);</span>
+<span class="nc" id="L15">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="nc" id="L18">	}</span>
+	
+	public void testBadServers() {
+<span class="nc" id="L21">		Server s = new Server (9998);</span>
+<span class="nc" id="L22">		assertTrue (s.activate());</span>
+		
+<span class="nc" id="L24">		waitASecond();</span>
+<span class="nc" id="L25">		waitASecond();</span>
+<span class="nc" id="L26">		assertTrue (s.listener.isRunning());</span>
+		
+<span class="nc" id="L28">		Server bad = new Server(9998);</span>
+<span class="nc" id="L29">		assertFalse (bad.activate());</span>
+		
+<span class="nc" id="L31">		waitASecond();</span>
+		
+<span class="nc" id="L33">		s.deactivate();</span>
+<span class="nc" id="L34">		waitASecond();</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		assertTrue(s.listener == null);</span>
+<span class="nc" id="L36">	}</span>
+	
+	// Note: if you have left your server running on the default 
+	// port, then this will fail. Make sure you exit all servers
+	// prior to running this test case.
+	public void testBadServersDefault() {
+<span class="nc" id="L42">		Server s = new Server ();</span>
+<span class="nc" id="L43">		assertTrue (s.activate());</span>
+		
+<span class="nc" id="L45">		waitASecond();</span>
+<span class="nc" id="L46">		waitASecond();</span>
+<span class="nc" id="L47">		assertTrue (s.listener.isRunning());</span>
+		
+<span class="nc" id="L49">		Server bad = new Server();</span>
+<span class="nc" id="L50">		assertFalse (bad.activate());</span>
+		
+<span class="nc" id="L52">		waitASecond();</span>
+		
+<span class="nc" id="L54">		s.deactivate();</span>
+<span class="nc" id="L55">		waitASecond();</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		assertTrue(s.listener == null);</span>
+<span class="nc" id="L57">	}</span>
+	
+	
+	public void testNormalServer() {
+<span class="nc" id="L61">		Server s = new Server (9998);</span>
+<span class="nc" id="L62">		assertTrue (s.activate());</span>
+		
+<span class="nc" id="L64">		waitASecond();</span>
+<span class="nc" id="L65">		waitASecond();</span>
+<span class="nc" id="L66">		assertTrue (s.listener.isRunning());</span>
+		
+<span class="nc" id="L68">		Server bad = new Server(9998);</span>
+<span class="nc" id="L69">		assertFalse (bad.activate());</span>
+		
+<span class="nc" id="L71">		waitASecond();</span>
+		
+<span class="nc" id="L73">		s.deactivate();</span>
+<span class="nc" id="L74">		waitASecond();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">		assertTrue(s.listener == null);</span>
+<span class="nc" id="L76">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

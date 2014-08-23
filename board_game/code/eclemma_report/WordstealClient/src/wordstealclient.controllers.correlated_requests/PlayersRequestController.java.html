@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>PlayersRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.correlated_requests</a> &gt; <span class="el_source">PlayersRequestController.java</span></div><h1>PlayersRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.correlated_requests;
+
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+import ks.client.interfaces.IController;
+
+import wordstealclient.util.GUIUpdater;
+import wordstealclient.controllers.xml_handlers.PlayerResponseHandler;
+
+/**
+ * This code manages the communications and top-level decisions of the request.
+ * Lower level logic is passed to the Handler
+ * 
+ * Request: players&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: playerResponse&lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * 	{@literal &lt;!-- Retrieve list of all players. --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;players/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @author jbodah
+ */
+public class PlayersRequestController implements IController {
+	ILobby lobby ;
+	
+<span class="fc" id="L30">	public PlayersRequestController(ILobby lobby) {</span>
+<span class="fc" id="L31">		this.lobby = lobby;</span>
+<span class="fc" id="L32">	}</span>
+	
+	/**
+	 * Create and send request
+	 * @author jbodah
+	 */
+	public void process() {
+<span class="fc" id="L39">		Message m = new Message(Message.construct (writeXMLForRequest()));</span>
+<span class="fc" id="L40">		lobby.getContext().getClient().sendToServer(lobby, m, this);</span>
+<span class="fc" id="L41">		System.out.println(&quot;PlayersRequestController.process(): Request sent&quot;);</span>
+<span class="fc" id="L42">	}</span>
+	
+	/**
+	 *  process correlated response (to given request) when received from server
+	 *	@author jbodah
+	 */
+	@Override
+	public void process(ILobby lobby, Message request, Message response) {		
+<span class="fc" id="L50">		System.out.println(&quot;PlayersRequestController.process(ILobby, Message, Message): Received &quot; + response + &quot; in response to &quot; + request);</span>
+<span class="fc" id="L51">		PlayerResponseHandler.parseXML( response ) ;</span>
+<span class="fc" id="L52">		GUIUpdater.updateUserListGUI(lobby);</span>
+<span class="fc" id="L53">	}</span>
+	
+	private String writeXMLForRequest() {
+<span class="fc" id="L56">		String s = Message.requestHeader() +</span>
+<span class="fc" id="L57">				new String(	&quot;&lt;players/&gt;&quot; + </span>
+				&quot;&lt;/request&gt;&quot;);
+<span class="fc" id="L59">		return s;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

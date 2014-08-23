@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>StatSVN - /WordstealClient Cloud Commit</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="Generator" content="StatSVN 0.7.0"/>
+<link rel="stylesheet" href="objectlab-statcvs.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="http://bit.ly/javascript-api.js?version=latest&#38;login=statsvn&#38;apiKey=R_2c362b417d0517c27876cbaca1bb68cc"></script>
+<script type="text/javascript" charset="utf-8">
+   // wait until page is loaded to call API
+   var redir_url;
+   var short_url;
+   BitlyCB.myShortenCallback = function(data) {
+      // this is how to get a result of shortening a single url
+      var result;
+      short_url=null;
+      for (var r in data.results) {
+         result = data.results[r];
+         result['longUrl'] = r;
+         short_url = result['shortUrl'];
+         break;
+      }
+      if (short_url==null) // bit.ly failed
+      document.location=redir_url;
+      else
+      redirToTwitter();
+   };
+   function shortenTweet(url) {
+      if (short_url == null || redir_url!=url) {
+      redir_url = url;
+      BitlyClient.shorten(document.location, 'BitlyCB.myShortenCallback');
+      }
+      else
+      redirToTwitter();
+      return false;
+   }
+   function redirToTwitter() { 
+      // replace {0} which is visible as %7B0} in the link
+      document.location = redir_url.replace('%7B0}', short_url);
+   }
+</script>
+  </head>
+
+<body>
+
+<h1>/WordstealClient Cloud Commit</h1>
+<div id="parentlink">&#171; <a href="index.html">Development Statistics for /WordstealClient</a></div>
+  <table  rules="groups" summary="Tag Cloud of Words in Commit Log Messages">
+    <colgroup align="left"/>
+    <colgroup align="right"/>
+    <thead>
+      <tr>
+        <th>Word</th>
+        <th>Frequency</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  class="odd">
+        <th>table</th>
+        <td>120 (11.2%)</td>
+      </tr>
+      <tr  class="even">
+        <th>test</th>
+        <td>102 (9.5%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>player</th>
+        <td>68 (6.3%)</td>
+      </tr>
+      <tr  class="even">
+        <th>controller</th>
+        <td>60 (5.6%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>code</th>
+        <td>52 (4.9%)</td>
+      </tr>
+      <tr  class="even">
+        <th>request</th>
+        <td>48 (4.5%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>package</th>
+        <td>36 (3.4%)</td>
+      </tr>
+      <tr  class="even">
+        <th>response</th>
+        <td>32 (3.0%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>working</th>
+        <td>28 (2.6%)</td>
+      </tr>
+      <tr  class="even">
+        <th>room</th>
+        <td>24 (2.2%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>moved</th>
+        <td>24 (2.2%)</td>
+      </tr>
+      <tr  class="even">
+        <th>other</th>
+        <td>20 (1.9%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>login</th>
+        <td>20 (1.9%)</td>
+      </tr>
+      <tr  class="even">
+        <th>logic</th>
+        <td>20 (1.9%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>update</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="even">
+        <th>unused</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>tableresponse</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="even">
+        <th>removed</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>modifications</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="even">
+        <th>minor</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>fixed</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="even">
+        <th>changes</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>changed</th>
+        <td>16 (1.5%)</td>
+      </tr>
+      <tr  class="even">
+        <th>user</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>tableid</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="even">
+        <th>stuff</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>refactored</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="even">
+        <th>properly</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>parsing</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="even">
+        <th>joinrequest</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>game</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="even">
+        <th>external</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>comments</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="even">
+        <th>cleaned</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>chat</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="even">
+        <th>cases</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>bunch</th>
+        <td>12 (1.1%)</td>
+      </tr>
+      <tr  class="even">
+        <th>handle</th>
+        <td>9 (0.8%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>warnings</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="even">
+        <th>view</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>updating</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="even">
+        <th>updated</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>unit</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="even">
+        <th>these</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>testdata</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="even">
+        <th>synchronization</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>structure</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="even">
+        <th>since</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="odd">
+        <th>send</th>
+        <td>8 (0.7%)</td>
+      </tr>
+      <tr  class="even">
+        <th>returns</th>
+        <td>8 (0.7%)</td>
+      </tr>
+    </tbody>
+  </table>
+
+<div id="generatedby">Generated by <a href="http://www.statsvn.org">StatSVN</a> 0.7.0</div>
+</body>
+</html>

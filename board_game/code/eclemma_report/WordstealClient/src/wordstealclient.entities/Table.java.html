@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>Table.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.entities</a> &gt; <span class="el_source">Table.java</span></div><h1>Table.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package wordstealclient.entities;</span>
+
+import wordstealclient.entities.Table.TABLE_STATE;
+
+public class Table {
+	public static final int MAX_PLAYERS = 4 ;
+	
+<span class="fc" id="L8">	public enum TABLE_STATE {PUBLIC, PRIVATE, INGAME, BYINVITATION, UNKNOWN};</span>
+	
+	protected Player[] 		players ;
+	protected TABLE_STATE 	tableState ;
+	protected int 			tableID; 		// TODO: Need to double think if ID is necessary given Room.tables[i], jbodah 4/5
+	protected int 			seed;
+	protected String		type ; 			// TODO: This should be an enum; might be the same thing as TABLE_STATE
+	protected String		game ;			// TODO: This should be a different type or an enum
+	protected String		options ;
+	
+	// Specific game options set by the moderator
+	protected boolean nos;
+	protected boolean pink;
+	protected int turnTime;
+	protected int pointsToWin;
+	
+	/***************************************** BEG CONSTRUCTORS ******************************************/
+	/**
+	 * @author jbodah
+	 */
+<span class="fc" id="L28">	public Table() {</span>
+<span class="fc" id="L29">		initTable();</span>
+<span class="fc" id="L30">	}</span>
+	
+	// For Room to initialize ID's
+<span class="fc" id="L33">	public Table(int id) {</span>
+<span class="fc" id="L34">		initTable() ;</span>
+<span class="fc" id="L35">		this.tableID = id;</span>
+<span class="fc" id="L36">	} </span>
+	
+<span class="fc" id="L38">	public Table(int id, TABLE_STATE state, Player[] players) {</span>
+<span class="fc" id="L39">		this.players = players;</span>
+<span class="fc" id="L40">		tableState = state;</span>
+<span class="fc" id="L41">		tableID = id;</span>
+<span class="fc" id="L42">		seed = 0;</span>
+<span class="fc" id="L43">	}</span>
+
+	private void initTable() {
+<span class="fc" id="L46">		this.players = new Player[MAX_PLAYERS] ;</span>
+			
+<span class="fc bfc" id="L48" title="All 2 branches covered.">		for(int i = 0 ; i &lt; MAX_PLAYERS ; i++) {</span>
+<span class="fc" id="L49">			players[i] = null ;</span>
+		}
+		
+<span class="fc" id="L52">		this.tableState = TABLE_STATE.PUBLIC;</span>
+<span class="fc" id="L53">		this.tableID = 0;</span>
+<span class="fc" id="L54">	} </span>
+	/***************************************** END CONSTRUCTORS ******************************************/
+	
+	/**************************************** BEG GETTERS/SETTERS ****************************************/	
+	/**
+	 * @author cbelhumeur
+	 */
+	public int getTableID()
+	{
+<span class="fc" id="L63">		return tableID;</span>
+	}
+	
+	public TABLE_STATE getTableState()
+	{
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">		if (tableState == TABLE_STATE.UNKNOWN){</span>
+<span class="nc" id="L69">			try {throw new Exception(&quot;Table state cannot be UNKNOWN.&quot;);} </span>
+<span class="nc" id="L70">			catch (Exception e) {e.printStackTrace();}</span>
+		}
+<span class="fc" id="L72">		return tableState;</span>
+	}
+
+	public void setTableState(TABLE_STATE state) {
+<span class="fc" id="L76">		this.tableState = state;</span>
+<span class="fc" id="L77">	}</span>
+	
+	public Player[] getPlayers()
+	{
+<span class="fc" id="L81">		return players;</span>
+	}
+	
+	public Player getPlayerAt(int position) {
+<span class="fc" id="L85">		return players[position] ;</span>
+	}
+		
+	public void setSeed(int newSeed) {
+<span class="fc" id="L89">		seed = newSeed ;</span>
+<span class="fc" id="L90">	}</span>
+	
+	public int getSeed() {
+<span class="fc" id="L93">		return seed ;</span>
+	}
+	
+	public void setType(String newType) {
+<span class="fc" id="L97">		type = newType ;</span>
+<span class="fc" id="L98">	}</span>
+	
+	public String getType() {
+<span class="fc" id="L101">		return type ;</span>
+	}
+	
+	public void setGame(String newGame) {
+<span class="fc" id="L105">		game = newGame ;</span>
+<span class="fc" id="L106">	}</span>
+	
+	public String getGame() {
+<span class="fc" id="L109">		return game ;</span>
+	}
+	
+	public void setOptions(String newOptions) {
+<span class="fc" id="L113">		options = newOptions ;</span>
+<span class="fc" id="L114">	}</span>
+	
+	public String getOptions() {
+<span class="fc" id="L117">		return options ;</span>
+	}
+	
+	public boolean isNos() {
+<span class="fc" id="L121">		return nos;</span>
+	}
+
+	public void setNos(boolean nos) {
+<span class="nc" id="L125">		this.nos = nos;</span>
+<span class="nc" id="L126">	}</span>
+
+	public boolean isPink() {
+<span class="fc" id="L129">		return pink;</span>
+	}
+
+	public void setPink(boolean pink) {
+<span class="nc" id="L133">		this.pink = pink;</span>
+<span class="nc" id="L134">	}</span>
+
+	public int getTurnTime() {
+<span class="fc" id="L137">		return turnTime;</span>
+	}
+
+	public void setTurnTime(int turnTime) {
+<span class="nc" id="L141">		this.turnTime = turnTime;</span>
+<span class="nc" id="L142">	}</span>
+
+	public int getPointsToWin() {
+<span class="fc" id="L145">		return pointsToWin;</span>
+	}
+
+	public void setPointsToWin(int pointsToWin) {
+<span class="nc" id="L149">		this.pointsToWin = pointsToWin;</span>
+<span class="nc" id="L150">	}</span>
+	
+	/**************************************** END GETTERS/SETTERS ****************************************/
+
+	public boolean isFull() {
+<span class="fc bfc" id="L155" title="All 2 branches covered.">		return getNumberOfPlayers() &gt;= MAX_PLAYERS ;</span>
+	}
+	
+	public Player getModerator() {
+<span class="fc" id="L159">		return getPlayerAt(0) ;</span>
+	}
+	
+	/**
+	 * Returns true if adding player to table was successful, else returns false
+	 * @param player
+	 * @return
+	 * @author jbodah
+	 */
+	public boolean addPlayer( Player player ) {
+<span class="fc bfc" id="L169" title="All 2 branches covered.">		if( getNumberOfPlayers() &lt; MAX_PLAYERS ) {</span>
+<span class="fc" id="L170">			players[getNumberOfPlayers()] = player ;</span>
+<span class="fc" id="L171">			player.setTableID(tableID);</span>
+<span class="fc" id="L172">			return true ;</span>
+		}
+<span class="fc" id="L174">		return false ;</span>
+	}
+	
+	/**
+	 * Removes player at position from table and shifts the positions of the rest of the players&lt;br/&gt;
+	 * Returns removed player or null.
+	 * @param position
+	 * @return Player
+	 * @author jbodah
+	 */
+	public Player removePlayerAt(int position) {
+<span class="fc bfc" id="L185" title="All 2 branches covered.">		if( position &gt; MAX_PLAYERS ) return null ;</span>
+<span class="fc" id="L186">		Player removedPlayer = players[position] ;</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">		while( position &lt; (MAX_PLAYERS - 1)) {</span>
+<span class="fc" id="L188">			players[position] = players[position + 1] ;</span>
+<span class="fc" id="L189">			players[position + 1] = null ;</span>
+<span class="fc" id="L190">			position++ ;</span>
+		}
+<span class="fc" id="L192">		players[3] = null ;</span>
+<span class="fc bfc" id="L193" title="All 2 branches covered.">		if( removedPlayer != null )</span>
+<span class="fc" id="L194">			removedPlayer.setTableID(0);</span>
+<span class="fc" id="L195">		return removedPlayer ;</span>
+	}
+	
+	/**
+	 * Attempts to remove player with login provided. Returns the removed player or null if no player is found.
+	 * @param login
+	 * @return
+	 * @author jbodah
+	 */
+	public Player removePlayer(int login) {
+<span class="fc bfc" id="L205" title="All 2 branches covered.">		for(int i = 0; i &lt; MAX_PLAYERS ; i++) {</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">			if( getPlayerAt(i) == null )</span>
+<span class="fc" id="L207">				break ;</span>
+<span class="fc bfc" id="L208" title="All 2 branches covered.">			else if( getPlayerAt(i).getLogin() == login )</span>
+<span class="fc" id="L209">				return removePlayerAt(i) ;</span>
+		}
+<span class="fc" id="L211">		return null ;</span>
+	}
+	
+	/**
+	 * Attempts to find player with a given login. Returns the first match or null.
+	 * @param login
+	 * @return
+	 * @author jbodah
+	 */
+	public Player getPlayer(int login) {
+<span class="fc bfc" id="L221" title="All 2 branches covered.">		for(int i = 0 ; i &lt; MAX_PLAYERS ; i++ )</span>
+<span class="fc bfc" id="L222" title="All 4 branches covered.">			if( getPlayerAt(i) != null &amp;&amp; getPlayerAt(i).getLogin() == login )</span>
+<span class="fc" id="L223">				return getPlayerAt(i) ;</span>
+<span class="fc" id="L224">		return null ;</span>
+	}
+	
+	/**
+	 * Returns number of players at table
+	 * @author jbodah
+	 */
+	public int getNumberOfPlayers() {
+<span class="fc" id="L232">		int count = 0 ;</span>
+<span class="fc bfc" id="L233" title="All 2 branches covered.">		for(int i = 0 ; i &lt; MAX_PLAYERS ; i++) {</span>
+<span class="fc bfc" id="L234" title="All 4 branches covered.">			if( (players == null) || (players[i] == null) )</span>
+<span class="fc" id="L235">				break ;</span>
+<span class="fc" id="L236">			count++ ;</span>
+		}
+<span class="fc" id="L238">		return count ;</span>
+	}
+
+	/**
+	 * Attempts to set user with given login to moderator of table.
+	 * Removes new moderator from table and then inserts at head.
+	 * Returns new moderator or null if player can't be found.
+	 * @param login
+	 * @author jbodah
+	 */
+	public Player setModerator(int login) {
+<span class="fc" id="L249">		Player newMod = removePlayer(login) ;</span>
+<span class="fc bfc" id="L250" title="All 2 branches covered.">		if( newMod == null )</span>
+<span class="fc" id="L251">			return null ;</span>
+<span class="fc" id="L252">		insertPlayer(newMod) ;</span>
+<span class="fc" id="L253">		return getModerator() ;</span>
+	}
+	
+	/**
+	 * Tries to insert given player into head of table.
+	 * Returns boolean telling whether or not the transaction was successful.
+	 * @author jbodah
+	 */
+	protected boolean insertPlayer(Player player) {
+<span class="fc bfc" id="L262" title="All 2 branches covered.">		if( getNumberOfPlayers() &gt;= MAX_PLAYERS )</span>
+<span class="fc" id="L263">			return false ;</span>
+<span class="fc bfc" id="L264" title="All 2 branches covered.">		for(int i = MAX_PLAYERS - 1 ; i &gt; 0 ; i--)</span>
+<span class="fc" id="L265">			players[i] = players[i-1] ;</span>
+<span class="fc" id="L266">		players[0] = player ;</span>
+<span class="fc" id="L267">		player.setTableID(tableID);</span>
+<span class="fc" id="L268">		return true ;</span>
+	}
+	
+	/**
+	 * Reinitializes table.
+	 * I don't think this will create memory leaks with old &quot;players&quot; arrays since the
+	 * reference is dropped =&gt; the array is eligible for garbage collection, but I could be wrong
+	 * @author jbodah
+	 */
+	public void clear() {
+<span class="fc" id="L278">		int id = tableID ;</span>
+<span class="fc bfc" id="L279" title="All 2 branches covered.">		for(int i = 0 ; i &lt; MAX_PLAYERS ; i++)</span>
+<span class="fc" id="L280">			removePlayerAt(i);</span>
+<span class="fc" id="L281">		initTable() ;</span>
+<span class="fc" id="L282">		tableID = id ;</span>
+<span class="fc" id="L283">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

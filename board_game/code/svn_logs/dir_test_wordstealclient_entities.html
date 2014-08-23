@@ -1,0 +1,451 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>StatSVN - Directory test/wordstealclient/entities/</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="Generator" content="StatSVN 0.7.0"/>
+<link rel="stylesheet" href="objectlab-statcvs.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="http://bit.ly/javascript-api.js?version=latest&#38;login=statsvn&#38;apiKey=R_2c362b417d0517c27876cbaca1bb68cc"></script>
+<script type="text/javascript" charset="utf-8">
+   // wait until page is loaded to call API
+   var redir_url;
+   var short_url;
+   BitlyCB.myShortenCallback = function(data) {
+      // this is how to get a result of shortening a single url
+      var result;
+      short_url=null;
+      for (var r in data.results) {
+         result = data.results[r];
+         result['longUrl'] = r;
+         short_url = result['shortUrl'];
+         break;
+      }
+      if (short_url==null) // bit.ly failed
+      document.location=redir_url;
+      else
+      redirToTwitter();
+   };
+   function shortenTweet(url) {
+      if (short_url == null || redir_url!=url) {
+      redir_url = url;
+      BitlyClient.shorten(document.location, 'BitlyCB.myShortenCallback');
+      }
+      else
+      redirToTwitter();
+      return false;
+   }
+   function redirToTwitter() { 
+      // replace {0} which is visible as %7B0} in the link
+      document.location = redir_url.replace('%7B0}', short_url);
+   }
+</script>
+  </head>
+
+<body>
+
+<h1>Directory test/wordstealclient/entities/</h1>
+<div id="parentlink">&#171; <a href="index.html">Development Statistics for /WordstealClient</a></div>
+<dl class="attributes">
+    <dt>Directory Created:</dt>
+    <dd><span class="date">2012-03-20 18:45</span></dd>
+    <dt>Total Files:</dt>
+    <dd>3</dd>
+    <dt>Deleted Files:</dt>
+    <dd>1</dd>
+    <dt>Lines of Code:</dt>
+    <dd>393</dd>
+</dl>
+<p class="dirtree">
+<a href="dir.html">[root]</a>/<a href="dir_test.html">test</a>/<a href="dir_test_wordstealclient.html">wordstealclient</a>/<strong>entities</strong><br/>
+</p>
+
+<div class="section">
+<h2>Lines of Code</h2>
+<p class="chart"><img src="loc_module_test_wordstealclient_entities.png" alt="test/wordstealclient/entities/ Lines of Code" width="800" height="500" /></p></div>
+<div class="section">
+<h2>Developers</h2>
+  <table  rules="groups" summary="All authors and the number of their changes and lines of code in this directory">
+    <colgroup align="left"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <thead>
+      <tr>
+        <th>Author</th>
+        <th>Changes</th>
+        <th>Lines of Code</th>
+        <th>Lines per Change</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th>Totals</th>
+        <td>32 (100.0%)</td>
+        <td>490 (100.0%)</td>
+        <td>15.3</td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr  class="odd">
+        <th><a href="user_jbodah.html" class="author">jbodah</a></th>
+        <td>29 (90.6%)</td>
+        <td>484 (98.8%)</td>
+        <td>16.6</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="user_cbelhumeur.html" class="author">cbelhumeur</a></th>
+        <td>3 (9.4%)</td>
+        <td>6 (1.2%)</td>
+        <td>2.0</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<div class="section">
+<h2>Most Recent Commits</h2>
+<dl class="commitlist">
+  <dt><a name="18"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-27 17:23</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">89</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+GameResponseHandlerTest, cleaned up unit tests a bit, made an "external" package for code that isn't immediately related to our client
+    </p>
+    <p class="commitdetails"><strong>6</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        RoomTest.java&#160;<span class="change">(+6&#160;-6)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="17"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-26 17:56</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">84</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Bunch of crap, forget what I did
+    </p>
+    <p class="commitdetails"><strong>59</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(+59&#160;-9)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="16"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-19 20:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">73</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Working JoinRequest
+    </p>
+    <p class="commitdetails"><strong>0</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(-10)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="15"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-19 13:22</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">65</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Changed Player.tableID to Player.table, added unit tests, sets to null when Table.removePlayerAt() is called.
+    </p>
+    <p class="commitdetails"><strong>10</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(+10)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="14"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-12 15:04</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">56</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Shifted tableID's by one so now they go from 1-100 instead of 0-99. Room.tables[0] is null
+    </p>
+    <p class="commitdetails"><strong>2</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        RoomTest.java&#160;<span class="change">(+2&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="13"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-12 11:24</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">52</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Everything for Room Chat (incl private chat). Response Chat doesn't update gui properly since I haven't figured out how to override the default controller
+    </p>
+    <p class="commitdetails"><strong>1</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="12"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-11 12:47</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">46</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+TableEmpty logic and testing, renamed a few controller packages to improve clarity
+    </p>
+    <p class="commitdetails"><strong>7</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        TableTest.java&#160;<span class="change">(+7)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="11"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-11 11:50</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">45</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Testing for TableResponseHandler
+    </p>
+    <p class="commitdetails"><strong>36</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        TableTest.java&#160;<span class="change">(+36)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="10"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-10 20:35</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">44</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Got a controller test working and caught an interesting bug
+    </p>
+    <p class="commitdetails"><strong>5</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        RoomTest.java&#160;<span class="change">(+5)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="9"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-10 18:04</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">42</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added a bunch of test cases for entities
+    </p>
+    <p class="commitdetails"><strong>145</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(+36&#160;-10)</span>,
+        RoomTest.java&#160;<span class="change">(+37)</span>,
+        TableTest.java&#160;<span class="change">(+72)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="8"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-10 15:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">41</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+TableRequestController should be working, removed a defunct constructor in Room, added basic methods and tests to Table, commented out some defunct TestData, organized TableTest tests into a suite
+    </p>
+    <p class="commitdetails"><strong>60</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        TableTest.java&#160;<span class="change">(+60&#160;-3)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="7"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-05 16:02</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">33</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+adding tests
+    </p>
+    <p class="commitdetails"><strong>54</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(+35&#160;-7)</span>,
+        RoomTest.java&#160;<span class="change">(-3)</span>,
+        TableTest.java&#160;<span class="change">(+19&#160;-10)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="6"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-04-05 15:01</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">31</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Fixed some tests, deleted one which was completely irrelevant now. Setup the structure for several more.
+    </p>
+    <p class="commitdetails"><strong>6</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        RoomTest.java&#160;<span class="change">(+6&#160;-5)</span>,
+        TableStateTest.java&#160;<span class="del">(del)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="5"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-05 13:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">27</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Tables UI enabled. Linked user requests with the user UI. Test cases changed. Other UI modifications.
+    </p>
+    <p class="commitdetails"><strong>6</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        RoomTest.java&#160;<span class="change">(+2&#160;-2)</span>,
+        TableStateTest.java&#160;<span class="change">(+2&#160;-2)</span>,
+        TableTest.java&#160;<span class="change">(+2&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="4"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-29 17:43</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">23</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+All the code to get players added to the Room after sending a playerRequest
+    </p>
+    <p class="commitdetails"><strong>1</strong> lines of code changed in <span class="files">1 file</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        RoomTest.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="3"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-27 14:56</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">20</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added a working request/response ("players" request =&gt; "playerInfo" response)
+    </p>
+    <p class="commitdetails"><strong>13</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(+4&#160;-1)</span>,
+        RoomTest.java&#160;<span class="change">(+3)</span>,
+        TableStateTest.java&#160;<span class="change">(+3)</span>,
+        TableTest.java&#160;<span class="change">(+3)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="2"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-26 16:12</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">14</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Copied arch package to our project, changed all Integer to int in Player class, started working on PlayerListRequestController.java
+    </p>
+    <p class="commitdetails"><strong>6</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="change">(+4&#160;-4)</span>,
+        TableTest.java&#160;<span class="change">(+2&#160;-2)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="1"></a>
+    <a href="user_jbodah.html" class="author">jbodah</a>
+    <span class="date">2012-03-20 18:45</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">1</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Basic package structure, Player, Table, Room, TableState all implemented with tests
+    </p>
+    <p class="commitdetails"><strong>73</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/entities</strong>:
+        PlayerTest.java&#160;<span class="new">(new&#160;19)</span>,
+        RoomTest.java&#160;<span class="new">(new&#160;18)</span>,
+        TableStateTest.java&#160;<span class="new">(new&#160;14)</span>,
+        TableTest.java&#160;<span class="new">(new&#160;22)</span>
+      </li>
+    </ul>
+  </dd>
+
+</dl>
+
+</div><div id="generatedby">Generated by <a href="http://www.statsvn.org">StatSVN</a> 0.7.0</div>
+</body>
+</html>

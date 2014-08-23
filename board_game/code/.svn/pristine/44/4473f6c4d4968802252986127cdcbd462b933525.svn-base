@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TableManagerGUI.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.boundaries</a> &gt; <span class="el_source">TableManagerGUI.java</span></div><h1>TableManagerGUI.java</h1><pre class="source lang-java linenums">package wordstealclient.boundaries;
+
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JPanel;
+
+import wordstealclient.entities.Table;
+
+/**
+ * @author cbelhumeur
+ * @return
+ */
+<span class="nc" id="L17">public class TableManagerGUI {</span>
+	
+	public static JPanel create(Table[] tables) {
+<span class="fc" id="L20">		JPanel tempTableManagerGUI = new JPanel();</span>
+<span class="fc" id="L21">		tempTableManagerGUI.setLayout(new GridLayout(10, 4, 4, 4));</span>
+			
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">		if (tables != null)</span>
+		{
+<span class="fc" id="L25">			List&lt;WSTablesPanel&gt; pTables = createTables(tables);</span>
+<span class="fc bfc" id="L26" title="All 2 branches covered.">			for (WSTablesPanel table : pTables)</span>
+			{
+<span class="fc" id="L28">				tempTableManagerGUI.add(table, Component.LEFT_ALIGNMENT);</span>
+			}	
+		}
+<span class="fc" id="L31">		return tempTableManagerGUI;</span>
+	}
+	
+	public static JPanel create(Table table) {
+<span class="fc" id="L35">		JPanel tempTableManagerGUI = new JPanel();</span>
+<span class="fc" id="L36">		tempTableManagerGUI.setLayout(new BorderLayout());</span>
+		
+<span class="fc" id="L38">		WSTablePanel wstp = new WSTablePanel(table);</span>
+<span class="fc" id="L39">		tempTableManagerGUI.add(wstp);</span>
+<span class="fc" id="L40">		return tempTableManagerGUI;</span>
+	}
+
+	/**
+	 * @author cbelhumeur
+	 * @return
+	 */
+	private static List&lt;WSTablesPanel&gt; createTables(Table[] tables)
+	{
+<span class="fc" id="L49">		List&lt;WSTablesPanel&gt; jTables = new ArrayList&lt;WSTablesPanel&gt;();</span>
+		
+<span class="fc bfc" id="L51" title="All 2 branches covered.">		for (Table table : tables)</span>
+		{
+<span class="fc" id="L53">			WSTablesPanel panel = new WSTablesPanel(table);</span>
+<span class="fc" id="L54">			jTables.add(panel);</span>
+		}	
+<span class="fc" id="L56">		return jTables;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

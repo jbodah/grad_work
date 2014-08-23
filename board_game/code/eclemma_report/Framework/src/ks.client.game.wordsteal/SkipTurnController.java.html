@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SkipTurnController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game.wordsteal</a> &gt; <span class="el_source">SkipTurnController.java</span></div><h1>SkipTurnController.java</h1><pre class="source lang-java linenums">package ks.client.game.wordsteal;
+
+import ks.client.interfaces.IGameInterface;
+import wordsteal.entities.GameState;
+import wordsteal.interfaces.IWordstealApp;
+
+
+/**
+ * SkipTurnController is launched when client detects an opponent has skipped
+ * his or her move.
+ * &lt;p&gt;
+ * The controller updates the number of consecutive skips in the game and updates
+ * the GUI accordingly.
+ * 
+ * @author Dan
+ */
+public class SkipTurnController {
+	
+	/** Controller has handle to MainFrame */
+	IWordstealApp mf;
+
+	/** 
+	 * Construct controller
+	 * @param mainFrame MainFrame allows ability to set and retrieve entity information
+	 */
+<span class="nc" id="L26">	public SkipTurnController(IWordstealApp mainFrame) {</span>
+<span class="nc" id="L27">		this.mf = mainFrame;</span>
+<span class="nc" id="L28">	}</span>
+	
+	/**
+	 * Launches the controller
+	 * @param callback 
+	 */
+	public boolean process(WordstealGameInformation info, IGameInterface callback){
+<span class="nc" id="L35">		int consecSkips = 0;</span>
+		
+		//Return tiles to rack
+<span class="nc" id="L38">		this.mf.getGame().returnPlayedTiles();</span>
+		
+		// Update the game log
+<span class="nc" id="L41">		GameState gs = new GameState(this.mf.getGame(), &quot;Turn skipped!&quot;, 0, null);</span>
+<span class="nc" id="L42">		this.mf.getGame().getGameLog().pushGameState(gs);</span>
+		
+		// Update consecutive skips, pass turn to next player, update GUI
+<span class="nc" id="L45">		consecSkips = this.mf.getGame().getConsecSkips() + 1;</span>
+<span class="nc" id="L46">		this.mf.getGame().setConsecSkips(consecSkips);</span>
+	
+		// must call update GUI since this will reset tiles as appropriate.
+<span class="nc" id="L49">		info.resetTimer();</span>
+<span class="nc" id="L50">		this.mf.updateGUI();</span>
+		
+//		callback.skip(mf.getTableNumber());
+//		
+//		// disable buttons.
+//		info.enableButtons(false);
+//		info.resetTimer();
+//		//this.mf.getGame().nextTurn();		
+//		this.mf.updateGUI();
+//		
+//		// make sure we lock out
+//		this.mf.lockUI(true);
+
+<span class="nc" id="L63">		return true;</span>
+	}
+
+
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

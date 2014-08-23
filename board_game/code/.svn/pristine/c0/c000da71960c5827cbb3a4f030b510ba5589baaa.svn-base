@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SimpleServerConnection.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.framework.common.network</a> &gt; <span class="el_source">SimpleServerConnection.java</span></div><h1>SimpleServerConnection.java</h1><pre class="source lang-java linenums">package ks.framework.common.network;
+
+import java.net.*;
+import java.io.*;  
+
+/**
+ * Base class to manage the server-side of a Socket connection.
+ * &lt;p&gt;
+ * @author George Heineman (heineman@cs.wpi.edu)
+ */
+public abstract class SimpleServerConnection implements Runnable, Cloneable {
+	// primary server fielding all accept requests.
+<span class="nc" id="L13">	private ServerSocket server = null;</span>
+
+	// returned by each successful accept attempt.
+<span class="nc" id="L16">	private Socket socket = null;</span>
+
+<span class="nc" id="L18">	private Thread life = null;</span>
+
+<span class="nc" id="L20">	private Thread twin = null;</span>
+
+	// means of communication with client.
+<span class="nc" id="L23">	private CommunicationAgent agent = null;</span>
+
+<span class="nc" id="L25">	private boolean original = true;</span>
+
+<span class="nc" id="L27">	private boolean runState = false;</span>
+
+<span class="nc" id="L29">	private boolean connectState = false;</span>
+
+<span class="nc" id="L31">	final int defaultPort = 4646;</span>
+   
+	/**
+	 * Keep default constructor protected for subclasses.
+	 */
+<span class="nc" id="L36">    protected SimpleServerConnection() {</span>
+    	
+<span class="nc" id="L38">	}</span>
+
+	public CommunicationAgent getAgent() {
+<span class="nc" id="L41">		return agent;</span>
+	}
+
+	
+   public void close() {
+<span class="nc" id="L46">		shutdown();</span>
+<span class="nc" id="L47">	}</span>
+
+   /**
+    * Subclasses should provide their own handler for
+    * new data appearin on the input
+    * 
+    * @param agent    Agent managing the communication session.
+    */
+	public abstract void handleSession(CommunicationAgent agent);
+
+	public boolean isConnected() {
+<span class="nc" id="L58">		return connectState;</span>
+	}
+
+	public boolean isRunning() {
+<span class="nc" id="L62">		return runState;</span>
+	}
+
+	/** Forces a manual shutdown of the original ServerSocket. */
+	public void killServer() {
+		try {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">			if (server != null) {</span>
+<span class="nc" id="L69">				server.close();</span>
+			}
+<span class="nc" id="L71">		} catch (IOException ioe) {</span>
+<span class="nc" id="L72">			System.err.println(&quot;SimpleServerConnection::killServer() fails:&quot; + ioe.toString());</span>
+		}
+<span class="nc" id="L74">		server = null;</span>
+<span class="nc" id="L75">	}</span>
+
+	public void run() {
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		if (original) // this is the primary server thread.</span>
+		{
+<span class="nc" id="L80">			runState = true;</span>
+<span class="nc" id="L81">			while (true) {</span>
+				try {
+<span class="nc" id="L83">					socket = server.accept();</span>
+<span class="nc" id="L84">				} catch (IOException e) {</span>
+					// we are the primary socket thread. BAD NEWS!
+<span class="nc" id="L86">					shutdown();</span>
+<span class="nc" id="L87">					return;</span>
+				}
+
+<span class="nc" id="L90">				SimpleServerConnection copy = null;</span>
+				try {
+<span class="nc" id="L92">					copy = (SimpleServerConnection) clone();</span>
+<span class="nc" id="L93">				} catch (CloneNotSupportedException e) {</span>
+<span class="nc" id="L94">					trouble(&quot;Unexpected 'CloneNotSupported' exception...&quot;);</span>
+				}
+
+<span class="nc" id="L97">				copy.life = null;</span>
+				///copy.server = null; Keep original server available to allow
+				// any child thread to kill it using the killServer() method
+				// call. Dangerous and powerful
+<span class="nc" id="L101">				copy.original = false;</span>
+<span class="nc" id="L102">				copy.runState = false;</span>
+<span class="nc" id="L103">				twin = new Thread(copy);</span>
+<span class="nc" id="L104">				twin.start();</span>
+			}
+		} else {
+			// this is the twin clone coming to life!
+<span class="nc" id="L108">			runState = true;</span>
+<span class="nc" id="L109">			connectState = true;</span>
+			try {
+<span class="nc" id="L111">				agent = new CommunicationAgent (socket.getInputStream(), socket.getOutputStream());</span>
+<span class="nc" id="L112">			} catch (IOException e) {</span>
+<span class="nc" id="L113">				trouble(&quot;Could not create data streams...&quot;);</span>
+				//shutdown();
+<span class="nc bnc" id="L115" title="All 2 branches missed.">				if (agent != null) agent.close();</span>
+<span class="nc" id="L116">				return;</span>
+			}
+<span class="nc" id="L118">			handleSession(agent);</span>
+			//shutdown();
+<span class="nc bnc" id="L120" title="All 2 branches missed.">			if (agent != null) {</span>
+<span class="nc" id="L121">				agent.close();</span>
+<span class="nc" id="L122">				agent = null;  // close out.</span>
+			}
+			
+		}
+<span class="nc" id="L126">	}      </span>
+	
+	/**
+	 * Cleanly shutdown connection.
+	 */
+	public void shutdown() {
+<span class="nc" id="L132">		life = null;</span>
+<span class="nc" id="L133">		twin = null;</span>
+<span class="nc" id="L134">		runState = false;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">		if (connectState) {</span>
+<span class="nc" id="L136">			agent.close();</span>
+
+<span class="nc" id="L138">			connectState = false;</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">			if (socket != null) {</span>
+				try {
+<span class="nc" id="L141">					socket.close();</span>
+<span class="nc" id="L142">				} catch (Exception e) {</span>
+				}
+			}
+		}
+		
+		// too aggressive? HEINEMAN 3-16-2005
+		try {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">			if (socket != null) socket.close();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">			if (server != null) server.close();</span>
+<span class="nc" id="L151">		} catch (IOException ioe) {</span>
+<span class="nc" id="L152">			System.err.println (&quot;SimpleServerConnection:&quot; + ioe);</span>
+		}
+		
+<span class="nc" id="L155">		socket = null;</span>
+<span class="nc" id="L156">		server = null;</span>
+<span class="nc" id="L157">		agent = null;</span>
+<span class="nc" id="L158">	}</span>
+
+	/**
+	 * Start listening on the default port.
+	 * 
+	 * @return true when connection is valid.
+	 */
+	public boolean start() {
+<span class="nc" id="L166">		return start(defaultPort);</span>
+	}
+
+	/**
+	 * Start listening on the given port.
+	 * 
+	 * @param thePort
+	 * @return true when connection is valid.
+	 */
+	public boolean start(int thePort) {
+<span class="nc bnc" id="L176" title="All 2 branches missed.">		if (life == null) {</span>
+<span class="nc" id="L177">			life = new Thread(this);</span>
+<span class="nc" id="L178">			life.setPriority(Thread.MAX_PRIORITY);</span>
+		}
+		try {
+<span class="nc" id="L181">			server = new ServerSocket(thePort);</span>
+<span class="nc" id="L182">		} catch (IOException e) {</span>
+<span class="nc" id="L183">			trouble(&quot;Could not create new server socket...&quot;);</span>
+<span class="nc" id="L184">			return false;</span>
+		}
+<span class="nc" id="L186">		life.start();</span>
+<span class="nc" id="L187">		return true;</span>
+	}
+
+
+	/**
+	 * Handle error messages.
+	 * 
+	 * @param message
+	 */
+	void trouble(String message) {
+<span class="nc" id="L197">		System.err.println(&quot;SimpleServerConnection::&quot; + message);</span>
+<span class="nc" id="L198">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>JoinTableResponseHandlerTest.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.xml_handlers</a> &gt; <span class="el_source">JoinTableResponseHandlerTest.java</span></div><h1>JoinTableResponseHandlerTest.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.xml_handlers;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import ks.client.UserContext;
+import ks.client.controllers.ConnectController;
+import ks.client.controllers.DisconnectController;
+import ks.client.lobby.LobbyFrame;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import arch.WSClientArchitecture;
+
+import test.TestData;
+import test.Utilities;
+import wordstealclient.controllers.correlated_requests.JoinRequestController;
+import wordstealclient.entities.Room;
+
+<span class="fc" id="L24">public class JoinTableResponseHandlerTest {</span>
+	Message mOne ;
+	Message mTwo ;
+	Message mThree ;
+	Message mFour ;
+	Message rTwo ;
+	Message rThree ;
+	Message rFour ;
+	
+	@Before
+	public void setUp() {
+		// Create a message to test parsing
+		// 1000 is just a random id number		
+<span class="fc" id="L37">		mOne 	= Utilities.makeTestMessage(TestData.samplePlayerResponse(&quot;1000&quot;));</span>
+<span class="fc" id="L38">		mTwo 	= Utilities.makeTestMessage(TestData.sampleTableResponseSuccesfulJoin(&quot;2000&quot;));</span>
+<span class="fc" id="L39">		mThree 	= Utilities.makeTestMessage(TestData.sampleTableEmptyResponse(&quot;3000&quot;));</span>
+<span class="fc" id="L40">		mFour 	= Utilities.makeTestMessage(TestData.sampleRejectResponse(&quot;4000&quot;));</span>
+		
+		// Create test requests
+<span class="fc" id="L43">		rTwo 	= Utilities.makeTestMessage(&quot;&lt;request version='1.0' id='2000'&gt;&quot; + &quot;&lt;join table='&quot; + 1 + &quot;'/&gt;&lt;/request&gt;&quot; );</span>
+<span class="fc" id="L44">		rThree 	= Utilities.makeTestMessage(&quot;&lt;request version='1.0' id='3000'&gt;&quot; + &quot;&lt;join table='&quot; + 1 + &quot;'/&gt;&lt;/request&gt;&quot; );</span>
+<span class="fc" id="L45">		rFour 	= Utilities.makeTestMessage(&quot;&lt;request version='1.0' id='4000'&gt;&quot; + &quot;&lt;join table='&quot; + 1 + &quot;'/&gt;&lt;/request&gt;&quot; );</span>
+<span class="fc" id="L46">	}</span>
+	
+	@After
+	public void tearDown() {
+<span class="fc" id="L50">		mOne	= null ;</span>
+<span class="fc" id="L51">		mTwo 	= null ;</span>
+<span class="fc" id="L52">		mThree 	= null ;</span>
+<span class="fc" id="L53">		mFour 	= null ;</span>
+<span class="fc" id="L54">		rTwo	= null ;</span>
+<span class="fc" id="L55">		rThree	= null ;</span>
+<span class="fc" id="L56">		rFour	= null ;</span>
+<span class="fc" id="L57">	}</span>
+	
+	@Test
+	public void test() {
+<span class="fc" id="L61">		context.getClient().process(mOne);</span>
+
+<span class="fc" id="L63">		JoinRequestController jrc = new JoinRequestController(lobby);</span>
+		// Attempt to join table
+<span class="fc" id="L65">		lobby.getContext().getClient().sendToServer(lobby, rTwo, jrc) ;</span>
+		// Receive OK response
+<span class="fc" id="L67">		jrc.process(lobby, rTwo, mTwo);</span>
+		// Assert that table was joined
+<span class="fc" id="L69">		assertEquals(Room.getInstance().getTable(1).getPlayer(1213).getAlias(), &quot;George Heineman&quot;) ;</span>
+		// Remove from table
+<span class="fc" id="L71">		Room.getInstance().getTable(1).removePlayer(1213) ;</span>
+<span class="fc" id="L72">		assertEquals(Room.getInstance().getTable(1).getNumberOfPlayers(), 0) ;</span>
+		
+		// Attempt to join table
+<span class="fc" id="L75">		lobby.getContext().getClient().sendToServer(lobby, rThree, jrc) ;</span>
+		// Receive denial response
+<span class="fc" id="L77">		jrc.process(lobby, rThree, mThree);</span>
+		// Assert that table wasn't joined
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">		assertTrue(Room.getInstance().getTable(1).getPlayer(1213) == null) ;</span>
+		// Assert nobody is at the table
+<span class="fc" id="L81">		assertEquals(Room.getInstance().getTable(1).getNumberOfPlayers(), 0) ;</span>
+		
+		// Attempt to join table
+<span class="fc" id="L84">		lobby.getContext().getClient().sendToServer(lobby, rThree, jrc) ;</span>
+		// Receive denial response
+<span class="fc" id="L86">		jrc.process(lobby, rFour, mFour);</span>
+		// Assert that table wasn't joined
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">		assertTrue(Room.getInstance().getTable(1).getPlayer(1213) == null) ;</span>
+		// Assert nobody is at the table
+<span class="fc" id="L90">		assertEquals(Room.getInstance().getTable(1).getNumberOfPlayers(), 0) ;</span>
+<span class="fc" id="L91">	}</span>
+
+	
+	/********************* BOILERPLATE CODE *********************/
+	
+	// host
+	public static final String localhost = &quot;localhost&quot;;
+	
+	// sample credentials (really meaningless in the testing case)
+	public static final String user = &quot;11323&quot;;
+	public static final String password = &quot;password&quot;;
+	
+	/** Constructed objects for this test case. */
+	UserContext context;
+	LobbyFrame lobby;
+	
+	// random port 8000-10000 to avoid arbitrary conflicts
+	int port;
+	
+	/**
+	 * setUp() method is executed by the JUnit framework prior to each 
+	 * test case.
+	 */
+	@Before
+	public void setUpTwo() {
+		// Determine the XML schema we are going to use
+		try {
+<span class="fc" id="L118">			Message.unconfigure();</span>
+<span class="fc" id="L119">			assertTrue (Configure.configure());</span>
+<span class="nc" id="L120">		} catch (Exception e) {</span>
+<span class="nc" id="L121">			fail (&quot;Unable to setup Message tests.&quot;); </span>
+		}
+		
+<span class="fc" id="L124">		WSClientArchitecture.setupControllerChain();</span>
+		
+		// create client to connect
+<span class="fc" id="L127">		context = new UserContext();  // by default, localhost</span>
+<span class="fc" id="L128">		lobby = new LobbyFrame (context);</span>
+<span class="fc" id="L129">		lobby.setVisible(true);</span>
+		
+<span class="fc" id="L131">		context.setPort(port);</span>
+<span class="fc" id="L132">		context.setUser(user);</span>
+<span class="fc" id="L133">		context.setPassword(password);</span>
+<span class="fc" id="L134">		context.setSelfRegister(false);</span>
+		
+		// connect client to server
+<span class="fc" id="L137">		assertTrue (new ConnectController(lobby).process(context));</span>
+		
+		// wait for things to settle down. As your test cases become more
+		// complex, we may find it necessary to include additional waiting 
+		// times.
+<span class="fc" id="L142">		waitASecond();</span>
+<span class="fc" id="L143">	}</span>
+
+	/**
+	 * tearDown() is executed by JUnit at the conclusion of each individual
+	 * test case.
+	 */
+	@After
+	public void tearDownTwo() {
+		// the other way to leave is to manually invoke controller.
+<span class="fc" id="L152">		assertTrue (new DisconnectController (lobby).process(context));</span>
+		
+<span class="fc" id="L154">		lobby.setVisible(false);</span>
+<span class="fc" id="L155">		lobby.dispose();</span>
+<span class="fc" id="L156">	}</span>
+	
+	// helper function to sleep for a second.
+	private void waitASecond() {
+		// literally wait a second.
+		try {
+<span class="fc" id="L162">			Thread.sleep(1000);</span>
+<span class="nc" id="L163">		} catch (InterruptedException e) {</span>
+			
+		}
+<span class="fc" id="L166">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

@@ -1,0 +1,827 @@
+<?xml version="1.0"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>StatSVN - /WordstealClient Developers: cbelhumeur</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+    <meta name="Generator" content="StatSVN 0.7.0"/>
+<link rel="stylesheet" href="objectlab-statcvs.css" type="text/css"/>
+<script type="text/javascript" charset="utf-8" src="http://bit.ly/javascript-api.js?version=latest&#38;login=statsvn&#38;apiKey=R_2c362b417d0517c27876cbaca1bb68cc"></script>
+<script type="text/javascript" charset="utf-8">
+   // wait until page is loaded to call API
+   var redir_url;
+   var short_url;
+   BitlyCB.myShortenCallback = function(data) {
+      // this is how to get a result of shortening a single url
+      var result;
+      short_url=null;
+      for (var r in data.results) {
+         result = data.results[r];
+         result['longUrl'] = r;
+         short_url = result['shortUrl'];
+         break;
+      }
+      if (short_url==null) // bit.ly failed
+      document.location=redir_url;
+      else
+      redirToTwitter();
+   };
+   function shortenTweet(url) {
+      if (short_url == null || redir_url!=url) {
+      redir_url = url;
+      BitlyClient.shorten(document.location, 'BitlyCB.myShortenCallback');
+      }
+      else
+      redirToTwitter();
+      return false;
+   }
+   function redirToTwitter() { 
+      // replace {0} which is visible as %7B0} in the link
+      document.location = redir_url.replace('%7B0}', short_url);
+   }
+</script>
+  </head>
+
+<body>
+
+<h1>/WordstealClient Developers: cbelhumeur</h1>
+<div id="parentlink">&#171; <a href="index.html">Development Statistics for /WordstealClient</a> &#171; <a href="developers.html">Developers</a></div>
+<dl class="attributes">
+    <dt>Login name:</dt>
+    <dd>cbelhumeur</dd>
+    <dt>Total Commits:</dt>
+    <dd>137 (17.4%)</dd>
+    <dt>Lines of Code:</dt>
+    <dd>3,499 (29.8%)</dd>
+    <dt>Most Recent Commit:</dt>
+    <dd><span class="date">2012-04-28 14:13</span></dd>
+    <dt>Tweet this:</dt>
+    <dd><a onclick="return shortenTweet(this.href);" href="http://twitter.com/home?status=cbelhumeur%20contributed%203%2C499%20(29.8%25)%20lines%20to%20%2FWordstealClient%20%7B0}%20most%20recent%20commit%202012-04-28%20stats%20by%20StatSVN%20http%3A%2F%2Fstatsvn.org"><img style="border:0px" alt="Tweet this" src="tweet-this.png"/></a></dd>
+</dl>
+
+<div class="section">
+<h2>Activity by Clock Time</h2>
+<p class="chart"><img src="activity_time_cbelhumeur.png" alt="Activity by Hour of Day for cbelhumeur" width="800" height="500" /></p><p class="chart"><img src="activity_day_cbelhumeur.png" alt="Activity by Day of Week for cbelhumeur" width="800" height="500" /></p></div>
+<div class="section">
+<h2>Activity in Directories</h2>
+  <table  rules="groups" summary="Overview of this author's activities in different directories">
+    <colgroup align="left"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <colgroup align="right"/>
+    <thead>
+      <tr>
+        <th>Directory</th>
+        <th>Changes</th>
+        <th>Lines of Code</th>
+        <th>Lines per Change</th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th>Totals</th>
+        <td>137 (100.0%)</td>
+        <td>3499 (100.0%)</td>
+        <td>25.5</td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr  class="odd">
+        <th><a href="dir_src_wordstealclient_boundaries.html" class="directory">src/wordstealclient/boundaries/</a></th>
+        <td>42 (30.7%)</td>
+        <td>1446 (41.3%)</td>
+        <td>34.4</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir_test_wordstealclient_controllers_requests.html" class="directory">test/wordstealclient/controllers/requests/</a></th>
+        <td>21 (15.3%)</td>
+        <td>973 (27.8%)</td>
+        <td>46.3</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_src_wordstealclient_controllers_uncorrelated_requests.html" class="directory">src/wordstealclient/controllers/uncorrelated_requests/</a></th>
+        <td>6 (4.4%)</td>
+        <td>233 (6.7%)</td>
+        <td>38.8</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir_src_wordstealclient_util.html" class="directory">src/wordstealclient/util/</a></th>
+        <td>12 (8.8%)</td>
+        <td>197 (5.6%)</td>
+        <td>16.4</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_test_arch.html" class="directory">test/arch/</a></th>
+        <td>5 (3.6%)</td>
+        <td>172 (4.9%)</td>
+        <td>34.4</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir_src_wordstealclient_entities.html" class="directory">src/wordstealclient/entities/</a></th>
+        <td>16 (11.7%)</td>
+        <td>170 (4.9%)</td>
+        <td>10.6</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_src_arch.html" class="directory">src/arch/</a></th>
+        <td>16 (11.7%)</td>
+        <td>133 (3.8%)</td>
+        <td>8.3</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir_test_wordstealclient_boundaries.html" class="directory">test/wordstealclient/boundaries/</a></th>
+        <td>3 (2.2%)</td>
+        <td>66 (1.9%)</td>
+        <td>22.0</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_src_wordstealclient_controllers_uncorrelated_responses.html" class="directory">src/wordstealclient/controllers/uncorrelated_responses/</a></th>
+        <td>3 (2.2%)</td>
+        <td>46 (1.3%)</td>
+        <td>15.3</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir_external_test.html" class="directory">external/test/</a></th>
+        <td>1 (0.7%)</td>
+        <td>29 (0.8%)</td>
+        <td>29.0</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_src_wordstealclient_interfaces.html" class="directory">src/wordstealclient/interfaces/</a></th>
+        <td>2 (1.5%)</td>
+        <td>12 (0.3%)</td>
+        <td>6.0</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir_src_wordstealclient_controllers_requests.html" class="directory">src/wordstealclient/controllers/requests/</a></th>
+        <td>2 (1.5%)</td>
+        <td>7 (0.2%)</td>
+        <td>3.5</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_test_wordstealclient_entities.html" class="directory">test/wordstealclient/entities/</a></th>
+        <td>3 (2.2%)</td>
+        <td>6 (0.2%)</td>
+        <td>2.0</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir_src_wordstealclient_controllers.html" class="directory">src/wordstealclient/controllers/</a></th>
+        <td>1 (0.7%)</td>
+        <td>4 (0.1%)</td>
+        <td>4.0</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_src_wordstealclient_controllers_xml_handlers.html" class="directory">src/wordstealclient/controllers/xml_handlers/</a></th>
+        <td>1 (0.7%)</td>
+        <td>3 (0.1%)</td>
+        <td>3.0</td>
+      </tr>
+      <tr  class="even">
+        <th><a href="dir.html" class="directory">/</a></th>
+        <td>2 (1.5%)</td>
+        <td>2 (0.1%)</td>
+        <td>1.0</td>
+      </tr>
+      <tr  class="odd">
+        <th><a href="dir_resources.html" class="directory">resources/</a></th>
+        <td>1 (0.7%)</td>
+        <td>0 (0.0%)</td>
+        <td>0.0</td>
+      </tr>
+    </tbody>
+  </table>
+
+<p class="chart"><img src="directory_sizes_cbelhumeur.png" alt="Activity of cbelhumeur" width="800" height="500" /></p></div>
+<div class="section">
+<h2>Most Recent Commits</h2>
+<dl class="commitlist">
+  <dt><a name="20"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-28 14:13</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">103</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Clean up
+    </p>
+    <p class="commitdetails"><strong>4</strong> lines of code changed in <span class="files">11 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSInviteFrame.java&#160;<span class="change">(-5)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(-2)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        GUIHelper.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+      <li>
+        <strong>test/arch</strong>:
+        ConsolidatedClientProfileControllerTest.java&#160;<span class="change">(-4)</span>,
+        MyLobbyInitializationTest.java&#160;<span class="change">(-3)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/boundaries</strong>:
+        ManagerGUITest.java&#160;<span class="change">(-3)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        ChatRequestControllerTest.java&#160;<span class="change">(-8)</span>,
+        ContextRequestControllerTests.java&#160;<span class="change">(+3&#160;-14)</span>,
+        JoinRequestControllerTest.java&#160;<span class="change">(-6)</span>,
+        LeaveRequestControllerTest.java&#160;<span class="change">(-5)</span>,
+        TablesRequestControllerTest.java&#160;<span class="change">(-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="19"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-28 13:35</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">102</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Test fixes.
+    </p>
+    <p class="commitdetails"><strong>146</strong> lines of code changed in <span class="files">5 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/arch</strong>:
+        MyLobbyInitializationTest.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/boundaries</strong>:
+        ManagerGUITest.java&#160;<span class="change">(+1&#160;-2)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        ConfirmRequestControllerTest.java&#160;<span class="del">(del)</span>,
+        ContextRequestControllerTests.java&#160;<span class="new">(new&#160;144)</span>,
+        InviteRequestControllerTest.java&#160;<span class="del">(del)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="18"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 22:26</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">100</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+More code coverage!
+    </p>
+    <p class="commitdetails"><strong>198</strong> lines of code changed in <span class="files">6 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSTablePanel.java&#160;<span class="change">(-8)</span>,
+        WSTablesPanel.java&#160;<span class="change">(-29)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        ChatRequestControllerTest.java&#160;<span class="new">(new&#160;90)</span>,
+        ConfirmRequestControllerTest.java&#160;<span class="change">(+12&#160;-13)</span>,
+        LeaveRequestControllerTest.java&#160;<span class="new">(new&#160;93)</span>,
+        PlayersRequestControllerTest.java&#160;<span class="change">(+3)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="17"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 21:41</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">98</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+More tests!
+    </p>
+    <p class="commitdetails"><strong>118</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(-138)</span>
+      </li>
+      <li>
+        <strong>test/arch</strong>:
+        MyLobbyInitializationTest.java&#160;<span class="new">(new&#160;96)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        ConfirmRequestControllerTest.java&#160;<span class="change">(+22&#160;-22)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="16"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 21:11</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">97</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+More tests!
+    </p>
+    <p class="commitdetails"><strong>266</strong> lines of code changed in <span class="files">7 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>external/test</strong>:
+        TestData.java&#160;<span class="change">(+29)</span>
+      </li>
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+4&#160;-4)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSTablePanel.java&#160;<span class="change">(-200)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+10&#160;-1)</span>
+      </li>
+      <li>
+        <strong>test/arch</strong>:
+        ConsolidatedClientProfileControllerTest.java&#160;<span class="new">(new&#160;75)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/boundaries</strong>:
+        ManagerGUITest.java&#160;<span class="new">(new&#160;65)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        JoinRequestControllerTest.java&#160;<span class="new">(new&#160;83)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="15"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 19:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">96</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+controller tests!
+    </p>
+    <p class="commitdetails"><strong>323</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        InviteRequestControllerTest.java&#160;<span class="new">(new&#160;104)</span>,
+        OptionsRequestControllerTest.java&#160;<span class="change">(+2&#160;-2)</span>,
+        PlayersRequestControllerTest.java&#160;<span class="new">(new&#160;105)</span>,
+        TablesRequestControllerTest.java&#160;<span class="new">(new&#160;112)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="14"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 19:41</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">95</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+playerslist and invite controller tests
+    </p>
+    <p class="commitdetails"><strong>15</strong> lines of code changed in <span class="files">3 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        .classpath&#160;<span class="change">(+1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+8&#160;-2)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        ConfirmRequestControllerTest.java&#160;<span class="change">(+6&#160;-11)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="13"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-27 16:58</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">88</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Confirm and options controller tests
+    </p>
+    <p class="commitdetails"><strong>200</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/controllers/uncorrelated_requests</strong>:
+        ConfirmRequestController.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        GUIUpdater.java&#160;<span class="change">(+5&#160;-3)</span>
+      </li>
+      <li>
+        <strong>test/wordstealclient/controllers/requests</strong>:
+        ConfirmRequestControllerTest.java&#160;<span class="new">(new&#160;107)</span>,
+        OptionsRequestControllerTest.java&#160;<span class="new">(new&#160;87)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="12"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-26 17:07</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">83</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Invitations now work if a table is set to by invitation only.
+    </p>
+    <p class="commitdetails"><strong>149</strong> lines of code changed in <span class="files">9 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSInviteFrame.java&#160;<span class="change">(+20&#160;-5)</span>,
+        WSTablesPanel.java&#160;<span class="change">(+7&#160;-5)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/uncorrelated_requests</strong>:
+        ConfirmRequestController.java&#160;<span class="change">(+25&#160;-2)</span>,
+        InviteRequestController.java&#160;<span class="new">(new&#160;75)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/uncorrelated_responses</strong>:
+        ConfirmResponseController.java&#160;<span class="change">(-19)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/xml_handlers</strong>:
+        TableResponseHandler.java&#160;<span class="change">(+3&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        GUIHelper.java&#160;<span class="change">(+17&#160;-2)</span>,
+        XMLSchema.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="11"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-26 13:40</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">82</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added confirm request and response controllers.
+    </p>
+    <p class="commitdetails"><strong>124</strong> lines of code changed in <span class="files">6 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSTablesPanel.java&#160;<span class="change">(-4)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers</strong>:
+        RoomControllerChainLink.java&#160;<span class="change">(+4)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/uncorrelated_requests</strong>:
+        ConfirmRequestController.java&#160;<span class="new">(new&#160;61)</span>,
+        OptionsRequestController.java&#160;<span class="change">(+4&#160;-6)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/uncorrelated_responses</strong>:
+        ConfirmResponseController.java&#160;<span class="new">(new&#160;45)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        XMLSchema.java&#160;<span class="change">(+10)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="10"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-24 15:08</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">81</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added the OptionsRequestController functionality and tightened up the table UI.
+    </p>
+    <p class="commitdetails"><strong>346</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+5&#160;-3)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSTablePanel.java&#160;<span class="change">(+256&#160;-22)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/uncorrelated_requests</strong>:
+        OptionsRequestController.java&#160;<span class="new">(new&#160;67)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        GUIHelper.java&#160;<span class="change">(+18)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="9"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-19 15:18</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">66</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Minor changes
+    </p>
+    <p class="commitdetails"><strong>18</strong> lines of code changed in <span class="files">2 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+2&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSInviteFrame.java&#160;<span class="change">(+16&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="8"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-17 15:52</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">62</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Invitations and other modifications to the table to support gameplay.
+    </p>
+    <p class="commitdetails"><strong>191</strong> lines of code changed in <span class="files">6 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+18&#160;-24)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        WSInviteFrame.java&#160;<span class="new">(new&#160;119)</span>,
+        WSTablePanel.java&#160;<span class="change">(+3&#160;-2)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+39)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/interfaces</strong>:
+        IGameProvider.java&#160;<span class="change">(+2&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        GUIHelper.java&#160;<span class="change">(+10)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="7"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-16 20:49</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">61</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Fixed event system. Game now launches from table panel which can be accessed by double clicking on a table. Most UI is functional provided we have built the content. Half of the table panel is currently working.
+    </p>
+    <p class="commitdetails"><strong>304</strong> lines of code changed in <span class="files">8 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+58&#160;-6)</span>,
+        WSClientArchitecture.java&#160;<span class="change">(+15&#160;-3)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        TableManagerGUI.java&#160;<span class="change">(+2&#160;-3)</span>,
+        WSTablePanel.java&#160;<span class="change">(+167&#160;-95)</span>,
+        WSTablesPanel.java&#160;<span class="change">(+4)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/interfaces</strong>:
+        IGameProvider.java&#160;<span class="new">(new&#160;10)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        GUIHelper.java&#160;<span class="change">(+35&#160;-1)</span>,
+        GUIUpdater.java&#160;<span class="change">(+13&#160;-4)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="6"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-13 13:06</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">60</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Major updates to in-table GUI, new resources added, new GUI helper added, other modifications.<br />
+Defaults to in-table GUI. This can be modified in the TableManagerGUI file.
+    </p>
+    <p class="commitdetails"><strong>299</strong> lines of code changed in <span class="files">8 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        .classpath&#160;<span class="change">(+1)</span>
+      </li>
+      <li>
+        <strong>resources</strong>:
+        blueWhiteBg.jpg&#160;<span class="new">(new)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        ImagePanel.java&#160;<span class="new">(new&#160;32)</span>,
+        TableManagerGUI.java&#160;<span class="change">(+9&#160;-7)</span>,
+        WSTablePanel.java&#160;<span class="change">(+220&#160;-14)</span>,
+        WSUsersTable.java&#160;<span class="change">(+3&#160;-18)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(+5&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        GUIHelper.java&#160;<span class="new">(new&#160;29)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="5"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-12 15:31</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">57</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Lobby fix, UI changes, new Table boundary
+    </p>
+    <p class="commitdetails"><strong>89</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+1&#160;-1)</span>,
+        WSClientArchitecture.java&#160;<span class="change">(+4)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        TableManagerGUI.java&#160;<span class="change">(+10)</span>,
+        WSTablePanel.java&#160;<span class="new">(new&#160;74)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="4"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-12 14:37</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">55</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+GUI updates, link with requests, etc
+    </p>
+    <p class="commitdetails"><strong>53</strong> lines of code changed in <span class="files">10 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+5&#160;-2)</span>,
+        WSClientArchitecture.java&#160;<span class="change">(+8)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        TableManagerGUI.java&#160;<span class="change">(+1&#160;-7)</span>,
+        UserManagerGUI.java&#160;<span class="change">(+17&#160;-7)</span>,
+        WSTablesPanel.java&#160;<span class="change">(+9)</span>,
+        WSUserPanel.java&#160;<span class="change">(+3&#160;-3)</span>,
+        WSUsersTable.java&#160;<span class="change">(+4&#160;-2)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/uncorrelated_responses</strong>:
+        TableResponseController.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Table.java&#160;<span class="change">(-6)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        TestData.java&#160;<span class="change">(+5&#160;-10)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="3"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-05 16:24</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">34</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Added TestData.java<br />
+UI is now tied in with the test data.<br />
+Updated GUI objects.
+    </p>
+    <p class="commitdetails"><strong>122</strong> lines of code changed in <span class="files">7 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        TableManagerGUI.java&#160;<span class="change">(+1&#160;-43)</span>,
+        UserManagerGUI.java&#160;<span class="change">(+2&#160;-14)</span>,
+        WSUserPanel.java&#160;<span class="change">(+39&#160;-23)</span>,
+        WSUsersTable.java&#160;<span class="change">(+2&#160;-3)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Player.java&#160;<span class="change">(+17)</span>,
+        Room.java&#160;<span class="change">(+8&#160;-5)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/util</strong>:
+        TestData.java&#160;<span class="new">(new&#160;53)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="2"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-05 15:23</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">32</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Table UI updated.  Tables are now properly generated through the room. Other minor changes.
+    </p>
+    <p class="commitdetails"><strong>70</strong> lines of code changed in <span class="files">7 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        WSClientArchitecture.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        TableManagerGUI.java&#160;<span class="change">(+11&#160;-9)</span>,
+        UserManagerGUI.java&#160;<span class="change">(+6&#160;-32)</span>,
+        WSTablesPanel.java&#160;<span class="change">(+42&#160;-7)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/entities</strong>:
+        Room.java&#160;<span class="change">(+9&#160;-1)</span>,
+        Table.java&#160;<span class="change">(+1)</span>,
+        TableState.java&#160;<span class="del">(del)</span>
+      </li>
+    </ul>
+  </dd>
+
+  <dt><a name="1"></a>
+    <a href="user_cbelhumeur.html" class="author">cbelhumeur</a>
+    <span class="date">2012-04-05 14:33</span>
+    <span class="revisionNumberOuter">Rev.: <span class="revisionNumberInner">29</span></span>
+  </dt>
+  <dd>
+    <p class="comment">
+Josh wants the new UI code.
+    </p>
+    <p class="commitdetails"><strong>18</strong> lines of code changed in <span class="files">4 files</span>:</p>
+    <ul class="commitdetails">
+      <li>
+        <strong>src/arch</strong>:
+        MyLobbyInitialization.java&#160;<span class="change">(+2)</span>,
+        WSClientArchitecture.java&#160;<span class="change">(+1&#160;-1)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/boundaries</strong>:
+        UserManagerGUI.java&#160;<span class="change">(+11&#160;-15)</span>
+      </li>
+      <li>
+        <strong>src/wordstealclient/controllers/requests</strong>:
+        PlayersRequestController.java&#160;<span class="change">(+4&#160;-1)</span>
+      </li>
+    </ul>
+  </dd>
+
+</dl>
+
+<p>(2 more)</p>
+</div><div id="generatedby">Generated by <a href="http://www.statsvn.org">StatSVN</a> 0.7.0</div>
+</body>
+</html>

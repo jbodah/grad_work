@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ClientArchitecture.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">arch</a> &gt; <span class="el_source">ClientArchitecture.java</span></div><h1>ClientArchitecture.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package arch;</span>
+
+import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import ks.client.controllers.ClientControllerChain;
+import ks.client.interfaces.ILobbyInitialize;
+import ks.client.lobby.ConnectFrame;
+import ks.client.processor.ClientProcessor;
+import ks.framework.common.Configure;
+
+/**
+ * This is a sample class that shows how to configure the client to function.
+ * Copy (and rename) this into your appropriate location and then you can 
+ * begin the process of building up your own server implementation.
+ * &lt;p&gt;
+ * Note that you will have to provide your response to requests to close the 
+ * window. Here it just exits but that may not be what you want.
+ * 
+ * @author George Heineman
+ */
+<span class="nc" id="L26">public class ClientArchitecture {</span>
+	
+	/** Entity created for client. */
+	static ConnectFrame cf;
+	
+	/**
+	 * Launch client app.
+	 * 
+	 * @param args
+	 * @throws Exception 
+	 */
+	public static void main(String[] args) throws Exception {
+		// Determine the XML schema we are going to use
+<span class="nc bnc" id="L39" title="All 2 branches missed.">		if (!Configure.configure()) {</span>
+<span class="nc" id="L40">			System.err.println(&quot;Unable to configure Message XML&quot;);</span>
+<span class="nc" id="L41">			return;</span>
+		}
+		
+		// create mock-User manager now outside. You should replace with 
+		// the appropriate class construction on your end.
+<span class="nc" id="L46">		JPanel tempUserManagerGUI = new JPanel();</span>
+<span class="nc" id="L47">		JLabel jLabel = new JLabel();</span>
+<span class="nc" id="L48">		jLabel.setText(&quot;UMGUI To Be Inserted&quot;);</span>
+<span class="nc" id="L49">		tempUserManagerGUI.setLayout(new FlowLayout());</span>
+<span class="nc" id="L50">		tempUserManagerGUI.add(jLabel, null);</span>
+		
+		// create mock-Table manager now outside. You should replace with 
+		// the appropriate class construction on your end.
+<span class="nc" id="L54">		JPanel tempTableManagerGUI = new JPanel();</span>
+<span class="nc" id="L55">		JLabel jLabel1 = new JLabel();</span>
+<span class="nc" id="L56">		jLabel1.setText(&quot;TMGUI To Be Inserted&quot;);</span>
+<span class="nc" id="L57">		tempTableManagerGUI.setLayout(new FlowLayout());</span>
+<span class="nc" id="L58">		tempTableManagerGUI.add(jLabel1, null);</span>
+				
+		// initialization callback. Client-side groups can pass in 
+		// an object that provides this interface into the ConnectFrame
+		// constructor and it will be called at the proper time.
+<span class="nc" id="L63">		ILobbyInitialize init = new MyLobbyInitialization(tempTableManagerGUI, tempUserManagerGUI);</span>
+		
+		// all action on this (default) local host. Should there be a need
+		// to connect to a different host computer, then you would need 
+		// to pass in command-line argument values from 'args' into the 
+		// constructor of UserContext so the client knows to which server
+		// to connect.
+<span class="nc" id="L70">		cf = new ConnectFrame(init);</span>
+<span class="nc" id="L71">		cf.addWindowListener(new WindowAdapter() {</span>
+
+			// Override the closing method to exit from the VM.
+			// we need no check because this is before user 
+			// has actually connected.
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+<span class="nc" id="L78">				System.exit(0);			</span>
+<span class="nc" id="L79">			}</span>
+
+		});
+		
+		// here is where you can augment the chain of client-side controllers
+<span class="nc" id="L84">		ClientControllerChain head = ClientProcessor.head();</span>
+<span class="nc" id="L85">		head.append(new ClientExtension());</span>
+		
+
+		
+<span class="nc" id="L89">		cf.setVisible(true);</span>
+		
+		// running...
+<span class="nc" id="L92">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

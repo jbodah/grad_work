@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>ConfirmRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.uncorrelated_requests</a> &gt; <span class="el_source">ConfirmRequestController.java</span></div><h1>ConfirmRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.uncorrelated_requests;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import org.w3c.dom.Node;
+
+import arch.WSClientArchitecture;
+
+import wordstealclient.controllers.uncorrelated_responses.ConfirmResponseController;
+import wordstealclient.entities.Player;
+import wordstealclient.entities.Room;
+import wordstealclient.util.NodeHelper;
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.IProcessClientMessage;
+import ks.framework.common.Message;
+
+/**
+ * Request: confirm&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: ??&lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * 	{@literal &lt;!-- Moderator is asked to confirm the request from player &quot;129382&quot; to join table 100 --&gt;}&lt;br/&gt;
+ * 	{@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * 	{@literal &lt;confirm table=&quot;100&quot; player=&quot;129382&quot;/&gt;}&lt;br/&gt;
+ * 	{@literal &lt;/request&gt;}
+ * 
+ * @author cbelhumeur
+ */
+public class ConfirmRequestController  implements IProcessClientMessage {
+	ILobby lobby ;
+	
+<span class="fc" id="L35">	public ConfirmRequestController(ILobby lobby) {</span>
+<span class="fc" id="L36">		this.lobby = lobby;</span>
+<span class="fc" id="L37">	}</span>
+	
+	@Override
+	public boolean process(ILobby lobby, Message m) {
+<span class="fc" id="L41">		System.out.println(&quot;ConfirmRequestController.process(ILobby, Message): Received &quot; + m);</span>
+<span class="fc" id="L42">		Node responseNode = m.contents() ; // Root's children</span>
+<span class="fc" id="L43">		String player = NodeHelper.strAttribute(responseNode, &quot;player&quot;);</span>
+<span class="fc" id="L44">		Player user = Room.getInstance().getPlayer(Integer.parseInt(player));</span>
+		
+		// User is not at a table if == 0
+<span class="fc bfc" id="L47" title="All 2 branches covered.">		if (user.getTableID() != 0)	{ parseInTableXML(m); } </span>
+<span class="fc" id="L48">		else {	parseOutTableXML( m ) ;	}</span>
+<span class="fc" id="L49">		return true;</span>
+	}
+	
+	/**
+	 * Parse XML response and extract the nodes we need
+	 * @author cbelhumeur
+	 */
+	private void parseOutTableXML(Message response) {
+<span class="fc" id="L57">		Node responseNode = response.contents() ; // Root's children</span>
+<span class="fc" id="L58">		String player = NodeHelper.strAttribute(responseNode, &quot;player&quot;);</span>
+<span class="fc" id="L59">		String tableID = NodeHelper.strAttribute(responseNode, &quot;table&quot;);</span>
+		/* 
+	    These are a list of STATIC MODAL dialogs
+	    int return codes of button pressed:
+	        -1 - WINDOW CLOSED - the X PRESSED
+	         0 - YES and OK
+	         1 - NO
+	         2 - CANCEL
+	     */
+<span class="fc" id="L68">		int result = JOptionPane.showConfirmDialog(new JFrame(&quot;Confirm Player?&quot;), &quot;Would you like to confirm &quot; + player + &quot;'s request to join this table (#&quot; + tableID + &quot;)?&quot;);</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">		new ConfirmResponseController().process(tableID, player, (result == 0));</span>
+<span class="fc" id="L70">	}</span>
+	
+	/**
+	 * Parse XML response and extract the nodes we need
+	 * @author cbelhumeur
+	 */
+	private void parseInTableXML(Message response) {
+<span class="fc" id="L77">		Node responseNode = response.contents() ; // Root's children</span>
+<span class="fc" id="L78">		String player = NodeHelper.strAttribute(responseNode, &quot;player&quot;);</span>
+<span class="fc" id="L79">		String tableID = NodeHelper.strAttribute(responseNode, &quot;table&quot;);</span>
+<span class="fc" id="L80">		int result = JOptionPane.showConfirmDialog(new JFrame(&quot;Join table?&quot;), player + &quot; would like to invite you to join table (#&quot; + tableID + &quot;). Do you want to accept?&quot;);</span>
+<span class="pc bpc" id="L81" title="1 of 2 branches missed.">		new ConfirmResponseController().process(tableID, &quot;&quot; + WSClientArchitecture.getThisPlayer().getLogin(), (result == 0));</span>
+<span class="fc" id="L82">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

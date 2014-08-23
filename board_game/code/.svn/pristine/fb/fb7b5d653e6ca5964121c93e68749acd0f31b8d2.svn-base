@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>LobbyOutputController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.controllers</a> &gt; <span class="el_source">LobbyOutputController.java</span></div><h1>LobbyOutputController.java</h1><pre class="source lang-java linenums">package ks.client.controllers;
+
+import org.w3c.dom.Node;
+
+import ks.client.interfaces.ILobby;
+import ks.client.interfaces.ILobby2;
+import ks.client.interfaces.IProcessClientMessage;
+import ks.framework.common.Message;
+
+/**
+ * Shows how to process Output requests from server.
+ * 
+ * @author George Heineman
+ */
+<span class="nc" id="L15">public class LobbyOutputController implements IProcessClientMessage {</span>
+
+	/** Process message. */
+	public boolean process(ILobby lobby, Message m) {
+<span class="nc" id="L19">		Node output = m.contents();</span>
+		
+		// retrieve high-level attribute value, if it exists, otherwise
+		// null is returned.
+<span class="nc" id="L23">		String from = m.getAttribute(&quot;from&quot;);</span>
+<span class="nc" id="L24">		String txt = output.getTextContent();</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">		if (from == null) {</span>
+			// it is optional so this could be from the system
+<span class="nc" id="L27">			lobby.append(txt);</span>
+		} else {
+			boolean publicMessage;
+			
+<span class="nc bnc" id="L31" title="All 2 branches missed.">			if (m.getAttribute(&quot;public&quot;) != null) {</span>
+<span class="nc" id="L32">				publicMessage = m.getAttribute(&quot;public&quot;).equals(&quot;true&quot;); // CHANGED!...</span>
+			}
+			else {
+<span class="nc" id="L35">				publicMessage = true;</span>
+			}
+			
+			// pre-pend from id.
+<span class="nc bnc" id="L39" title="All 2 branches missed.">			if (lobby instanceof ILobby2) {</span>
+<span class="nc" id="L40">				((ILobby2)lobby).append(from, txt, publicMessage); // CHANGED!</span>
+			}
+			else {
+<span class="nc" id="L43">				lobby.append(txt);</span>
+			}
+		}
+		
+<span class="nc" id="L47">		return true;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

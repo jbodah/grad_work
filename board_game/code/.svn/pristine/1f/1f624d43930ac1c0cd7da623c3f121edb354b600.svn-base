@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>InviteRequestController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">wordstealclient.controllers.uncorrelated_requests</a> &gt; <span class="el_source">InviteRequestController.java</span></div><h1>InviteRequestController.java</h1><pre class="source lang-java linenums">package wordstealclient.controllers.uncorrelated_requests;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import org.w3c.dom.Node;
+
+import wordstealclient.controllers.uncorrelated_responses.ConfirmResponseController;
+import wordstealclient.util.NodeHelper;
+import ks.client.interfaces.IController;
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Message;
+
+/**
+ * Request: invite&lt;br/&gt;
+ * Initiated by client&lt;br/&gt;
+ * Expects correlated response: ??&lt;br/&gt; 
+ * &lt;br/&gt;
+ * 
+ * @example
+ * {@literal &lt;!-- Request a player to join an invitation-only table. --&gt;}&lt;br/&gt;
+ * {@literal &lt;request version=&quot;1.0&quot; id=&quot;589a39591271844e3fbe32bbb9281ad9&quot;&gt;}&lt;br/&gt;
+ * {@literal &lt;invite table=&quot;99&quot; player=&quot;83293&quot;/&gt;}&lt;br/&gt;
+ * {@literal &lt;/request&gt;}&lt;br/&gt;
+ * 
+ * @author cbelhumeur
+ */
+public class InviteRequestController implements IController {
+	ILobby lobby ;
+	
+<span class="fc" id="L31">	public InviteRequestController(ILobby lobby) {</span>
+<span class="fc" id="L32">		this.lobby = lobby;</span>
+<span class="fc" id="L33">	}</span>
+	
+	/**
+	 * Create and send request
+	 * @author cbelhumeur
+	 */
+	public void process(int tableID, int playerID) {
+<span class="fc" id="L40">		Message m = new Message(Message.construct (writeXMLForRequest(tableID, playerID)));</span>
+<span class="fc" id="L41">		lobby.getContext().getClient().sendToServer(lobby, m, this);</span>
+<span class="fc" id="L42">		System.out.println(&quot;InviteRequestController.process(): Request sent&quot;);</span>
+<span class="fc" id="L43">	}</span>
+	
+	/**
+	 *  process correlated response (to given request) when received from server
+	 *	@author cbelhumeur
+	 */
+	@Override
+	public void process(ILobby lobby, Message request, Message response) {		
+<span class="fc" id="L51">		System.out.println(&quot;InviteRequestController.process(ILobby, Message, Message): Received &quot; + response + &quot; in response to &quot; + request);</span>
+<span class="fc" id="L52">		parseXML( response ) ;</span>
+<span class="fc" id="L53">	}</span>
+	
+	private String writeXMLForRequest(int tableID, int playerID) {
+<span class="fc" id="L56">		String s = Message.requestHeader() +</span>
+<span class="fc" id="L57">				&quot;&lt;invite table='&quot; + tableID + &quot;' &quot; +</span>
+<span class="fc" id="L58">				 		&quot;player='&quot; + playerID + &quot;'/&gt;&lt;/request&gt;&quot; ;</span>
+<span class="fc" id="L59">		return s;</span>
+	}
+	
+	/**
+	 * Parse XML response and extract the nodes we need
+	 * @author cbelhumeur
+	 */
+	private void parseXML(Message response) {
+<span class="fc" id="L67">		Node responseNode = response.contents() ; // Root's children</span>
+<span class="fc" id="L68">		String player = NodeHelper.strAttribute(responseNode, &quot;player&quot;);</span>
+<span class="fc" id="L69">		String tableID = NodeHelper.strAttribute(responseNode, &quot;table&quot;);</span>
+<span class="fc" id="L70">		int result = JOptionPane.showConfirmDialog(new JFrame(&quot;Join table?&quot;), player + &quot; would like to invite you to join table (#&quot; + tableID + &quot;). Do you want to accept?&quot;);</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">		new ConfirmResponseController().process(tableID, player, (result == 0));		</span>
+<span class="fc" id="L72">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

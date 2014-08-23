@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>WordstealGameInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game.wordsteal</a> &gt; <span class="el_source">WordstealGameInformation.java</span></div><h1>WordstealGameInformation.java</h1><pre class="source lang-java linenums"><span class="fc" id="L1">package ks.client.game.wordsteal;</span>
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import wordsteal.boundaries.main.MainJPanel;
+import wordsteal.entities.Dictionary;
+import wordsteal.entities.Game;
+import wordsteal.entities.Player;
+import wordsteal.entities.ReqTilesPerTurn;
+
+import ks.client.game.GameFrame;
+import ks.client.game.GameInformation;
+import ks.client.timer.TimerPanel;
+import ks.client.timer.TimerUpdate;
+
+public class WordstealGameInformation extends GameInformation {
+
+	boolean pink;
+	boolean noS;
+	int turnTime;
+	int pointsToWin;
+	
+	/** Enclosing game frame. */
+	GameFrame frame;
+	
+	/** Game container. */
+<span class="fc" id="L37">	MainJPanel gameContainer = null;</span>
+	
+	/** Controls. */
+<span class="fc" id="L40">	JPanel controlPanel = null;</span>
+<span class="fc" id="L41">	JButton submitButton = null;</span>
+<span class="fc" id="L42">	JButton skipButton = null;</span>
+<span class="fc" id="L43">	TimerPanel timerPanel = null;</span>
+	
+	/** Is game complete? reset in start. Set in stop. */
+<span class="fc" id="L46">	boolean isGameComplete = false;</span>
+	
+	/**
+	 * Options for solitaire include:
+	 * 
+	 * pink&lt;boolean&gt;     determine whether board clears on Pink play.
+	 * noS&lt;boolean&gt;      prevent or allow S extensions to words
+	 * turnTime&lt;int&gt;     time for each turn
+	 * pointsToWin&lt;int&gt;  score at which game finishes
+	 * 
+	 * @param options
+	 * @param gameOptions
+	 */
+	public WordstealGameInformation(Properties options, Properties gameOptions) {
+<span class="fc" id="L60">		super(options);</span>
+		
+		// set pink option
+<span class="fc" id="L63">		String pinkS = gameOptions.getProperty(&quot;pink&quot;);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">		if (pinkS == null) {</span>
+<span class="nc" id="L65">			pink = true; //defaults</span>
+		} else {
+			try {
+<span class="fc" id="L68">				pink = Boolean.valueOf(pinkS);</span>
+<span class="nc" id="L69">			} catch (Exception e) {</span>
+<span class="nc" id="L70">				e.printStackTrace();</span>
+<span class="nc" id="L71">				pink = true;</span>
+			}
+		}
+		
+		// set noS option
+<span class="fc" id="L76">		String noSS = gameOptions.getProperty(&quot;noS&quot;);</span>
+<span class="pc bpc" id="L77" title="1 of 2 branches missed.">		if (noSS == null) {</span>
+<span class="nc" id="L78">			noS = true; //defaults</span>
+		} else {
+			try {
+<span class="fc" id="L81">				noS = Boolean.valueOf(noSS);</span>
+<span class="nc" id="L82">			} catch (Exception e) {</span>
+<span class="nc" id="L83">				e.printStackTrace();</span>
+<span class="nc" id="L84">				noS = true;</span>
+			}
+		}
+		
+		// set turntime option
+<span class="fc" id="L89">		String turnTimeS = gameOptions.getProperty(&quot;turnTime&quot;);</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">		if (turnTimeS == null) {</span>
+<span class="nc" id="L91">			turnTime = 30; //defaults</span>
+		} else {
+			try {
+<span class="fc" id="L94">				turnTime = Integer.valueOf(turnTimeS);</span>
+<span class="nc" id="L95">			} catch (Exception e) {</span>
+<span class="nc" id="L96">				e.printStackTrace();</span>
+<span class="nc" id="L97">				turnTime = 30;</span>
+			}
+		}
+		
+		// set score finishing option
+<span class="fc" id="L102">		String pointsToWinS = gameOptions.getProperty(&quot;pointsToWin&quot;);</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">		if (pointsToWinS == null) {</span>
+<span class="nc" id="L104">			pointsToWin = 30; //defaults</span>
+		} else {
+			try {
+<span class="fc" id="L107">				pointsToWin = Integer.valueOf(pointsToWinS);</span>
+<span class="nc" id="L108">			} catch (Exception e) {</span>
+<span class="nc" id="L109">				e.printStackTrace();</span>
+<span class="nc" id="L110">				pointsToWin = 30;</span>
+			}
+		}
+<span class="fc" id="L113">	}</span>
+
+	/**
+	 * Because this is a turn-based game, initially the lobby is locked
+	 * while the moderator (first one) gets a chance.
+	 */
+	@Override
+	public boolean start(GameFrame frame) {
+<span class="fc" id="L121">		this.frame = frame;</span>
+<span class="fc" id="L122">		frame.setVisible(true);</span>
+<span class="fc" id="L123">		frame.setTitle(&quot;WordSteal by Dan Sacco, Soe San Winn, and Zach Broderick&quot;);</span>
+<span class="fc" id="L124">		frame.setSize (800, 768);</span>
+		
+		// necessary?
+		//frame.addMouseListener(((MainJPanel)getGameContainer()).moveTileController());
+		//frame.addMouseMotionListener(((MainJPanel)getGameContainer()).moveTileController());
+		
+<span class="fc" id="L130">		ArrayList&lt;wordsteal.entities.Player&gt; list = new ArrayList&lt;wordsteal.entities.Player&gt;();</span>
+		
+<span class="fc" id="L132">		Color[] colors = { Color.red, Color.orange, Color.blue, Color.green };</span>
+<span class="fc" id="L133">		int i = 0;</span>
+<span class="fc bfc" id="L134" title="All 2 branches covered.">		for (String pid : order) {</span>
+<span class="fc" id="L135">			String name = fullName(pid);</span>
+<span class="fc" id="L136">			list.add(new wordsteal.entities.Player(name, colors[i++]));</span>
+		}
+		
+<span class="fc" id="L139">		Dictionary dict = null;</span>
+		try {
+<span class="fc" id="L141">			dict = new Dictionary(&quot;../StandAlone/Dictionaries/english.txt&quot;);</span>
+<span class="nc" id="L142">		} catch (Exception e) {</span>
+			try {
+<span class="nc" id="L144">				dict = Dictionary.createDefaultDictionary();</span>
+<span class="nc" id="L145">			} catch (Exception e1) {</span>
+				// TODO Auto-generated catch block
+<span class="nc" id="L147">				e1.printStackTrace();</span>
+<span class="nc" id="L148">				return false;</span>
+			}
+		}
+		
+		// make sure dictionary uses proper seed
+<span class="fc" id="L153">		dict.setSeed(seed);</span>
+		
+		//Create a new game using new game information
+<span class="fc" id="L156">		Game newGame = new Game(list, dict);</span>
+<span class="fc" id="L157">		newGame.setNoPinkEnabled(pink);</span>
+<span class="fc" id="L158">		newGame.setNoSEnabled(noS);</span>
+<span class="fc" id="L159">		newGame.setPointsToWin(pointsToWin);</span>
+<span class="fc" id="L160">		newGame.setReqTilesPerTurn(ReqTilesPerTurn.Normal);</span>
+<span class="fc" id="L161">		newGame.setTimePerTurn(turnTime);</span>
+				
+		// set game and refresh GUI to kick things off. Because
+		// code bases are separate we have a bridge controller
+		// to ensure outgoing events are handled.
+<span class="fc" id="L166">		((MainJPanel)getGameContainer()).setGame(newGame);</span>
+<span class="fc" id="L167">		((MainJPanel)getGameContainer()).setCallback(new BridgeCallback(callback, frame.getTableNumber()));</span>
+		
+		
+		// need table number for skip controller...
+<span class="fc" id="L171">		((MainJPanel)getGameContainer()).setTableNumber(frame.getTableNumber());</span>
+<span class="fc" id="L172">		((MainJPanel)getGameContainer()).refreshGUI();</span>
+		
+		// must lock GUI and let (at a later time) the moderator begin things
+		// off. This is a tricky handshake and doesn't happen for Solitaire
+		// games.
+<span class="fc" id="L177">		((MainJPanel)getGameContainer()).lockUI(true);</span>
+<span class="fc" id="L178">		isGameComplete = false;</span>
+<span class="fc" id="L179">		return true;</span>
+	}
+
+	@Override
+	public Component getGameControls() {
+
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">		if (controlPanel == null) {</span>
+<span class="fc" id="L186">			controlPanel = new JPanel();</span>
+				
+<span class="fc" id="L188">			GroupLayout layout = new GroupLayout(controlPanel);</span>
+<span class="fc" id="L189">			controlPanel.setLayout(layout);</span>
+<span class="fc" id="L190">			layout.setAutoCreateGaps(true);</span>
+<span class="fc" id="L191">			layout.setAutoCreateContainerGaps(true);</span>
+			
+<span class="fc" id="L193">			timerPanel = new TimerPanel();</span>
+<span class="fc" id="L194">			timerPanel.setMaximumSize(new Dimension (100, 40));</span>
+			
+<span class="fc" id="L196">			submitButton = new JButton (&quot;Submit&quot;);</span>
+<span class="fc" id="L197">			submitButton.addActionListener (new ActionListener() {</span>
+	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L201">					SubmitWordController swc = new SubmitWordController((MainJPanel)getGameContainer());</span>
+					
+<span class="nc" id="L203">					swc.process(WordstealGameInformation.this, callback);</span>
+<span class="nc" id="L204">				}</span>
+				
+			});
+			
+			// initially not responsive
+<span class="fc" id="L209">			submitButton.setEnabled(false);</span>
+			
+<span class="fc" id="L211">			skipButton = new JButton (&quot;Skip Turn&quot;);</span>
+<span class="fc" id="L212">			skipButton.addActionListener (new ActionListener() {</span>
+	
+				@Override
+				public void actionPerformed(ActionEvent e) {
+<span class="nc" id="L216">					MainJPanel mjp = (MainJPanel)getGameContainer();</span>
+<span class="nc" id="L217">					SkipSelfTurnController stc = new SkipSelfTurnController(mjp);</span>
+<span class="nc" id="L218">					stc.process(WordstealGameInformation.this, callback);				}</span>
+			});
+			
+			// initially not responsive
+<span class="fc" id="L222">			skipButton.setEnabled(false);</span>
+
+<span class="fc" id="L224">			timerPanel.setMaster(new TimerUpdate() {</span>
+	
+				@Override
+				public void minorTick() {
+					
+<span class="nc" id="L229">				}</span>
+
+				@Override
+				public void timerExpired() {
+					// if we are expiring AND IT IS OUR TURN, then act
+					// differently than if timer is expiring while
+					// we are active. How to know? IF GUI is locked
+					// then OPPONENT; if now, then US
+<span class="nc" id="L237">					MainJPanel mjp = (MainJPanel)getGameContainer();</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">					if (mjp.isLockedUI()) {</span>
+						// opponent. DO NOTHING
+					} else {
+<span class="nc" id="L241">						SkipSelfTurnController stc = new SkipSelfTurnController(mjp);</span>
+<span class="nc" id="L242">						stc.process(WordstealGameInformation.this, callback);		</span>
+					}
+<span class="nc" id="L244">				}</span>
+				
+			});
+			
+<span class="fc" id="L248">			layout.setHorizontalGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L249">					.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L250">							.addComponent(timerPanel)</span>
+<span class="fc" id="L251">							.addComponent(submitButton)</span>
+<span class="fc" id="L252">							.addComponent(skipButton))</span>
+					);
+			
+<span class="fc" id="L255">			layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="fc" id="L256">					.addGroup(layout.createSequentialGroup()</span>
+<span class="fc" id="L257">							.addComponent(timerPanel)</span>
+<span class="fc" id="L258">							.addComponent(submitButton)</span>
+<span class="fc" id="L259">							.addComponent(skipButton))</span>
+					);
+							
+		}
+		
+<span class="fc" id="L264">		return controlPanel;</span>
+	}
+
+	@Override
+	public Component getGameContainer() {
+<span class="fc bfc" id="L269" title="All 2 branches covered.">		if (gameContainer == null) {</span>
+<span class="fc" id="L270">			gameContainer = new MainJPanel();</span>
+			
+		}
+		
+<span class="fc" id="L274">		return gameContainer;</span>
+	}
+
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+<span class="nc" id="L281">	}</span>
+
+	/**
+	 * Stop wordsteal game. Future attempts to activate turns for
+	 * this game will be denied.
+	 */
+	@Override
+	public void stop() {
+		// must stop underlying timer panel thread...
+<span class="nc" id="L290">		timerPanel.stop();</span>
+		
+<span class="nc" id="L292">		isGameComplete = true;</span>
+<span class="nc" id="L293">	}</span>
+
+	/**
+	 * Extract points in preparation for returning to kombatGames.
+	 * 
+	 * @param players
+	 * @return
+	 */
+	public static Properties extractScores(ArrayList&lt;Player&gt; players) {
+<span class="nc" id="L302">		Properties props = new Properties();</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">		for (Player p : players) {</span>
+			// of the form &quot;jsaldjljd [id]&quot;. Extract id.
+<span class="nc" id="L305">			int idx = p.name.indexOf('[');</span>
+<span class="nc" id="L306">			int end = p.name.indexOf(']');</span>
+			
+<span class="nc" id="L308">			String id = p.name.substring(idx+1, end);</span>
+<span class="nc" id="L309">			props.setProperty(id, &quot;&quot; + p.getPoints());</span>
+		}
+		
+<span class="nc" id="L312">		return props;</span>
+	}
+
+	/**
+	 * Acts by locking/unlocking interface for user action.
+	 * &lt;p&gt;
+	 * The player is the one whose turn is becoming active.
+	 * &lt;p&gt;
+	 * @param playerID   player whose turn has becom active.
+	 * @return &lt;code&gt;false&lt;/code&gt; if game is over; &lt;code&gt;true&lt;/code&gt; otherwise.
+	 */
+	@Override
+	public boolean activateTurn(String playerID) {
+<span class="fc" id="L325">		super.activateTurn(playerID);</span>
+		
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">		if (isGameComplete) {</span>
+<span class="nc" id="L328">			return false;</span>
+		}
+		
+<span class="fc" id="L331">		Game game = gameContainer.getGame();</span>
+		//int idx = game.getCurrentPlayer();
+<span class="fc" id="L333">		Player curPlayer = game.findPlayer(fullName(playerID));</span>
+		
+<span class="fc" id="L335">		gameContainer.activatePlayer(curPlayer.name);</span>
+		
+<span class="fc" id="L337">		submitButton.setEnabled(true);</span>
+<span class="fc" id="L338">		skipButton.setEnabled(true);</span>
+<span class="fc" id="L339">		timerPanel.start(turnTime);</span>
+		
+<span class="pc bpc" id="L341" title="1 of 2 branches missed.">		if (playerID.equals (this.player)) {</span>
+<span class="fc" id="L342">			gameContainer.lockUI(false);</span>
+<span class="fc" id="L343">			return true;</span>
+		}
+		
+<span class="nc" id="L346">		gameContainer.lockUI(true);</span>
+<span class="nc" id="L347">		return true;</span>
+	}
+
+	// immediately reset the timer as requested.
+	public void resetTimer() {
+<span class="nc" id="L352">		timerPanel.start(turnTime);</span>
+<span class="nc" id="L353">	}</span>
+	
+	@Override
+	public boolean makeTurn(String playerID, String moveString) {
+<span class="nc" id="L357">		super.makeTurn(playerID, moveString);</span>
+		
+		// apply this move
+		// (6/9)=E,(6/8)=O,(6/7)=H,(6/6)=S 
+<span class="nc" id="L361">		return new MakeTurnController((MainJPanel)getGameContainer()).process(this, callback, fullName(playerID), moveString);</span>
+		
+	}
+
+	// can't just ignore this playerID, right?
+	@Override
+	public boolean skipTurn(String playerID) {
+<span class="nc" id="L368">		super.skipTurn(playerID);</span>
+<span class="nc" id="L369">		return new SkipTurnController((MainJPanel)getGameContainer()).process(this, callback);</span>
+	}
+
+	/**
+	 * Properly deal with in internal game as well.
+	 * 
+	 * Must pass in full name since that is used internally in the game.
+	 */
+	@Override
+	public boolean requestLeave(String playerID) {
+<span class="nc" id="L379">		new SkipTurnController((MainJPanel)getGameContainer()).process(this, callback);</span>
+		
+<span class="nc" id="L381">		boolean rc = new RemovePlayerController((MainJPanel)getGameContainer()).process(callback, fullName(playerID));</span>
+<span class="nc" id="L382">		rc = rc &amp; super.requestLeave(playerID);</span>
+<span class="nc" id="L383">		return rc;</span>
+	}
+
+	/**
+	 * Determine if playerID is current.
+	 * 
+	 * @param playerID
+	 * @return
+	 */
+//	boolean isCurrentPlayer(String playerID) {
+//		String full = fullName(playerID);
+//		Game game = ((MainJPanel)getGameContainer()).getGame();
+//		int idx = game.getCurrentPlayer();
+//		Player p = game.getPlayer(idx);
+//		if (p == null) { return false; }
+//			
+//		return full.equals(p.name);
+//	}
+
+	/** Activate or deactivate buttons as needed. */
+	public void enableButtons(boolean b) {
+<span class="nc" id="L404">		skipButton.setEnabled(b);</span>
+<span class="nc" id="L405">		submitButton.setEnabled(b);</span>
+<span class="nc" id="L406">	}</span>
+
+	@Override
+	public boolean updateScores(Properties updatedScores, Properties updatedGame) {
+<span class="nc" id="L410">		System.err.println(&quot;WordSteal does not expect updatedScores message.&quot;);</span>
+<span class="nc" id="L411">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

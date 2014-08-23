@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestClientControllerChain.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.client.controllers</a> &gt; <span class="el_source">TestClientControllerChain.java</span></div><h1>TestClientControllerChain.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package ks.client.controllers;</span>
+
+import org.w3c.dom.Document;
+
+import junit.framework.TestCase;
+import ks.client.interfaces.ILobby;
+import ks.framework.common.Configure;
+import ks.framework.common.Message;
+
+<span class="nc" id="L10">public class TestClientControllerChain extends TestCase {</span>
+
+	ILobby lobby;
+	Message m;
+	
+	protected void setUp() {
+<span class="nc" id="L16">		lobby = new SampleLobby(); </span>
+		
+		// Determine the XML schema we are going to use
+		try {
+<span class="nc" id="L20">			Message.unconfigure();</span>
+<span class="nc" id="L21">			assertTrue (Configure.configure());</span>
+<span class="nc" id="L22">		} catch (Exception e) {</span>
+<span class="nc" id="L23">			fail (&quot;Unable to setup Message tests.&quot;);</span>
+		}
+		
+<span class="nc" id="L26">		String s = Message.requestHeader() + &quot;&lt;chat&gt;&lt;text&gt;Here is the message&lt;/text&gt;&lt;/chat&gt;&lt;/request&gt;&quot;;</span>
+<span class="nc" id="L27">		Document d = Message.construct(s);</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">		assertTrue (d != null);</span>
+<span class="nc" id="L29">		m = new Message(d);</span>
+<span class="nc" id="L30">	}</span>
+	
+	public void testChainEmpty() {
+<span class="nc" id="L33">		ClientControllerChain ccc = new ClientControllerChain();</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">		assertTrue (ccc.next == null);</span>
+<span class="nc" id="L35">	}</span>
+	
+	public void testNotHandled() {
+		
+		
+<span class="nc" id="L40">		ClientControllerChain ccc = new ClientControllerChain();</span>
+<span class="nc" id="L41">		assertFalse (ccc.process(lobby, m));</span>
+<span class="nc" id="L42">	}</span>
+	
+	// chain, but still none process the request.
+	public void testCreateChain() {
+<span class="nc" id="L46">		ClientControllerChain ccc = new ClientControllerChain();</span>
+		
+		// this one &quot;processes&quot; all of its messages by delegating to next in the chain
+<span class="nc" id="L49">		ClientControllerChain cccNext = new ClientControllerChain() {</span>
+			public boolean process(ILobby lobby, Message m) {
+<span class="nc" id="L51">				return next(lobby, m);</span>
+			} 
+		};
+		
+<span class="nc" id="L55">		ccc.append(cccNext);</span>
+<span class="nc" id="L56">		assertFalse (cccNext.process(lobby, m));</span>
+<span class="nc" id="L57">	}</span>
+	
+	// chain, but still none process the request.
+	public void testCreateMultipleChain() {
+<span class="nc" id="L61">		ClientControllerChain ccc = new ClientControllerChain();</span>
+		
+		// this one &quot;processes&quot; all of its messages by delegating to next in the chain
+<span class="nc" id="L64">		ClientControllerChain cccNext = new ClientControllerChain() {</span>
+			public boolean process(ILobby lobby, Message m) {
+<span class="nc" id="L66">				return next(lobby, m);</span>
+			} 
+		};
+		
+		// this one &quot;processes&quot; all of its messages by delegating to next in the chain
+<span class="nc" id="L71">		ClientControllerChain ccc2Next = new ClientControllerChain() {</span>
+			public boolean process(ILobby lobby, Message m) {
+<span class="nc" id="L73">				return next(lobby, m);</span>
+			} 
+		};
+		
+<span class="nc" id="L77">		ccc.append(cccNext);</span>
+<span class="nc" id="L78">		ccc.append(ccc2Next);</span>
+<span class="nc" id="L79">		assertFalse (ccc.process(lobby, m));</span>
+<span class="nc" id="L80">	}</span>
+	
+	// chain, but still none process the request.
+	public void testTakeMessage() {
+		// this one &quot;processes&quot; all of its messages by delegating to next in the chain
+<span class="nc" id="L85">		ClientControllerChain ccc = new ClientControllerChain() {</span>
+			public boolean process(ILobby lobby, Message m) {
+<span class="nc" id="L87">				return true;</span>
+			} 
+		};
+		
+<span class="nc" id="L91">		assertTrue (ccc.process(lobby, m));</span>
+<span class="nc" id="L92">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

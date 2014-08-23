@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SControllerChainLink.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">WordstealClient</a> &gt; <a href="../index.html" class="el_bundle">external</a> &gt; <a href="index.html" class="el_package">our_server</a> &gt; <span class="el_source">SControllerChainLink.java</span></div><h1>SControllerChainLink.java</h1><pre class="source lang-java linenums">package our_server;
+
+import ks.framework.common.Message;
+import ks.framework.communicator.Communicator;
+import ks.server.controllers.ServerControllerChain;
+
+/**
+ * This is a class for testing. It simulates a server by adding a
+ * controller to the controller chain. Since this class won't be in the
+ * final implementation, it should be okay to just make it a huge
+ * if/else statement.
+ */
+<span class="nc" id="L13">public class SControllerChainLink extends ServerControllerChain {</span>
+
+	/**
+	 * @author jbodah
+	 */
+	@Override
+	public boolean process(Communicator com, Message m) {
+<span class="nc bnc" id="L20" title="All 2 branches missed.">		if (m.getName().equals (&quot;players&quot;)) {</span>
+<span class="nc" id="L21">			return new SPlayerResponse().process(com, m);</span>
+		}
+		
+<span class="nc bnc" id="L24" title="All 2 branches missed.">		if (m.getName().equals (&quot;tables&quot;)) {</span>
+<span class="nc" id="L25">			return new STableResponse().process(com, m);</span>
+		}
+		
+		// try the next one in the chain...
+<span class="nc" id="L29">		return next (com, m);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

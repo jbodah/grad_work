@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>TestElement.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">test</a> &gt; <a href="index.html" class="el_package">ks.common.model</a> &gt; <span class="el_source">TestElement.java</span></div><h1>TestElement.java</h1><pre class="source lang-java linenums">package ks.common.model;
+
+import junit.framework.TestCase;
+
+// must test listeners, mostly
+<span class="nc" id="L6">public class TestElement extends TestCase {</span>
+
+	class TestListener implements ElementListener {
+		
+		public int val;
+		
+<span class="nc" id="L12">		public TestListener () {</span>
+<span class="nc" id="L13">			super();</span>
+<span class="nc" id="L14">		}</span>
+		
+		
+		@Override
+		public void modelChanged(Element elt) {
+<span class="nc" id="L19">			val = ((MutableInteger) elt).getValue();		</span>
+<span class="nc" id="L20">		}</span>
+	};
+	
+	public void testConstruct() {
+<span class="nc" id="L24">		TestListener el = new TestListener();</span>
+		
+<span class="nc" id="L26">		MutableInteger mi = new MutableInteger(47);</span>
+<span class="nc" id="L27">		mi.setListener(el);</span>
+<span class="nc" id="L28">		assertEquals (el, mi.getListener());</span>
+<span class="nc" id="L29">		mi.setValue(33);</span>
+		
+		// assert listener was told!
+<span class="nc" id="L32">		assertEquals (33, el.val);</span>
+		
+<span class="nc" id="L34">		el.val = 99; // fix it improperly</span>
+		
+		// same value DOES NOT reissue event
+<span class="nc" id="L37">		mi.setValue(33);</span>
+<span class="nc" id="L38">		assertEquals (99, el.val);</span>
+		
+		// invalid to set name to null.
+		try {
+<span class="nc" id="L42">			mi.setName(null);</span>
+<span class="nc" id="L43">			fail (&quot;can't set model name to null&quot;);</span>
+<span class="nc" id="L44">		} catch (Exception e) {</span>
+			
+		}
+<span class="nc" id="L47">	}</span>
+	
+	public void testElementBase() {
+<span class="nc" id="L50">		Element e = new Element ();</span>
+<span class="nc" id="L51">		e.setName(&quot;sample&quot;);</span>
+<span class="nc" id="L52">		assertEquals (&quot;ks.common.model.Element:sample&quot;, e.toString());</span>
+<span class="nc" id="L53">	}</span>
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

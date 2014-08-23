@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>MakeTurnController.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game.wordsteal</a> &gt; <span class="el_source">MakeTurnController.java</span></div><h1>MakeTurnController.java</h1><pre class="source lang-java linenums">package ks.client.game.wordsteal;
+
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+
+import ks.client.interfaces.IGameInterface;
+import wordsteal.entities.Board;
+import wordsteal.entities.Cell;
+import wordsteal.entities.Rack;
+import wordsteal.entities.Tile;
+import wordsteal.interfaces.IWordstealApp;
+import wordsteal.util.BoardLocation;
+
+/**
+ * MakeTurnController is launched when a turn is received by a client.
+ * &lt;p&gt;
+ * Not responsible for emitting any requests to server 
+ * 
+ * @author Dan and George Heineman
+ */
+public class MakeTurnController extends CommonMoveController {
+	
+	/** 
+	 * Construct controller
+	 * @param mainFrame MainFrame allows ability to set and retrieve entity information
+	 */
+	public MakeTurnController(IWordstealApp mainFrame) {
+<span class="nc" id="L29">		super(mainFrame);</span>
+<span class="nc" id="L30">	}</span>
+	
+	/**
+	 * Launches the controller that handles the playing of a move.
+	 * Best way to do this is to 'simulate' the playing of tiles
+	 * that must be valid onto the board, and then requesting
+	 * the SubmitWordController to do its part. 
+	 * 
+	 * Sample move string:
+	 * (6/9)=E,(6/8)=O,(6/7)=H,(6/6)=S
+	 * 
+	 * @param callback 
+	 * @param moveString 
+	 * @param playerID 
+	 */
+	public boolean process(WordstealGameInformation info, IGameInterface callback, String playerID, String moveString){
+		
+		// build up hashtable &lt;Point,Character&gt;.
+<span class="nc" id="L48">		Hashtable&lt;java.awt.Point,String&gt; tiles = new Hashtable&lt;java.awt.Point,String&gt;();</span>
+		try {
+<span class="nc" id="L50">			StringTokenizer st = new StringTokenizer(moveString, &quot;(/,)=&quot;);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">			while (st.hasMoreTokens()) {</span>
+<span class="nc" id="L52">				int row = Integer.valueOf(st.nextToken());</span>
+<span class="nc" id="L53">				int col = Integer.valueOf(st.nextToken());</span>
+<span class="nc" id="L54">				String ch = st.nextToken();</span>
+<span class="nc" id="L55">				tiles.put(new java.awt.Point(row,col), ch);</span>
+			}
+<span class="nc" id="L57">		} catch (Exception e) {</span>
+<span class="nc" id="L58">			System.err.println(&quot;Unable to interpret move string:&quot; + moveString);</span>
+<span class="nc" id="L59">			return false;</span>
+		}
+		
+		// Place all tiles on the board
+		
+<span class="nc" id="L64">		Rack rack = this.mf.getGame().getRack();</span>
+<span class="nc" id="L65">		Board board = this.mf.getGame().getBoard();</span>
+<span class="nc" id="L66">		ArrayList&lt;Tile&gt; allTiles = rack.getTiles();</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		for (java.awt.Point p : tiles.keySet()) {</span>
+<span class="nc" id="L68">			String ch = tiles.get(p);</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">			for (int i = 0; i &lt; allTiles.size(); i++) {</span>
+<span class="nc" id="L70">				Tile t = allTiles.get(i);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">				if (t.letter.equals(ch)) {</span>
+<span class="nc" id="L72">					rack.removeTile(t);</span>
+<span class="nc" id="L73">					Cell cell = board.getCell(p.x, p.y);</span>
+<span class="nc" id="L74">					cell.setTile(t);</span>
+<span class="nc" id="L75">					break;</span>
+				}
+			}
+		}
+		
+		// Holds the list of word strings created on the board
+<span class="nc" id="L81">		ArrayList&lt;String&gt; words = new ArrayList&lt;String&gt;();</span>
+		// Holds the list of cells where new words are located
+<span class="nc" id="L83">		ArrayList&lt;ArrayList&lt;Cell&gt;&gt; wordCells = new ArrayList&lt;ArrayList&lt;Cell&gt;&gt;(); </span>
+    	// Holds the cells containing tiles played this turn
+<span class="nc" id="L85">    	Hashtable&lt;BoardLocation, Cell&gt; playedTileCells = this.mf.getGame().getBoard().getNewTiles();</span>
+    	
+<span class="nc" id="L87">    	wordCells = board.extractAdjacentWordCells(playedTileCells);</span>
+<span class="nc" id="L88">		words = board.formWordsFromCells(wordCells);</span>
+		
+<span class="nc" id="L90">		boolean complete = finishSubmitWord(playerID, words, wordCells, playedTileCells);</span>
+				
+<span class="nc" id="L92">		this.mf.updateGUI();</span>
+		
+<span class="nc bnc" id="L94" title="All 2 branches missed.">		if (complete) {</span>
+			// disable future play
+<span class="nc" id="L96">			info.stop();</span>
+<span class="nc" id="L97">			return true;</span>
+		} else {
+<span class="nc" id="L99">			info.resetTimer();</span>
+
+<span class="nc" id="L101">			return true;</span>
+		}
+	}
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>

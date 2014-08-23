@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../../.resources/report.gif" type="image/gif"/><title>SudokuGameInformation.java</title><link rel="stylesheet" href="../../../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="right"><a href="../../../.sessions.html" class="el_session">Sessions</a></span><a href="../../../index.html" class="el_report">Merged (Apr 28, 2012 2:01:54 PM)</a> &gt; <a href="../../index.html" class="el_group">Framework</a> &gt; <a href="../index.html" class="el_bundle">src</a> &gt; <a href="index.html" class="el_package">ks.client.game.sudoku</a> &gt; <span class="el_source">SudokuGameInformation.java</span></div><h1>SudokuGameInformation.java</h1><pre class="source lang-java linenums">package ks.client.game.sudoku;
+
+import interfaces.IShareState;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import javax.swing.GroupLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import edu.wpi.sudoku.gui.SudokuPlayingPanel;
+import edu.wpi.sudoku.gui.music.SoundManager;
+
+import wordsteal.boundaries.main.MainJPanel;
+import wordsteal.entities.Player;
+
+import ks.client.game.GameFrame;
+import ks.client.game.GameInformation;
+import ks.client.game.wordsteal.RemovePlayerController;
+
+// notes for sudoku.
+public class SudokuGameInformation extends GameInformation implements IShareState {
+
+	int difficulty;
+	
+	/** Enclosing game frame. */
+	GameFrame frame;
+	
+	/** Game container. */
+<span class="nc" id="L33">	SudokuPlayingPanel sudokuContainer = null;</span>
+	
+	/** Controls. */
+<span class="nc" id="L36">	JPanel controlPanel = null;</span>
+	
+	/** Is game complete? reset in start. Set in stop. */
+<span class="nc" id="L39">	boolean isGameComplete = false;</span>
+	
+	/**
+	 * Options for solitaire include:
+	 * 
+	 * pink&lt;boolean&gt;     determine whether board clears on Pink play.
+	 * noS&lt;boolean&gt;      prevent or allow S extensions to words
+	 * turnTime&lt;int&gt;     time for each turn
+	 * pointsToWin&lt;int&gt;  score at which game finishes
+	 * 
+	 * @param options
+	 * @param gameOptions
+	 */
+	public SudokuGameInformation(Properties options, Properties gameOptions) {
+<span class="nc" id="L53">		super(options);</span>
+		
+		// set pink option
+<span class="nc" id="L56">		String difficultyS = gameOptions.getProperty(&quot;difficulty&quot;);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		if (difficultyS == null) {</span>
+<span class="nc" id="L58">			difficulty = 1;</span>
+		} else {
+			try {
+<span class="nc" id="L61">				difficulty = Integer.valueOf(difficultyS);</span>
+<span class="nc" id="L62">			} catch (Exception e) {</span>
+<span class="nc" id="L63">				e.printStackTrace();</span>
+<span class="nc" id="L64">				difficulty = 1;</span>
+			}
+		}
+		
+<span class="nc" id="L68">	}</span>
+
+	/**
+	 * Non-turn based game with synchronized state and head-to-head moves 
+	 */
+	@Override
+	public boolean start(GameFrame frame) {
+<span class="nc" id="L75">		this.frame = frame;</span>
+<span class="nc" id="L76">		frame.setVisible(true);</span>
+<span class="nc" id="L77">		frame.setTitle(&quot;Sudoku by George Heineman&quot;);</span>
+<span class="nc" id="L78">		frame.setSize (800, 768);</span>
+		
+<span class="nc" id="L80">		isGameComplete = false;</span>
+<span class="nc" id="L81">		return true;</span>
+	}
+
+	@Override
+	public Component getGameControls() {
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">		if (controlPanel == null) {</span>
+<span class="nc" id="L88">			controlPanel = new JPanel();</span>
+				
+<span class="nc" id="L90">			GroupLayout layout = new GroupLayout(controlPanel);</span>
+<span class="nc" id="L91">			controlPanel.setLayout(layout);</span>
+<span class="nc" id="L92">			layout.setAutoCreateGaps(true);</span>
+<span class="nc" id="L93">			layout.setAutoCreateContainerGaps(true);</span>
+			
+			// not sure what controls to put here
+<span class="nc" id="L96">			JLabel lab = new JLabel(&quot;what controls?&quot;);</span>
+<span class="nc" id="L97">			layout.setHorizontalGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L98">					.addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L99">							.addComponent(lab))</span>
+					);
+			
+<span class="nc" id="L102">			layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)</span>
+<span class="nc" id="L103">					.addGroup(layout.createSequentialGroup()</span>
+<span class="nc" id="L104">							.addComponent(lab))</span>
+					);
+							
+		}
+		
+<span class="nc" id="L109">		return controlPanel;</span>
+	}
+
+	@Override
+	public Component getGameContainer() {
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (sudokuContainer == null) {</span>
+<span class="nc" id="L115">			sudokuContainer = new SudokuPlayingPanel();</span>
+<span class="nc" id="L116">			sudokuContainer.setUpdateSharedState (this);</span>
+<span class="nc" id="L117">			sudokuContainer.setPreferredSize(new java.awt.Dimension(490,490));</span>
+<span class="nc" id="L118">			sudokuContainer.setName(&quot;sudokuPanel&quot;);</span>
+		}
+		
+<span class="nc" id="L121">		return sudokuContainer;</span>
+	}
+
+	@Override
+	public void initialize() {
+		// TODO Auto-generated method stub
+		
+<span class="nc" id="L128">	}</span>
+
+	/**
+	 * Stop sudoku game. Future attempts to activate turns for
+	 * this game will be denied.
+	 * 
+	 * make sure to shut down player thread (if active).
+	 */
+	@Override
+	public void stop() {
+<span class="nc" id="L138">		SoundManager.enableSound(false);</span>
+<span class="nc" id="L139">		isGameComplete = true;</span>
+<span class="nc" id="L140">	}</span>
+
+	/**
+	 * Extract points in preparation for returning to kombatGames.
+	 * 
+	 * @param players
+	 * @return
+	 */
+	public static Properties extractScores(ArrayList&lt;Player&gt; players) {
+<span class="nc" id="L149">		Properties props = new Properties();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">		for (Player p : players) {</span>
+			// of the form &quot;jsaldjljd [id]&quot;. Extract id.
+<span class="nc" id="L152">			int idx = p.name.indexOf('[');</span>
+<span class="nc" id="L153">			int end = p.name.indexOf(']');</span>
+			
+<span class="nc" id="L155">			String id = p.name.substring(idx+1, end);</span>
+<span class="nc" id="L156">			props.setProperty(id, &quot;&quot; + p.getPoints());</span>
+		}
+		
+<span class="nc" id="L159">		return props;</span>
+	}
+
+	/**
+	 * Acts by locking/unlocking interface for user action.
+	 * &lt;p&gt;
+	 * The player is the one whose turn is becoming active.
+	 * &lt;p&gt;
+	 * @param playerID   player whose turn has become active.
+	 * @return &lt;code&gt;false&lt;/code&gt; if game is over; &lt;code&gt;true&lt;/code&gt; otherwise.
+	 */
+	@Override
+	public boolean activateTurn(String playerID) {
+<span class="nc" id="L172">		System.out.println(&quot;Not expecting to activate turn in solitaire-based games&quot;);</span>
+<span class="nc" id="L173">		return false;</span>
+	}
+
+	@Override
+	public boolean makeTurn(String playerID, String moveString) {
+<span class="nc" id="L178">		System.out.println(&quot;Not expecting to make turn in solitaire-based games&quot;);</span>
+<span class="nc" id="L179">		return false;</span>
+	}
+
+	// can't just ignore this playerID, right?
+	@Override
+	public boolean skipTurn(String playerID) {
+<span class="nc" id="L185">		System.out.println(&quot;Not expecting to skip turn in solitaire-based games&quot;);</span>
+<span class="nc" id="L186">		return false;</span>
+	}
+
+	/**
+	 * Properly deal with in internal game as well.
+	 * 
+	 * Must pass in full name since that is used internally in the game.
+	 */
+	@Override
+	public boolean requestLeave(String playerID) {
+		
+<span class="nc" id="L197">		boolean rc = new RemovePlayerController((MainJPanel)getGameContainer()).process(callback, fullName(playerID));</span>
+<span class="nc" id="L198">		rc = rc &amp; super.requestLeave(playerID);</span>
+<span class="nc" id="L199">		return rc;</span>
+	}
+
+	// when response comes in from remote client must make move on my local sudoku game
+	@Override
+	public boolean updateScores(Properties updatedScores, Properties updatedGame) {
+<span class="nc" id="L205">		System.err.println(&quot;SERVER SENDS REMOVE MOVE NOT YET WORKING&quot;);;</span>
+<span class="nc" id="L206">		return false;</span>
+	}
+
+	// WHEN local client makes a move in sudoku then request must go out to the server
+	@Override
+	public void updateState(Properties state, int score) {
+<span class="nc" id="L212">		System.out.println(&quot;CLIENT MAKES MOVE LOCALLY: &quot; + state);	</span>
+<span class="nc" id="L213">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.5.6.201201232323</span>Merged (Apr 28, 2012 2:01:54 PM)</div></body></html>
